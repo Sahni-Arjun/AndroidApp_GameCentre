@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/gridouter"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="fall2018.csc2017.GameCentre.SlidingTileActivity"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.8">
+
+        <Button
+            android:id="@+id/New"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="49dp"
+            android:layout_marginBottom="35dp"
+            android:text="@string/new_game"
+            tools:ignore="RelativeOverlap" />
+
+        <EditText
+            android:id="@+id/editText5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:inputType="textMultiLine|textPersonName"
+            android:selectAllOnFocus="false"
+            android:singleLine="false"
+            android:text="@string/prove_you_re_not_a_robot_finish_the_game"
+            tools:ignore="Autofill,LabelFor" />
+
+
+    </RelativeLayout>
+
+    <fall2018.csc2017.GameCentre.GestureDetectGridView
+        android:id="@+id/grid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.2"
+        tools:context="fall2018.csc2017.GameCentre.NotRobotActivity" />
+
+</LinearLayout>

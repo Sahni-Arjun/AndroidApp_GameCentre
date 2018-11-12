@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SignInActivity">
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="119dp"
+        android:layout_marginTop="116dp"
+        android:layout_marginEnd="119dp"
+        android:text="@string/sign_in_message"
+        android:textAppearance="@android:style/TextAppearance.Material.Large" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="145dp"
+        android:layout_marginEnd="146dp"
+        android:layout_marginBottom="122dp"
+        android:text="@string/sign_in_enter_button"
+        android:textAppearance="@android:style/TextAppearance.Material.Widget.Button" />
+
+    <EditText
+        android:id="@+id/editText"
+        style="@style/Widget.AppCompat.EditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="85dp"
+        android:layout_marginTop="245dp"
+        android:layout_marginEnd="84dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/sign_in_username"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/editText"
+        android:layout_alignEnd="@+id/editText"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="-1dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="217dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/sign_in_password"
+        android:inputType="textPassword"
+        android:visibility="visible" />
+</RelativeLayout>
