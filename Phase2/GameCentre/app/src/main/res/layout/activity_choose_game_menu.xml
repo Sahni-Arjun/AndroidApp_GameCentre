@@ -28,4 +28,26 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <Button
+        android:id="@+id/btnHangMan"
+        android:layout_width="318dp"
+        android:layout_height="79dp"
+        android:layout_marginBottom="228dp"
+        android:text="HangMan"
+        android:textAppearance="@android:style/TextAppearance.Material.Widget.Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnSudoku"
+        android:layout_width="318dp"
+        android:layout_height="79dp"
+        android:layout_marginBottom="68dp"
+        android:text="Sudoku"
+        android:textAppearance="@android:style/TextAppearance.Material.Widget.Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </android.support.constraint.ConstraintLayout>
