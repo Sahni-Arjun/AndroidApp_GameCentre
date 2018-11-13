@@ -191,8 +191,14 @@ class SudokuBoardManager extends BoardManager implements Serializable {
      * @return whether the tile at position is surrounded by a blank tile
      */
     boolean isValidTap(int position) { //TODO implement what it means for a tap to be valid.
-        // find the row
-        // find the column
+        int row = position / SudokuBoard.numRows;
+        int col = position % SudokuBoard.numCols;
+
+        int ternaryRow = row / 3;
+        int ternaryCol = col / 3;
+
+
+        return this.checkSingleRow(row) && this.checkSingleCol(col) & this.checkSubBox(ternaryRow, ternaryCol);
 
         // check if its row is correct
         // check if its col is correct
