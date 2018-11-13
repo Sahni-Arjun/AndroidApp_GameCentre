@@ -56,7 +56,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
         List<Tile> tiles = new ArrayList<>();
         final int numTiles = Board.numRows * Board.numCols;
         for (int tileNum = 0; tileNum != numTiles; tileNum++) {
-            tiles.add(new Tile(25));
+            tiles.add(new Tile(-1));
         }
 //        Collections.shuffle(tiles);
         this.board = new SudokuBoard(tiles);
@@ -69,20 +69,6 @@ class SudokuBoardManager extends BoardManager implements Serializable {
      */
     boolean puzzleSolved() {
         return this.checkRows() && this.checkCols() && this.checkBoxes();
-//        Iterator<Tile> boardIterator = board.iterator();
-//        Tile prev_Tile = boardIterator.next();
-//        Tile current_Tile;
-//        // Iterate through all Tiles checking if the previous id is larger than the next.
-//        while (boardIterator.hasNext()) {
-//            current_Tile = boardIterator.next();
-//            if (prev_Tile.getId() > current_Tile.getId()) {
-//                return false;
-//            }
-//            prev_Tile = current_Tile;
-//        }
-//        // If the end of the while loop is reached then all Tiles are in correct order.
-//        return true;
-//        return false;
     }
 
     /**
