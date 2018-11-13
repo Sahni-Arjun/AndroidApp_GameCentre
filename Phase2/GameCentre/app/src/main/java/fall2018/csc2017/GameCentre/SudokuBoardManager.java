@@ -121,6 +121,18 @@ class SudokuBoardManager extends BoardManager implements Serializable {
         return Arrays.equals(colTiles, CHECKER);
     }
 
+    private boolean checkBoxes() {
+        for (int ternaryCol = 0; ternaryCol < 3; ternaryCol ++) {
+            for (int ternaryRow = 0; ternaryRow < 3; ternaryRow ++) {
+                if (!checkSubBox(ternaryRow, ternaryCol)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+
 
 
 
