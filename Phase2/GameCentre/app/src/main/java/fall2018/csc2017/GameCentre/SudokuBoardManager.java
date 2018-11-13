@@ -132,6 +132,26 @@ class SudokuBoardManager extends BoardManager implements Serializable {
         return true;
     }
 
+    private boolean checkSubBox(int ternaryRow, int ternaryCol) {
+        List<Integer> tiles = new ArrayList<>();
+        for (int r = 0; r < 3; r ++) {
+            for (int c = 0; c < 3; c ++) {
+                tiles.add(this.board.getTile(3*ternaryRow + r, 3*ternaryCol + c).getValue());
+            }
+        }
+
+        if (tiles.size() != CHECKER.length) {
+            return false;
+        }
+
+        for (int num: CHECKER) {
+            if (!tiles.contains(num)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
 
 
