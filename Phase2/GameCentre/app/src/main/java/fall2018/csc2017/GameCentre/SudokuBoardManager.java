@@ -103,6 +103,17 @@ class SudokuBoardManager extends BoardManager implements Serializable {
         return Arrays.equals(rowTiles, CHECKER);
     }
 
+    private boolean checkCols() {
+        for (int col = 0; col < 9; col ++) {
+            if (!this.checkSingleCol(col)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+
 
 
 
