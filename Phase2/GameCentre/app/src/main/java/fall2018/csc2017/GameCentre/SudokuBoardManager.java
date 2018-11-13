@@ -85,6 +85,10 @@ class SudokuBoardManager extends BoardManager implements Serializable {
 //        return false;
     }
 
+    /**
+     * Checks if all rows correspond to a correct sudoku order
+     * @return true iff all rows are correctly written
+     */
     private boolean checkRows() {
         for (int row = 0; row < 9; row ++) {
             if (!this.checkSingleRow(row)) {
@@ -94,6 +98,10 @@ class SudokuBoardManager extends BoardManager implements Serializable {
         return true;
     }
 
+    /**
+     * Checks if one row correspond to a correct sudoku order
+     * @return true iff the row is correctly written
+     */
     private boolean checkSingleRow(int row) {
         int[] rowTiles = new int[9];
         for (int col = 0; col < 9; col ++) {
@@ -103,6 +111,10 @@ class SudokuBoardManager extends BoardManager implements Serializable {
         return Arrays.equals(rowTiles, CHECKER);
     }
 
+    /**
+     * Checks if all cols correspond to a correct sudoku order
+     * @return true iff all cols are correctly written
+     */
     private boolean checkCols() {
         for (int col = 0; col < 9; col ++) {
             if (!this.checkSingleCol(col)) {
@@ -112,6 +124,10 @@ class SudokuBoardManager extends BoardManager implements Serializable {
         return true;
     }
 
+    /**
+     * Checks if one col correspond to a correct sudoku order
+     * @return true iff the col is correctly written
+     */
     private boolean checkSingleCol(int col) {
         int[] colTiles = new int[9];
         for (int row = 0; row < 9; row++) {
@@ -121,6 +137,10 @@ class SudokuBoardManager extends BoardManager implements Serializable {
         return Arrays.equals(colTiles, CHECKER);
     }
 
+    /**
+     * Checks if all boxes correspond to a correct sudoku order
+     * @return true iff all boxes are correctly written
+     */
     private boolean checkBoxes() {
         for (int ternaryCol = 0; ternaryCol < 3; ternaryCol ++) {
             for (int ternaryRow = 0; ternaryRow < 3; ternaryRow ++) {
@@ -132,6 +152,10 @@ class SudokuBoardManager extends BoardManager implements Serializable {
         return true;
     }
 
+    /**
+     * Checks if one box correspond to a correct sudoku order
+     * @return true iff the box is correctly written
+     */
     private boolean checkSubBox(int ternaryRow, int ternaryCol) {
         List<Integer> tiles = new ArrayList<>();
         for (int r = 0; r < 3; r ++) {
@@ -151,14 +175,6 @@ class SudokuBoardManager extends BoardManager implements Serializable {
         }
         return true;
     }
-
-
-
-
-
-
-
-
 
     /**
      * Return whether any of the four surrounding tiles is the blank tile.
