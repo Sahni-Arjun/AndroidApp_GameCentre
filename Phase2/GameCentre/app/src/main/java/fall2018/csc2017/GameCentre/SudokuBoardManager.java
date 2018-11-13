@@ -112,6 +112,16 @@ class SudokuBoardManager extends BoardManager implements Serializable {
         return true;
     }
 
+    private boolean checkSingleCol(int col) {
+        int[] colTiles = new int[9];
+        for (int row = 0; row < 9; row++) {
+            colTiles[col] = this.board.getTile(row, col).getValue();
+        }
+        Arrays.sort(colTiles);
+        return Arrays.equals(colTiles, CHECKER);
+    }
+
+
 
 
 
