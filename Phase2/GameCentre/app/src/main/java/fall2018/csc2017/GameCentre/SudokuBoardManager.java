@@ -105,7 +105,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
     private boolean checkSingleRow(int row) {
         List<Integer> rowTiles = new ArrayList<>();
         for (int col = 0; col < 9; col++) {
-            int val = this.board.getTile(row, col).getValue();
+            int val = this.board.getTile(row, col).getBackground() + 1;
             if (val != 0) {
                 rowTiles.add(val);
             }
@@ -133,7 +133,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
     private boolean checkSingleCol(int col) {
         List<Integer> colTiles = new ArrayList<>();
         for (int row = 0; row < 9; row++) {
-            int val = this.board.getTile(row, col).getValue();
+            int val = this.board.getTile(row, col).getBackground() + 1;
             if (val != 0) {
                 colTiles.add(val);
             }
@@ -164,7 +164,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
         List<Integer> tiles = new ArrayList<>();
         for (int r = 0; r < 3; r ++) {
             for (int c = 0; c < 3; c ++) {
-                tiles.add(this.board.getTile(3*ternaryRow + r, 3*ternaryCol + c).getValue());
+                tiles.add(this.board.getTile(3*ternaryRow + r, 3*ternaryCol + c).getBackground() + 1);
             }
         }
 
@@ -197,24 +197,15 @@ class SudokuBoardManager extends BoardManager implements Serializable {
         int ternaryRow = row / 3;
         int ternaryCol = col / 3;
 
+        SudokuBoardManager tempBoardManager = new SudokuBoardManager();
+        SudokuBoard tempBoard = new SudokuBoard();
+        tempBoard.setTiles(this.board.getTiles().clone());
+        tempBoardManager.setBoard(tempBoard);
+        Tile tile = new Tile(SudokuActivity.currentNumber-1);
+        tempBoardManager.getBoard().setTile(row, col, tile);
 
-        return this.checkSingleRow(row) && this.checkSingleCol(col) & this.checkSubBox(ternaryRow, ternaryCol);
-
-        // check if its row is correct
-        // check if its col is correct
-        // check if its
-//        int row = position / Board.numCols;
-//        int col = position % Board.numCols;
-//        int blankId = board.numTiles();
-//        // Are any of the 4 the blank tile?
-//        Tile above = row == 0 ? null : board.getTile(row - 1, col);
-//        Tile below = row == Board.numRows - 1 ? null : board.getTile(row + 1, col);
-//        Tile left = col == 0 ? null : board.getTile(row, col - 1);
-//        Tile right = col == Board.numCols - 1 ? null : board.getTile(row, col + 1);
-//        return (below != null && below.getId() == blankId)
-//                || (above != null && above.getId() == blankId)
-//                || (left != null && left.getId() == blankId)
-//                || (right != null && right.getId() == blankId);
+        //TODO edit or create new methods for checking isValidTap.
+        return tempBoardManager.checkSingleRow(row) && tempBoardManager.checkSingleCol(col) & tempBoardManager.checkSubBox(ternaryRow, ternaryCol);
     }
 
     /**
@@ -223,24 +214,12 @@ class SudokuBoardManager extends BoardManager implements Serializable {
      * @param position the position
      */
     void touchMove(int position) {
+        int row = position / Board.numRows;
+        int col = position % Board.numCols;
 
-//        int row = position / Board.numRows;
-//        int col = position % Board.numCols;
-//        int blankId = board.numTiles();
-//        int rowId = 0, colId = 0; // First tile in Board.
-//
-//        // Only process touch if current tile is beside a blank one.
-//        if (isValidTap(position)) {
-//            // Iterate through the board to find the tile at current position
-//            for (int c = 0; c < Board.numCols; c++) {
-//                for (int r = 0; r < Board.numRows; r++) {
-//                    if (board.getTile(r, c).getId() == blankId) {
-//                        rowId = r;
-//                        colId = c;
-//                    }
-//                }
-//            }
-//            board.swapTiles(row, col, rowId, colId);
-//        }
+        if (isValidTap(position)){
+            Tile newTile = new Tile(SudokuActivity.currentNumber-1);
+            board.setTile(row, col, newTile);
+        }
     }
 }
