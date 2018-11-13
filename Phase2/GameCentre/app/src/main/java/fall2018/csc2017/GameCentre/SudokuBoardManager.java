@@ -85,6 +85,17 @@ class SudokuBoardManager extends BoardManager implements Serializable {
 //        return false;
     }
 
+    private boolean checkRows() {
+        for (int row = 0; row < 9; row ++) {
+            if (!this.checkSingleRow(row)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+
 
 
     /**
