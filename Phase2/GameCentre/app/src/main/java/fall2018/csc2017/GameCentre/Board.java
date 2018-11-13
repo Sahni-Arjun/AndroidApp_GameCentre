@@ -2,6 +2,7 @@ package fall2018.csc2017.GameCentre;
 
 import android.support.annotation.NonNull;
 
+import java.util.Collections;
 import java.util.Observable;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -34,6 +35,19 @@ public class Board extends Observable implements Serializable, Iterable<Tile> {
      * @param tiles the tiles for the board
      */
     Board(List<Tile> tiles) {
+        populateBoard(tiles);
+        while(!(this.isSolvable())){
+            populateBoard(tiles);
+        }
+    }
+
+    /**
+     * Populates the board with the given tiles.
+     *
+     * @param tiles the tiles that must be added into the board
+     */
+    private void populateBoard(List<Tile> tiles){
+        Collections.shuffle(tiles);
         Iterator<Tile> iter = tiles.iterator();
 
         for (int row = 0; row != Board.numRows; row++) {
@@ -108,7 +122,7 @@ public class Board extends Observable implements Serializable, Iterable<Tile> {
      *
      * @return whether or not the board is solvable
      */
-    public boolean isSolvable() {
+      private boolean isSolvable() {
         int blankTileId = numRows * numCols;
         int numInversions = 0;
         int blankTileRow = 0;
@@ -123,7 +137,13 @@ public class Board extends Observable implements Serializable, Iterable<Tile> {
                 if (currTile.getId() != blankTileId) {
                     // Iterate through each subsequent tiles
                     for (int subRow = row; subRow < numRows; subRow++) {
-                        for (int subCol = col; subCol < numCols; subCol++) {
+                        // TODO Pretty messy, probably change?
+                        // If the current row isn't the starting row, the col must start at 0
+                        int startCol = 0;
+                        if(subRow == row){
+                            startCol = col;
+                        }
+                        for (int subCol = startCol; subCol < numCols; subCol++) {
                             Tile subTile = tiles[subRow][subCol];
                             // Inversions are possible when the nxt tile is less than the curr tile
                             if (currTile.getId() > subTile.getId()) {
@@ -133,7 +153,7 @@ public class Board extends Observable implements Serializable, Iterable<Tile> {
                     }
                 } else {
                     // Must get the row counting from the bottom
-                    blankTileRow = numRows - row + 1;
+                    blankTileRow = numRows - row;
                 }
             }
         }
