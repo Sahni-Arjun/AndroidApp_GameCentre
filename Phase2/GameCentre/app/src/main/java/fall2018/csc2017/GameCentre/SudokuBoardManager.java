@@ -47,7 +47,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
     /**
      * The correct order of the sudoku checker
      */
-    static final int[] CHECKER = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    static final int[] CHECKER = {1, 2, 3, 4, 5, 6, 7, 8, 9};
 
     /**
      * Manage a new shuffled board.
@@ -103,12 +103,14 @@ class SudokuBoardManager extends BoardManager implements Serializable {
      * @return true iff the row is correctly written
      */
     private boolean checkSingleRow(int row) {
-        int[] rowTiles = new int[9];
-        for (int col = 0; col < 9; col ++) {
-            rowTiles[col] = this.board.getTile(row, col).getValue();
+        List<Integer> rowTiles = new ArrayList<>();
+        for (int col = 0; col < 9; col++) {
+            int val = this.board.getTile(row, col).getValue();
+            if (val != 0) {
+                rowTiles.add(val);
+            }
         }
-        Arrays.sort(rowTiles);
-        return Arrays.equals(rowTiles, CHECKER);
+        return checkWithChecker(rowTiles);
     }
 
     /**
@@ -129,12 +131,14 @@ class SudokuBoardManager extends BoardManager implements Serializable {
      * @return true iff the col is correctly written
      */
     private boolean checkSingleCol(int col) {
-        int[] colTiles = new int[9];
+        List<Integer> colTiles = new ArrayList<>();
         for (int row = 0; row < 9; row++) {
-            colTiles[col] = this.board.getTile(row, col).getValue();
+            int val = this.board.getTile(row, col).getValue();
+            if (val != 0) {
+                colTiles.add(val);
+            }
         }
-        Arrays.sort(colTiles);
-        return Arrays.equals(colTiles, CHECKER);
+        return checkWithChecker(colTiles);
     }
 
     /**
@@ -164,12 +168,16 @@ class SudokuBoardManager extends BoardManager implements Serializable {
             }
         }
 
-        if (tiles.size() != CHECKER.length) {
+        return checkWithChecker(tiles);
+    }
+
+    private boolean checkWithChecker(List<Integer> numTiles) {
+        if (numTiles.size() != CHECKER.length) {
             return false;
         }
 
         for (int num: CHECKER) {
-            if (!tiles.contains(num)) {
+            if (!numTiles.contains(num)) {
                 return false;
             }
         }
@@ -183,7 +191,12 @@ class SudokuBoardManager extends BoardManager implements Serializable {
      * @return whether the tile at position is surrounded by a blank tile
      */
     boolean isValidTap(int position) { //TODO implement what it means for a tap to be valid.
+        // find the row
+        // find the column
 
+        // check if its row is correct
+        // check if its col is correct
+        // check if its
 //        int row = position / Board.numCols;
 //        int col = position % Board.numCols;
 //        int blankId = board.numTiles();
