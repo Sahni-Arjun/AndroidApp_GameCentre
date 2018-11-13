@@ -15,26 +15,28 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name="fall2018.csc2017.GameCentre.StartingLoginActivity">
+        <activity android:name=".StartingLoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="fall2018.csc2017.GameCentre.SlidingTileActivity" />
-        <activity android:name="fall2018.csc2017.GameCentre.SlidingTileStartingActivity" />
-        <activity android:name="fall2018.csc2017.GameCentre.SignInActivity" />
-        <activity android:name="fall2018.csc2017.GameCentre.SignUpActivity" />
-        <activity android:name="fall2018.csc2017.GameCentre.SlidingTileChoosePictureActivity" />
-        <activity android:name="fall2018.csc2017.GameCentre.ScoreBoardActivity" />
-        <activity android:name="fall2018.csc2017.GameCentre.SlidingTileScoreActivity" />
-        <activity android:name="fall2018.csc2017.GameCentre.MainMenuActivity" />
-        <activity android:name="fall2018.csc2017.GameCentre.ChooseGameMenuActivity" />
-        <activity android:name="fall2018.csc2017.GameCentre.SlidingTileComplexityActivity" />
-        <activity android:name="fall2018.csc2017.GameCentre.SetUndoActivity" />
-        <activity android:name="fall2018.csc2017.GameCentre.NotRobotActivity" />
-        <activity android:name="fall2018.csc2017.GameCentre.WinningActivity" />
+        <activity android:name=".SlidingTileActivity" />
+        <activity android:name=".SlidingTileStartingActivity" />
+        <activity android:name=".SignInActivity" />
+        <activity android:name=".SignUpActivity" />
+        <activity android:name=".SlidingTileChoosePictureActivity" />
+        <activity android:name=".ScoreBoardActivity" />
+        <activity android:name=".SlidingTileScoreActivity" />
+        <activity android:name=".MainMenuActivity" />
+        <activity android:name=".ChooseGameMenuActivity" />
+        <activity android:name=".SlidingTileComplexityActivity" />
+        <activity android:name=".SetUndoActivity" />
+        <activity android:name=".NotRobotActivity" />
+        <activity android:name=".WinningActivity" />
+        <activity android:name=".SudokuStartingActivity" />
+        <activity android:name=".SudokuActivity" />
     </application>
 
 </manifest>

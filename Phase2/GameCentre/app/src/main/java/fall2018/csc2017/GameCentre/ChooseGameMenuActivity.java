@@ -16,6 +16,7 @@ public class ChooseGameMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_game_menu);
         addSlidingTilesButtonListener();
+        addSudokuButtonListener();
     }
 
     /**
@@ -36,6 +37,27 @@ public class ChooseGameMenuActivity extends AppCompatActivity {
      */
     private void switchToSlidingTilesMenu() {
         Intent tmp = new Intent(this, SlidingTileStartingActivity.class);
+        startActivity(tmp);
+    }
+
+    /**
+     * Activate the sudoku button.
+     */
+    private void addSudokuButtonListener() {
+        Button button = findViewById(R.id.btnSudoku);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchToSudokuMenu();
+            }
+        });
+    }
+
+    /**
+     * Switch to the sudoku game.
+     */
+    private void switchToSudokuMenu() {
+        Intent tmp = new Intent(this, SudokuStartingActivity.class);
         startActivity(tmp);
     }
 
