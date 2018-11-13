@@ -2,6 +2,7 @@ package fall2018.csc2017.GameCentre;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -14,14 +15,14 @@ class SudokuBoardManager extends BoardManager implements Serializable {
     /**
      * The board being managed.
      */
-    private Board board;
+    private SudokuBoard board;
 
     /**
      * Manage a board that has been pre-populated.
      *
      * @param board the board
      */
-    SudokuBoardManager(Board board) {
+    SudokuBoardManager(SudokuBoard board) {
         this.board = board;
     }
 
@@ -30,7 +31,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
      *
      * @return the current board.
      */
-    public Board getBoard() {
+    public SudokuBoard getBoard() {
         return board;
     }
 
@@ -39,9 +40,14 @@ class SudokuBoardManager extends BoardManager implements Serializable {
      *
      * @param newBoard a new board
      */
-    public void setBoard(Board newBoard) {
+    public void setBoard(SudokuBoard newBoard) {
         this.board = newBoard;
     }
+
+    /**
+     * The correct order of the sudoku checker
+     */
+    static final int[] CHECKER = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
     /**
      * Manage a new shuffled board.
@@ -53,7 +59,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
             tiles.add(new Tile(25));
         }
 //        Collections.shuffle(tiles);
-        this.board = new Board(tiles);
+        this.board = new SudokuBoard(tiles);
     }
 
     /**
@@ -61,7 +67,8 @@ class SudokuBoardManager extends BoardManager implements Serializable {
      *
      * @return whether the tiles are in row-major order
      */
-    boolean puzzleSolved() { //TODO implement what it means for the puzzle to be solved.
+    boolean puzzleSolved() {
+        return this.checkRows() && this.checkCols() && this.checkBoxes();
 //        Iterator<Tile> boardIterator = board.iterator();
 //        Tile prev_Tile = boardIterator.next();
 //        Tile current_Tile;
@@ -75,8 +82,10 @@ class SudokuBoardManager extends BoardManager implements Serializable {
 //        }
 //        // If the end of the while loop is reached then all Tiles are in correct order.
 //        return true;
-        return false;
+//        return false;
     }
+
+
 
     /**
      * Return whether any of the four surrounding tiles is the blank tile.
