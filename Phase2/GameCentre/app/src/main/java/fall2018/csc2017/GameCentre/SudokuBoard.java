@@ -20,6 +20,23 @@ public class SudokuBoard extends Board{
      */
     private Tile[][] tiles = new Tile[numRows][numCols]; //TODO: Change this to SudokuTile once implemented
 
+    public void setTile(int row, int col, Tile tile){
+        tiles[row][col] = tile;
+        setChanged();
+        notifyObservers();
+    }
+
+    public void setTiles(Tile[][] tiles) {
+        this.tiles = tiles;
+    }
+
+    public Tile[][] getTiles() {
+        return tiles;
+    }
+
+    public SudokuBoard(){
+    }
+
     /**
      * A new board of tiles in row-major order.
      * Precondition: len(tiles) == numRows * numCols
@@ -40,7 +57,7 @@ public class SudokuBoard extends Board{
     /**
      * Get the tile in row and col
      */
-    public SudokuTile getTile(int row, int col) {
-        return (SudokuTile) this.tiles[row][col];  // TODO: better way to return SudokuTile
+    public Tile getTile(int row, int col) {
+        return (Tile) this.tiles[row][col];  // TODO: better way to return SudokuTile
     }
 }
