@@ -13,13 +13,101 @@
         android:layout_weight="0.8">
 
         <Button
+            android:id="@+id/btnSudoku1"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="1dp"
+            android:layout_marginBottom="0dp"
+            android:text="1" />
+
+        <Button
+            android:id="@+id/btnSudoku2"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="-3dp"
+            android:layout_marginBottom="0dp"
+            android:layout_toEndOf="@+id/btnSudoku1"
+            android:text="2" />
+
+        <Button
+            android:id="@+id/btnSudoku3"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="-4dp"
+            android:layout_marginBottom="0dp"
+            android:layout_toEndOf="@+id/btnSudoku2"
+            android:text="3" />
+
+        <Button
+            android:id="@+id/btnSudoku4"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="-4dp"
+            android:layout_marginBottom="0dp"
+            android:layout_toEndOf="@+id/btnSudoku3"
+            android:text="4" />
+
+        <Button
+            android:id="@+id/btnSudoku5"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="-3dp"
+            android:layout_marginBottom="0dp"
+            android:layout_toEndOf="@+id/btnSudoku4"
+            android:text="5" />
+
+        <Button
+            android:id="@+id/btnSudoku6"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="212dp"
+            android:layout_marginBottom="0dp"
+            android:text="6" />
+
+        <Button
+            android:id="@+id/btnSudoku7"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="-3dp"
+            android:layout_marginBottom="0dp"
+            android:layout_toEndOf="@+id/btnSudoku6"
+            android:text="7" />
+
+        <Button
+            android:id="@+id/btnSudoku8"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="296dp"
+            android:layout_marginBottom="0dp"
+            android:text="8" />
+
+        <Button
+            android:id="@+id/btnSudoku9"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="339dp"
+            android:layout_marginBottom="0dp"
+            android:text="9" />
+
+        <Button
             android:id="@+id/btnSudokuSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="49dp"
-            android:layout_marginBottom="35dp"
+            android:layout_marginStart="0dp"
             android:text="@string/save"
             tools:ignore="RelativeOverlap" />
 
@@ -27,18 +115,15 @@
             android:id="@+id/btnSudokuUndo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/SaveButton"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="91dp"
-            android:layout_marginTop="34dp"
-            android:layout_marginEnd="68dp"
-            android:layout_toEndOf="@+id/btnSudokuSave"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
             android:text="@string/undo"
             tools:ignore="RelativeOverlap" />
     </RelativeLayout>
 
-    <fall2018.csc2017.GameCentre.GestureDetectGridView
+    <fall2018.csc2017.GameCentre.SudokuGestureDetectGridView
         android:id="@+id/grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -28,6 +28,8 @@ public class Board extends Observable implements Serializable, Iterable<Tile> {
      */
     private Tile[][] tiles = new Tile[numRows][numCols];
 
+    Board(){}
+
     /**
      * A new board of tiles in row-major order.
      * Precondition: len(tiles) == numRows * numCols

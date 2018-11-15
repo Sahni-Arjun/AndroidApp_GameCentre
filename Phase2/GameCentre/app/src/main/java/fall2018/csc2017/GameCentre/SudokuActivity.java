@@ -45,8 +45,13 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
     private Scoreboard scoreBoard;
 
     // Grid View and calculated column height and width based on device size
-    private GestureDetectGridView gridView;
+    private SudokuGestureDetectGridView gridView;
     private static int columnWidth, columnHeight;
+
+    /**
+     * The current number selected.
+     */
+    public static int currentNumber = 1;
 
     /**
      * Set up the background image for each button based on the master list
@@ -88,6 +93,15 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
                         display();
                     }
                 });
+        addChooseOneButtonListener();
+        addChooseTwoButtonListener();
+        addChooseThreeButtonListener();
+        addChooseFourButtonListener();
+        addChooseFiveButtonListener();
+        addChooseSixButtonListener();
+        addChooseSevenButtonListener();
+        addChooseEightButtonListener();
+        addChooseNineButtonListener();
     }
 
     /**
@@ -153,12 +167,13 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
      * @param context the context
      */
     private void createTileButtons(Context context) {
-//        Board board = boardManager.getBoard();
+//        Board board = boardManager.getThisBoard();
         tileButtons = new ArrayList<>();
         for (int row = 0; row != Board.numRows; row++) {
             for (int col = 0; col != Board.numCols; col++) {
                 Button tmp = new Button(context);
 //                tmp.setBackgroundResource(board.getTile(row, col).getBackground());
+                //TODO Uncomment the above line after pregenerated board is implemented.
                 tmp.setBackgroundResource(R.drawable.tile_25);
                 this.tileButtons.add(tmp);
             }
@@ -169,12 +184,12 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
      * Update the backgrounds on the buttons to match the tiles.
      */
     private void updateTileButtons() {
-        Board board = boardManager.getBoard();
+        SudokuBoard board = boardManager.getBoard();
         int nextPos = 0;
 
         for (Button b : tileButtons) {
-            int row = nextPos / Board.numRows;
-            int col = nextPos % Board.numCols;
+            int row = nextPos / SudokuBoard.numRows;
+            int col = nextPos % SudokuBoard.numCols;
             b.setBackgroundResource(board.getTile(row, col).getBackground());
             nextPos++;
         }
@@ -255,33 +270,34 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        loadFromFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
-
-        Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-        SaveManager currSavManager = currentAccount.getSaveManager();
-        SlidingTilesState lastAutoState = (SlidingTilesState) currSavManager.getLastState("auto");
-        int numMoves = currSavManager.getLength("auto");
-
-        //Creating new game state with field values of the previous state.
-        SlidingTilesState newState = new SlidingTilesState(boardManager, numMoves,
-                SlidingTileComplexityActivity.complexity, SetUndoActivity.undo,
-                lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo());
-        currSavManager.addState(newState);
-        saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+//        loadFromFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+//
+//        Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
+//        SaveManager currSavManager = currentAccount.getSaveManager();
+//        SlidingTilesState lastAutoState = (SlidingTilesState) currSavManager.getLastState("auto");
+//        int numMoves = currSavManager.getLength("auto");
+//
+//        //Creating new game state with field values of the previous state.
+//        SlidingTilesState newState = new SlidingTilesState(boardManager, numMoves,
+//                SlidingTileComplexityActivity.complexity, SetUndoActivity.undo,
+//                lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo());
+//        currSavManager.addState(newState);
+//        saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+        Toast.makeText(getApplicationContext(), "" + currentNumber, Toast.LENGTH_SHORT).show();
         display();
-
-        //Saving/Displaying the score if the game is over.
-        if (newState.getBoardManager().puzzleSolved()) {
-            loadFromFile(StartingLoginActivity.SAVE_SCOREBOARD, "scoreboard");
-            scoreBoard.addToScoreBoard(scoreBoard.createScore(StartingLoginActivity.currentUser,
-                    newState.getScore()));
-            ScoreBoardActivity.slidingTileScoreBoard = scoreBoard;
-            saveToFile(StartingLoginActivity.SAVE_SCOREBOARD, "scoreboard");
-            currSavManager.wipeAutoSave();
-            currSavManager.wipePermaSave();
-            saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
-            switchToWinning();
-        }
+//
+//        //Saving/Displaying the score if the game is over.
+//        if (newState.getBoardManager().puzzleSolved()) {
+//            loadFromFile(StartingLoginActivity.SAVE_SCOREBOARD, "scoreboard");
+//            scoreBoard.addToScoreBoard(scoreBoard.createScore(StartingLoginActivity.currentUser,
+//                    newState.getScore()));
+//            ScoreBoardActivity.slidingTileScoreBoard = scoreBoard;
+//            saveToFile(StartingLoginActivity.SAVE_SCOREBOARD, "scoreboard");
+//            currSavManager.wipeAutoSave();
+//            currSavManager.wipePermaSave();
+//            saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+//            switchToWinning();
+//        }
 
     }
 
@@ -291,5 +307,122 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
     private void switchToWinning() {
         Intent tmp = new Intent(this, WinningActivity.class);
         startActivity(tmp);
+    }
+
+    /**
+     * Activate the Choose one button.
+     */
+    private void addChooseOneButtonListener() {
+        Button saveButton = findViewById(R.id.btnSudoku1);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentNumber = 1;
+            }
+        });
+    }
+
+    /**
+     * Activate the Choose one button.
+     */
+    private void addChooseTwoButtonListener() {
+        Button saveButton = findViewById(R.id.btnSudoku2);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentNumber = 2;
+            }
+        });
+    }
+
+    /**
+     * Activate the Choose one button.
+     */
+    private void addChooseThreeButtonListener() {
+        Button saveButton = findViewById(R.id.btnSudoku3);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentNumber = 3;
+            }
+        });
+    }
+
+    /**
+     * Activate the Choose one button.
+     */
+    private void addChooseFourButtonListener() {
+        Button saveButton = findViewById(R.id.btnSudoku4);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentNumber = 4;
+            }
+        });
+    }
+
+    /**
+     * Activate the Choose one button.
+     */
+    private void addChooseFiveButtonListener() {
+        Button saveButton = findViewById(R.id.btnSudoku5);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentNumber = 5;
+            }
+        });
+    }
+
+    /**
+     * Activate the Choose one button.
+     */
+    private void addChooseSixButtonListener() {
+        Button saveButton = findViewById(R.id.btnSudoku6);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentNumber = 6;
+            }
+        });
+    }
+
+    /**
+     * Activate the Choose one button.
+     */
+    private void addChooseSevenButtonListener() {
+        Button saveButton = findViewById(R.id.btnSudoku7);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentNumber = 7;
+            }
+        });
+    }
+
+    /**
+     * Activate the Choose one button.
+     */
+    private void addChooseEightButtonListener() {
+        Button saveButton = findViewById(R.id.btnSudoku8);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentNumber = 8;
+            }
+        });
+    }
+
+    /**
+     * Activate the Choose one button.
+     */
+    private void addChooseNineButtonListener() {
+        Button saveButton = findViewById(R.id.btnSudoku9);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentNumber = 9;
+            }
+        });
     }
 }
