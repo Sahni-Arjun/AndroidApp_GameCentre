@@ -37,6 +37,9 @@
         <activity android:name=".WinningActivity" />
         <activity android:name=".SudokuStartingActivity" />
         <activity android:name=".SudokuActivity" />
+        <activity android:name=".HangmanComplexityActivity" />
+        <activity android:name=".HangmanStartingActivity" />
+
     </application>
 
 </manifest>
