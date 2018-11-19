@@ -32,7 +32,7 @@ public class SudokuStartingActivity  extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        boardManager = new SudokuBoardManager();
+//        slidingTilesBoardManager = new SudokuBoardManager();
         setContentView(R.layout.activity_sudoku_starting);
         addNewGameButtonListener();
         addLoadButtonListener();

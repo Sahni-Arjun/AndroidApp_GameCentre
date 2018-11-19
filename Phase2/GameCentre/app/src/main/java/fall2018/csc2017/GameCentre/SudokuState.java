@@ -7,7 +7,7 @@ import java.io.Serializable;
  */
 class SudokuState extends GameState implements Serializable {
     /**
-     * The current BoardManager, containing current configuration of tiles.
+     * The current SlidingTilesBoardManager, containing current configuration of tiles.
      */
     private SudokuBoardManager boardManager;
 

@@ -45,7 +45,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
     private Scoreboard scoreBoard;
 
     // Grid View and calculated column height and width based on device size
-    private SudokuGestureDetectGridView gridView;
+    private GestureDetectGridView gridView;
     private static int columnWidth, columnHeight;
 
     /**
@@ -68,7 +68,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loadFromFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
-//        boardManager = SlidingTileStartingActivity.boardManager;
+//        slidingTilesBoardManager = SlidingTileStartingActivity.slidingTilesBoardManager;
         boardManager = SudokuStartingActivity.boardManager;
         createTileButtons(this);
         setContentView(R.layout.activity_sudoku);
@@ -169,7 +169,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
      * @param context the context
      */
     private void createTileButtons(Context context) {
-//        SudokuBoard board = boardManager.getThisBoard();
+//        SudokuBoard board = slidingTilesBoardManager.getThisBoard();
         tileButtons = new ArrayList<>();
         for (int row = 0; row != Board.numRows; row++) {
             for (int col = 0; col != Board.numCols; col++) {
@@ -301,7 +301,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
         startTime = System.currentTimeMillis();
 //
 //        //Saving/Displaying the score if the game is over.
-//        if (newState.getBoardManager().puzzleSolved()) {
+//        if (newState.getSlidingTilesBoardManager().puzzleSolved()) {
 //            loadFromFile(StartingLoginActivity.SAVE_SCOREBOARD, "scoreboard");
 //            scoreBoard.addToScoreBoard(scoreBoard.createScore(StartingLoginActivity.currentUser,
 //                    newState.getScore()));
