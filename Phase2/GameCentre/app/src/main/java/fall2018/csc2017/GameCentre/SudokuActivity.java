@@ -53,6 +53,8 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
      */
     public static int currentNumber = 1;
 
+    private long startTime;
+
     /**
      * Set up the background image for each button based on the master list
      * of positions, and then call the adapter to set the view.
@@ -102,6 +104,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
         addChooseSevenButtonListener();
         addChooseEightButtonListener();
         addChooseNineButtonListener();
+        startTime = System.currentTimeMillis();
     }
 
     /**
@@ -200,6 +203,12 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onPause() {
         super.onPause();
+        Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
+        SaveManager currSavManager = currentAccount.getSaveManager();
+        SudokuState lastAutoState = (SudokuState) currSavManager.getLastState("auto", SaveManager.sudokuName);
+        long lastTime = lastAutoState.getTime();
+        long newTime = lastTime + System.currentTimeMillis() - startTime;
+        lastAutoState.setTime(newTime);
         saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
     }
 
@@ -210,8 +219,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
     protected void onResume() {
         super.onResume();
         loadFromFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
-//        Board.numRows = 9;
-//        Board.numCols = 9;
+        startTime = System.currentTimeMillis();
         display();
     }
 
@@ -277,16 +285,20 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
         SaveManager currSavManager = currentAccount.getSaveManager();
         SudokuState lastAutoState = (SudokuState) currSavManager.getLastState("auto", SaveManager.sudokuName);
         int numMoves = currSavManager.getLength("auto", SaveManager.sudokuName);
+        long lastTime = lastAutoState.getTime();
+        long newTime = lastTime + System.currentTimeMillis() - startTime;
 
         //TODO set the difficulty of the game when it is implemented. (Currently it's 0).
         //Creating new game state with field values of the previous state.
         SudokuState newState = new SudokuState(boardManager, numMoves,
                 0, SetUndoActivity.undo,
-                lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo());
+                lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo(),
+                newTime);
         currSavManager.addState(newState, SaveManager.sudokuName);
         saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
-        Toast.makeText(getApplicationContext(), "" + currentNumber, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "" + newTime/1000, Toast.LENGTH_SHORT).show();
         display();
+        startTime = System.currentTimeMillis();
 //
 //        //Saving/Displaying the score if the game is over.
 //        if (newState.getBoardManager().puzzleSolved()) {

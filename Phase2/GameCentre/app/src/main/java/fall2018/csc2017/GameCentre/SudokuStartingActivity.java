@@ -117,8 +117,8 @@ public class SudokuStartingActivity  extends AppCompatActivity {
                     SudokuState prePermaState = (SudokuState) currSavManager.getLastState("perma", SaveManager.sudokuName);
                     //TODO add difficulty when implemented.
 //                    SlidingTileComplexityActivity.complexity = prePermaState.getComplexity();
-//                    Board.numRows = 9;
-//                    Board.numCols = 9;
+                    Board.numRows = 9;
+                    Board.numCols = 9;
                     makeToastLoadedText();
                     saveToFile();
                     switchtoSudoku();
@@ -155,8 +155,8 @@ public class SudokuStartingActivity  extends AppCompatActivity {
 //                    SlidingTileComplexityActivity.complexity = lastAutoState.getComplexity();
 //                    Board.numRows = SlidingTileComplexityActivity.complexity;
 //                    Board.numCols = SlidingTileComplexityActivity.complexity;
-//                    Board.numRows = 9;
-//                    Board.numCols = 9;
+                    Board.numRows = 9;
+                    Board.numCols = 9;
                     makeToastLoadedText();
                     switchtoSudoku();
                 } else {

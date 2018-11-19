@@ -17,7 +17,7 @@ class SudokuMovementController {
     void processTapMovement(Context context, int position) {
         if (boardManager.isValidTap(position)) {
             boardManager.touchMove(position);
-            Toast.makeText(context, "Valid", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(context, "Valid", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(context, "Invalid Tap", Toast.LENGTH_SHORT).show();
         }

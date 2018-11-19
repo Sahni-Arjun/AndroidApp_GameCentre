@@ -16,10 +16,18 @@ class SudokuState extends GameState implements Serializable {
      */
     private int difficulty = 0;
 
+    long getTime() {
+        return time;
+    }
+
+    void setTime(long time) {
+        this.time = time;
+    }
+
     /**
      * The current amount of time spent solving the game already.
      */
-    private double time = 0;
+    private long time = 0;
     // TODO add time to one of the constructors.
 
     /**
@@ -50,13 +58,14 @@ class SudokuState extends GameState implements Serializable {
      * @param isUnlimited  if the number of moves undone has no limit
      */
     SudokuState(SudokuBoardManager boardManager, int numMoves, int difficulty, int maxUndone,
-                      int movesUndone, boolean isUnlimited) {
+                      int movesUndone, boolean isUnlimited, long time) {
         this.boardManager = boardManager;
         this.numMoves = numMoves;
         this.difficulty = difficulty;
         this.maxNumMovesUndone = maxUndone;
         this.numMovesUndone = movesUndone;
         this.unlimitedUndo = isUnlimited;
+        this.time = time;
     }
 
     /**
