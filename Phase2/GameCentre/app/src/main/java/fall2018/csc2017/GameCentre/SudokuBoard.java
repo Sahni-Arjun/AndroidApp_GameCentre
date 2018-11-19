@@ -40,7 +40,7 @@ public class SudokuBoard extends Board{
      *
      * @param t the tiles for the board
      */
-    public SudokuBoard(List<Tile> t) {
+    SudokuBoard(List<Tile> t) {
         super(t);
         Iterator<Tile> iter = t.iterator();
 
@@ -55,6 +55,6 @@ public class SudokuBoard extends Board{
      * Get the tile in row and col
      */
     public Tile getTile(int row, int col) {
-        return (Tile) this.tiles[row][col];  // TODO: better way to return SudokuTile
+        return this.tiles[row][col];  // TODO: better way to return SudokuTile
     }
 }

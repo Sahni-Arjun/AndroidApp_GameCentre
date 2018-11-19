@@ -67,7 +67,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        loadFromFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+        loadFromFile("Account");
 //        slidingTilesBoardManager = SlidingTileStartingActivity.slidingTilesBoardManager;
         boardManager = SudokuStartingActivity.boardManager;
         createTileButtons(this);
@@ -115,7 +115,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFromFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+                loadFromFile("Account");
 
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
                 currentAccount.getSaveManager().updateSave("perma", SaveManager.sudokuName);
@@ -133,7 +133,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
         undoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFromFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+                loadFromFile("Account");
 
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
                 SaveManager currSavManager = currentAccount.getSaveManager();
@@ -218,7 +218,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onResume() {
         super.onResume();
-        loadFromFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+        loadFromFile("Account");
         startTime = System.currentTimeMillis();
         display();
     }
@@ -226,12 +226,11 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
     /**
      * Load scoreboard or account manager from fileName.
      *
-     * @param fileName the name of the file
      */
-    private void loadFromFile(String fileName, String type) {
+    private void loadFromFile(String type) {
 
         try {
-            InputStream inputStream = this.openFileInput(fileName);
+            InputStream inputStream = this.openFileInput(StartingLoginActivity.SAVE_ACCOUNT_MANAGER);
             if (inputStream != null) {
                 ObjectInputStream input = new ObjectInputStream(inputStream);
                 if (type.equals("Account")) {
@@ -279,7 +278,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        loadFromFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+        loadFromFile("Account");
 
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         SaveManager currSavManager = currentAccount.getSaveManager();
@@ -315,13 +314,14 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
 
     }
 
-    /**
-     * Switch to the SlidingTileActivity view to play the game.
-     */
-    private void switchToWinning() {
-        Intent tmp = new Intent(this, WinningActivity.class);
-        startActivity(tmp);
-    }
+    //TODO Implement winning screen.
+//    /**
+//     * Switch to the SlidingTileActivity view to play the game.
+//     */
+//    private void switchToWinning() {
+//        Intent tmp = new Intent(this, WinningActivity.class);
+//        startActivity(tmp);
+//    }
 
     /**
      * Activate the Choose one button.

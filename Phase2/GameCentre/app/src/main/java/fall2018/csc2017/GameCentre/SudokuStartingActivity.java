@@ -84,14 +84,6 @@ public class SudokuStartingActivity  extends AppCompatActivity {
     }
 
     /**
-     * Switch to the SlidingTileComplexityActivity to specify complexity.
-     */
-    private void switchToTileComplexity() {
-        Intent tmp = new Intent(this, SlidingTileComplexityActivity.class);
-        startActivity(tmp);
-    }
-
-    /**
      * Switch to the SudokuActivity to specify complexity.
      */
     private void switchtoSudoku() {
@@ -114,7 +106,7 @@ public class SudokuStartingActivity  extends AppCompatActivity {
                 if (currSavManager.getLength("perma", SaveManager.sudokuName) != 0) {
                     boardManager = ((SudokuState) currSavManager.getLastState("perma", SaveManager.sudokuName)).getBoardManager();
                     currSavManager.updateSave("auto", SaveManager.sudokuName);
-                    SudokuState prePermaState = (SudokuState) currSavManager.getLastState("perma", SaveManager.sudokuName);
+//                    SudokuState prePermaState = (SudokuState) currSavManager.getLastState("perma", SaveManager.sudokuName);
                     //TODO add difficulty when implemented.
 //                    SlidingTileComplexityActivity.complexity = prePermaState.getComplexity();
                     Board.numRows = 9;
@@ -151,7 +143,7 @@ public class SudokuStartingActivity  extends AppCompatActivity {
 
                 if (currSavManager.getLength("auto", SaveManager.sudokuName) != 0) {
                     boardManager = ((SudokuState) currSavManager.getLastState("auto", SaveManager.sudokuName)).getBoardManager();
-                    SudokuState lastAutoState = (SudokuState) currSavManager.getLastState("auto", SaveManager.sudokuName);
+//                    SudokuState lastAutoState = (SudokuState) currSavManager.getLastState("auto", SaveManager.sudokuName);
 //                    SlidingTileComplexityActivity.complexity = lastAutoState.getComplexity();
 //                    Board.numRows = SlidingTileComplexityActivity.complexity;
 //                    Board.numCols = SlidingTileComplexityActivity.complexity;

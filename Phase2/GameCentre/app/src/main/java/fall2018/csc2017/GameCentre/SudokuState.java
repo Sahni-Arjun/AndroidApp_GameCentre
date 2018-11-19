@@ -80,7 +80,7 @@ class SudokuState extends GameState implements Serializable {
     /**
      * Calculate and return the score based on number of moves taken.
      *
-     * @return score of this SlidingTilesState.
+     * @return score of this SudokuState.
      */
     int getScore() { //TODO create formula for getScore based on double time.
 //        if (complexity == 3) {
@@ -94,18 +94,18 @@ class SudokuState extends GameState implements Serializable {
     }
 
     /**
-     * Return the complexity of this SlidingTilesState.
+     * Return the difficulty of this SudokuState.
      *
-     * @return the complexity.
+     * @return the difficulty.
      */
     int getDifficulty() {
         return difficulty;
     }
 
     /**
-     * Set the complexity of the SlidingTilesState.
+     * Set the difficulty of the SudokuState.
      *
-     * @param difficulty the desired complexity of SlidingTilesState.
+     * @param difficulty the desired complexity of SudokuState.
      */
     void setDifficulty(int difficulty) {
         this.difficulty = difficulty;

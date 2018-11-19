@@ -44,7 +44,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
     /**
      * The correct order of the sudoku checker
      */
-    static final int[] CHECKER = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    private static final int[] CHECKER = {1, 2, 3, 4, 5, 6, 7, 8, 9};
 
     /**
      * Manage a new shuffled board.
