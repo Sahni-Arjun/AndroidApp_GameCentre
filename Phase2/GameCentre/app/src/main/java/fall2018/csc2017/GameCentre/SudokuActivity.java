@@ -67,7 +67,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
         super.onCreate(savedInstanceState);
         loadFromFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
 //        boardManager = SlidingTileStartingActivity.boardManager;
-        boardManager = new SudokuBoardManager();
+        boardManager = SudokuStartingActivity.boardManager;
         createTileButtons(this);
         setContentView(R.layout.activity_sudoku);
         addSaveButtonListener();
@@ -115,7 +115,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
                 loadFromFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
 
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-                currentAccount.getSaveManager().updateSave("perma");
+                currentAccount.getSaveManager().updateSave("perma", SaveManager.sudokuName);
 
                 saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
             }
@@ -132,24 +132,23 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
             public void onClick(View v) {
                 loadFromFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
 
-                boardManager = new SudokuBoardManager();
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
                 SaveManager currSavManager = currentAccount.getSaveManager();
 
-                boolean canUndo = currSavManager.getLastState("auto").canUndo();
-                SlidingTilesState currentAutoState = (SlidingTilesState) currSavManager.getLastState("auto");
+                boolean canUndo = currSavManager.getLastState("auto", SaveManager.sudokuName).canUndo();
+                SudokuState currentAutoState = (SudokuState) currSavManager.getLastState("auto", SaveManager.sudokuName);
 
-                if ((currSavManager.getLength("auto") != 1) && canUndo) {
+                if ((currSavManager.getLength("auto", SaveManager.sudokuName) != 1) && canUndo) {
                     int prevMovesUndone = currentAutoState.getNumMovesUndone();
-                    currSavManager.undo();
-                    SlidingTilesState prevState;
-                    prevState = (SlidingTilesState) currSavManager.getLastState("auto");
+                    currSavManager.undo(SaveManager.sudokuName);
+                    SudokuState prevState;
+                    prevState = (SudokuState) currSavManager.getLastState("auto", SaveManager.sudokuName);
 
                     Tile[][] prevTiles = prevState.getBoardManager().getBoard().getTiles();
                     boardManager.getBoard().setTiles(prevTiles);
 
                     gridView.setBoardManager(boardManager);
-                    currSavManager.getLastState("auto").incrementNumMoves(prevMovesUndone);
+                    currSavManager.getLastState("auto", SaveManager.sudokuName).incrementNumMoves(prevMovesUndone);
                     saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
                     display();
 
@@ -167,7 +166,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
      * @param context the context
      */
     private void createTileButtons(Context context) {
-//        Board board = boardManager.getThisBoard();
+//        SudokuBoard board = boardManager.getThisBoard();
         tileButtons = new ArrayList<>();
         for (int row = 0; row != Board.numRows; row++) {
             for (int col = 0; col != Board.numCols; col++) {
@@ -211,6 +210,8 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
     protected void onResume() {
         super.onResume();
         loadFromFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+//        Board.numRows = 9;
+//        Board.numCols = 9;
         display();
     }
 
@@ -270,19 +271,20 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-//        loadFromFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
-//
-//        Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-//        SaveManager currSavManager = currentAccount.getSaveManager();
-//        SlidingTilesState lastAutoState = (SlidingTilesState) currSavManager.getLastState("auto");
-//        int numMoves = currSavManager.getLength("auto");
-//
-//        //Creating new game state with field values of the previous state.
-//        SlidingTilesState newState = new SlidingTilesState(boardManager, numMoves,
-//                SlidingTileComplexityActivity.complexity, SetUndoActivity.undo,
-//                lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo());
-//        currSavManager.addState(newState);
-//        saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+        loadFromFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+
+        Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
+        SaveManager currSavManager = currentAccount.getSaveManager();
+        SudokuState lastAutoState = (SudokuState) currSavManager.getLastState("auto", SaveManager.sudokuName);
+        int numMoves = currSavManager.getLength("auto", SaveManager.sudokuName);
+
+        //TODO set the difficulty of the game when it is implemented. (Currently it's 0).
+        //Creating new game state with field values of the previous state.
+        SudokuState newState = new SudokuState(boardManager, numMoves,
+                0, SetUndoActivity.undo,
+                lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo());
+        currSavManager.addState(newState, SaveManager.sudokuName);
+        saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
         Toast.makeText(getApplicationContext(), "" + currentNumber, Toast.LENGTH_SHORT).show();
         display();
 //

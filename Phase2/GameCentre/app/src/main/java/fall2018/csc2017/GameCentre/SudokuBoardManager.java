@@ -177,21 +177,22 @@ class SudokuBoardManager extends BoardManager implements Serializable {
      * @return whether the tile at position is surrounded by a blank tile
      */
     boolean isValidTap(int position) { //TODO implement what it means for a tap to be valid.
-        int row = position / SudokuBoard.numRows;
-        int col = position % SudokuBoard.numCols;
-
-        int ternaryRow = row / 3;
-        int ternaryCol = col / 3;
-
-        SudokuBoardManager tempBoardManager = new SudokuBoardManager();
-        SudokuBoard tempBoard = new SudokuBoard();
-        tempBoard.setTiles(this.board.getTiles().clone());
-        tempBoardManager.setBoard(tempBoard);
-        Tile tile = new Tile(SudokuActivity.currentNumber-1);
-        tempBoardManager.getBoard().setTile(row, col, tile);
+//        int row = position / SudokuBoard.numRows;
+//        int col = position % SudokuBoard.numCols;
+//
+//        int ternaryRow = row / 3;
+//        int ternaryCol = col / 3;
+//
+//        SudokuBoardManager tempBoardManager = new SudokuBoardManager();
+//        SudokuBoard tempBoard = new SudokuBoard();
+//        tempBoard.setTiles(this.board.getTiles().clone());
+//        tempBoardManager.setBoard(tempBoard);
+//        Tile tile = new Tile(SudokuActivity.currentNumber-1);
+//        tempBoardManager.getBoard().setTile(row, col, tile);
 
         //TODO edit or create new methods for checking isValidTap.
-        return tempBoardManager.checkSingleRow(row) && tempBoardManager.checkSingleCol(col) & tempBoardManager.checkSubBox(ternaryRow, ternaryCol);
+//        return tempBoardManager.checkSingleRow(row) && tempBoardManager.checkSingleCol(col) & tempBoardManager.checkSubBox(ternaryRow, ternaryCol);
+        return true;
     }
 
     /**
