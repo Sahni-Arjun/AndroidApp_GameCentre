@@ -11,11 +11,6 @@ import android.widget.Button;
  */
 public class ScoreBoardActivity extends AppCompatActivity {
 
-    /**
-     * The scoreboard object for sliding tiles.
-     */
-    public static Scoreboard slidingTileScoreBoard;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

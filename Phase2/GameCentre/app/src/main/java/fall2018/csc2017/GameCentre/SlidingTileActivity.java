@@ -272,7 +272,6 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
             loadFromFile(StartingLoginActivity.SAVE_SCOREBOARD, "scoreboard");
             scoreBoard.addToScoreBoard(scoreBoard.createScore(StartingLoginActivity.currentUser,
                     newState.getScore()));
-            ScoreBoardActivity.slidingTileScoreBoard = scoreBoard;
             saveToFile(StartingLoginActivity.SAVE_SCOREBOARD, "scoreboard");
             currSavManager.wipeAutoSave(SaveManager.slidingTilesName);
             currSavManager.wipePermaSave(SaveManager.slidingTilesName);
