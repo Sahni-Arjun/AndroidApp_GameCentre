@@ -2,20 +2,41 @@ package fall2018.csc2017.GameCentre;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 class SaveManager implements Serializable {
 
     static final long serialVersionUID = 5971302647072124829L;
 
-    /**
-     * Permanent save of user's SlidingTiles game.
-     */
-    private ArrayList<GameState> permaSave = new ArrayList<>();
+    static final String slidingTilesName = "sliding tiles";
+    static final String sudokuName = "sudoku";
+
+//    /**
+//     * Permanent save of user's SlidingTiles game.
+//     */
+//    private ArrayList<GameState> permaSave = new ArrayList<>();
+//
+//    /**
+//     * Autosave of user's SlidingTiles game.
+//     */
+//    private ArrayList<GameState> autoSave = new ArrayList<>();
 
     /**
-     * Autosave of user's SlidingTiles game.
+     * Permanent save of user's games.
      */
-    private ArrayList<GameState> autoSave = new ArrayList<>();
+    private HashMap<String,ArrayList<GameState>> permaSave = new HashMap<>();
+
+    /**
+     * Autosave of user's games.
+     */
+    private HashMap<String,ArrayList<GameState>> autoSave = new HashMap<>();
+
+    SaveManager(){
+        permaSave.put(SaveManager.slidingTilesName, new ArrayList<GameState>());
+        permaSave.put(SaveManager.sudokuName, new ArrayList<GameState>());
+        autoSave.put(SaveManager.slidingTilesName, new ArrayList<GameState>());
+        autoSave.put(SaveManager.sudokuName, new ArrayList<GameState>());
+    }
 
     /**
      * Return the most recent saved game of SlidingTiles.
@@ -23,11 +44,13 @@ class SaveManager implements Serializable {
      * @param saveType whether retrieving from auto or perma save
      * @return most recent saved game
      */
-    GameState getLastState(String saveType) {
+    GameState getLastState(String saveType, String gameType) {
         if (saveType.equals("auto")) {
-            return autoSave.get(autoSave.size() - 1);
+            int numAuto = autoSave.get(gameType).size();
+            return autoSave.get(gameType).get(numAuto - 1);
         } else {
-            return permaSave.get(permaSave.size() - 1);
+            int numAuto = permaSave.get(gameType).size();
+            return permaSave.get(gameType).get(numAuto - 1);
         }
     }
 
@@ -36,8 +59,8 @@ class SaveManager implements Serializable {
      *
      * @param state The new state to add
      */
-    void addState(GameState state) {
-        autoSave.add(state);
+    void addState(GameState state, String gameType) {
+        autoSave.get(gameType).add(state);
     }
 
     /**
@@ -45,35 +68,36 @@ class SaveManager implements Serializable {
      *
      * @param saveType whether erasing the perma or auto save
      */
-    void updateSave(String saveType) {
+    void updateSave(String saveType, String gameType) {
         if (saveType.equals("auto")) {
-            autoSave = new ArrayList<>();
-            autoSave.addAll(permaSave);
+            autoSave.put(gameType, new ArrayList<GameState>());
+            autoSave.get(gameType).addAll(permaSave.get(gameType));
         } else {
-            permaSave = new ArrayList<>();
-            permaSave.addAll(autoSave);
+            permaSave.put(gameType, new ArrayList<GameState>());
+            permaSave.get(gameType).addAll(autoSave.get(gameType));
         }
     }
 
     /**
      * Erase the auto save.
      */
-    void wipeAutoSave() {
-        autoSave = new ArrayList<>();
+    void wipeAutoSave(String gameType) {
+        autoSave.put(gameType, new ArrayList<GameState>());
     }
 
     /**
-     * Erase the auto save.
+     * Erase the perma save.
      */
-    void wipePermaSave() {
-        permaSave = new ArrayList<>();
+    void wipePermaSave(String gameType) {
+        permaSave.put(gameType, new ArrayList<GameState>());
     }
 
     /**
      * Remove the last auto save.
      */
-    void undo() {
-        autoSave.remove(autoSave.size() - 1);
+    void undo(String gameType) {
+        int numAuto = autoSave.get(gameType).size();
+        autoSave.get(gameType).remove(numAuto - 1);
     }
 
     /**
@@ -82,11 +106,11 @@ class SaveManager implements Serializable {
      * @param saveType whether returning the auto or perma save
      * @return the number of moves
      */
-    int getLength(String saveType) {
+    int getLength(String saveType, String gameType) {
         if (saveType.equals("auto")) {
-            return autoSave.size();
+            return autoSave.get(gameType).size();
         } else {
-            return permaSave.size();
+            return permaSave.get(gameType).size();
         }
     }
 }

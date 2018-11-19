@@ -124,7 +124,7 @@ public class Board extends Observable implements Serializable, Iterable<Tile> {
      *
      * @return whether or not the board is solvable
      */
-      private boolean isSolvable() {
+    boolean isSolvable() {
         int blankTileId = numRows * numCols;
         int numInversions = 0;
         int blankTileRow = 0;

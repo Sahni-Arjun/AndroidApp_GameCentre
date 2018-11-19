@@ -27,7 +27,7 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
     /**
      * The board manager.
      */
-    private BoardManager boardManager;
+    private SlidingTilesBoardManager slidingTilesBoardManager;
 
     /**
      * The buttons to display.
@@ -61,7 +61,7 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loadFromFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
-        boardManager = SlidingTileStartingActivity.boardManager;
+        slidingTilesBoardManager = SlidingTileStartingActivity.slidingTilesBoardManager;
         createTileButtons(this);
         setContentView(R.layout.activity_main);
         addSaveButtonListener();
@@ -69,8 +69,8 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
         // Add View to activity
         gridView = findViewById(R.id.grid);
         gridView.setNumColumns(Board.numCols);
-        gridView.setBoardManager(boardManager);
-        boardManager.getBoard().addObserver(this);
+        gridView.setBoardManager(slidingTilesBoardManager);
+        slidingTilesBoardManager.getBoard().addObserver(this);
         // Observer sets up desired dimensions as well as calls our display function
         gridView.getViewTreeObserver().addOnGlobalLayoutListener(
                 new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -100,7 +100,7 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
                 loadFromFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
 
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-                currentAccount.getSaveManager().updateSave("perma");
+                currentAccount.getSaveManager().updateSave("perma", SaveManager.slidingTilesName);
 
                 saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
             }
@@ -120,20 +120,20 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
                 SaveManager currSavManager = currentAccount.getSaveManager();
 
-                boolean canUndo = currSavManager.getLastState("auto").canUndo();
-                SlidingTilesState currentAutoState = (SlidingTilesState) currSavManager.getLastState("auto");
+                boolean canUndo = currSavManager.getLastState("auto", SaveManager.slidingTilesName).canUndo();
+                SlidingTilesState currentAutoState = (SlidingTilesState) currSavManager.getLastState("auto", SaveManager.slidingTilesName);
 
-                if ((currSavManager.getLength("auto") != 1) && canUndo) {
+                if ((currSavManager.getLength("auto", SaveManager.slidingTilesName) != 1) && canUndo) {
                     int prevMovesUndone = currentAutoState.getNumMovesUndone();
-                    currSavManager.undo();
+                    currSavManager.undo(SaveManager.slidingTilesName);
                     SlidingTilesState prevState;
-                    prevState = (SlidingTilesState) currSavManager.getLastState("auto");
+                    prevState = (SlidingTilesState) currSavManager.getLastState("auto", SaveManager.slidingTilesName);
 
-                    Tile[][] prevTiles = prevState.getBoardManager().getBoard().getTiles();
-                    boardManager.getBoard().setTiles(prevTiles);
+                    Tile[][] prevTiles = prevState.getSlidingTilesBoardManager().getBoard().getTiles();
+                    slidingTilesBoardManager.getBoard().setTiles(prevTiles);
 
-                    gridView.setBoardManager(boardManager);
-                    currSavManager.getLastState("auto").incrementNumMoves(prevMovesUndone);
+                    gridView.setBoardManager(slidingTilesBoardManager);
+                    currSavManager.getLastState("auto", SaveManager.slidingTilesName).incrementNumMoves(prevMovesUndone);
                     saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
                     display();
 
@@ -151,7 +151,7 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
      * @param context the context
      */
     private void createTileButtons(Context context) {
-        Board board = boardManager.getBoard();
+        Board board = slidingTilesBoardManager.getBoard();
         tileButtons = new ArrayList<>();
         for (int row = 0; row != Board.numRows; row++) {
             for (int col = 0; col != Board.numCols; col++) {
@@ -166,7 +166,7 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
      * Update the backgrounds on the buttons to match the tiles.
      */
     private void updateTileButtons() {
-        Board board = boardManager.getBoard();
+        Board board = slidingTilesBoardManager.getBoard();
         int nextPos = 0;
 
         for (Button b : tileButtons) {
@@ -256,26 +256,25 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
 
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         SaveManager currSavManager = currentAccount.getSaveManager();
-        SlidingTilesState lastAutoState = (SlidingTilesState) currSavManager.getLastState("auto");
-        int numMoves = currSavManager.getLength("auto");
+        SlidingTilesState lastAutoState = (SlidingTilesState) currSavManager.getLastState("auto", SaveManager.slidingTilesName);
+        int numMoves = currSavManager.getLength("auto", SaveManager.slidingTilesName);
 
         //Creating new game state with field values of the previous state.
-        SlidingTilesState newState = new SlidingTilesState(boardManager, numMoves,
+        SlidingTilesState newState = new SlidingTilesState(slidingTilesBoardManager, numMoves,
                 SlidingTileComplexityActivity.complexity, SetUndoActivity.undo,
                 lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo());
-        currSavManager.addState(newState);
+        currSavManager.addState(newState, SaveManager.slidingTilesName);
         saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
         display();
 
         //Saving/Displaying the score if the game is over.
-        if (newState.getBoardManager().puzzleSolved()) {
+        if (newState.getSlidingTilesBoardManager().puzzleSolved()) {
             loadFromFile(StartingLoginActivity.SAVE_SCOREBOARD, "scoreboard");
             scoreBoard.addToScoreBoard(scoreBoard.createScore(StartingLoginActivity.currentUser,
                     newState.getScore()));
-            ScoreBoardActivity.slidingTileScoreBoard = scoreBoard;
             saveToFile(StartingLoginActivity.SAVE_SCOREBOARD, "scoreboard");
-            currSavManager.wipeAutoSave();
-            currSavManager.wipePermaSave();
+            currSavManager.wipeAutoSave(SaveManager.slidingTilesName);
+            currSavManager.wipePermaSave(SaveManager.slidingTilesName);
             saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
             switchToWinning();
         }
