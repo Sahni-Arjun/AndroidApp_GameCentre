@@ -2,6 +2,7 @@ package fall2018.csc2017.GameCentre;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -51,7 +52,12 @@ class SlidingTilesBoardManager extends BoardManager implements Serializable {
         for (int tileNum = 0; tileNum != numTiles; tileNum++) {
             tiles.add(new Tile(tileNum));
         }
+        Collections.shuffle(tiles);
         this.board = new Board(tiles);
+        while (!this.board.isSolvable()){
+            Collections.shuffle(tiles);
+            this.board = new Board(tiles);
+        }
     }
 
     /**
