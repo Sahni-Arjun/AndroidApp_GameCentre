@@ -37,6 +37,19 @@ public class Board extends Observable implements Serializable, Iterable<Tile> {
      * @param tiles the tiles for the board
      */
     Board(List<Tile> tiles) {
+        populateBoard(tiles);
+        while(!(this.isSolvable())){
+            populateBoard(tiles);
+        }
+    }
+
+    /**
+     * Populates the board with the given tiles.
+     *
+     * @param tiles the tiles that must be added into the board
+     */
+    private void populateBoard(List<Tile> tiles){
+        Collections.shuffle(tiles);
         Iterator<Tile> iter = tiles.iterator();
 
         for (int row = 0; row != Board.numRows; row++) {

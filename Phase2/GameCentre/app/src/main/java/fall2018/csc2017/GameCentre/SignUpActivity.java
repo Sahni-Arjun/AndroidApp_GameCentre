@@ -33,6 +33,11 @@ public class SignUpActivity extends AppCompatActivity {
     private AccountManager accountManager;
 
     /**
+     * The scoreboard for all games.
+     */
+    private Scoreboard scoreboard;
+
+    /**
      * Existence of a serializable file for accountManager and Scoreboard.
      */
     private boolean existingFile = true;
@@ -60,7 +65,7 @@ public class SignUpActivity extends AppCompatActivity {
                     if (!existingFile) {
                         List<Account> emptyAccounts = new ArrayList<>();
                         accountManager = new AccountManager(emptyAccounts);
-                        ScoreBoardActivity.slidingTileScoreBoard = new Scoreboard();
+                        scoreboard = new Scoreboard();
                         saveToFile();
                         existingFile = true;
                     }
@@ -163,7 +168,7 @@ public class SignUpActivity extends AppCompatActivity {
             InputStream inputStreamScoreBoard = this.openFileInput(StartingLoginActivity.SAVE_SCOREBOARD);
             if (inputStreamScoreBoard != null) {
                 ObjectInputStream input = new ObjectInputStream(inputStreamScoreBoard);
-                ScoreBoardActivity.slidingTileScoreBoard = (Scoreboard) input.readObject();
+                scoreboard = (Scoreboard) input.readObject();
                 inputStreamScoreBoard.close();
             }
         } catch (FileNotFoundException e) {
@@ -188,7 +193,7 @@ public class SignUpActivity extends AppCompatActivity {
 
             ObjectOutputStream outputStreamScoreBoard = new ObjectOutputStream(
                     this.openFileOutput(StartingLoginActivity.SAVE_SCOREBOARD, MODE_PRIVATE));
-            outputStreamScoreBoard.writeObject(ScoreBoardActivity.slidingTileScoreBoard);
+            outputStreamScoreBoard.writeObject(scoreboard);
             outputStreamScoreBoard.close();
         } catch (IOException e) {
             Log.e("Exception", "File write failed: " + e.toString());
