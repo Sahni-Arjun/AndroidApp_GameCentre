@@ -22,7 +22,7 @@ public class SudokuStartingActivity  extends AppCompatActivity {
     /**
      * The board manager.
      */
-    public static BoardManager boardManager;
+    public static SudokuBoardManager boardManager;
 
     /**
      * The account manager.
@@ -32,7 +32,7 @@ public class SudokuStartingActivity  extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        boardManager = new BoardManager();
+//        slidingTilesBoardManager = new SudokuBoardManager();
         setContentView(R.layout.activity_sudoku_starting);
         addNewGameButtonListener();
         addLoadButtonListener();
@@ -53,19 +53,34 @@ public class SudokuStartingActivity  extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switchtoSudoku();
                 Board.numCols = 9;
                 Board.numRows = 9;
+                boardManager = new SudokuBoardManager();
+
+                Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
+                SaveManager currSavManager = currentAccount.getSaveManager();
+                currSavManager.wipeAutoSave(SaveManager.sudokuName);
+
+                //Start new game with chosen number of undos
+                SudokuState newState = new
+                        SudokuState(boardManager, 0);
+
+                //TODO set correct difficulty when implemented.
+                newState.setDifficulty(0);
+
+                //TODO set number of undos when implemented.
+                newState.setUnlimitedUndo();
+
+//                if (SetUndoActivity.unlimited) {
+//                    newState.setUnlimitedUndo();
+//                } else {
+//                    newState.setMaxNumMovesUndone(SetUndoActivity.undo);
+//                }
+                currSavManager.addState(newState, SaveManager.sudokuName);
+                saveToFile();
+                switchtoSudoku();
             }
         });
-    }
-
-    /**
-     * Switch to the SlidingTileComplexityActivity to specify complexity.
-     */
-    private void switchToTileComplexity() {
-        Intent tmp = new Intent(this, SlidingTileComplexityActivity.class);
-        startActivity(tmp);
     }
 
     /**
@@ -88,16 +103,17 @@ public class SudokuStartingActivity  extends AppCompatActivity {
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
                 SaveManager currSavManager = currentAccount.getSaveManager();
 
-                if (currSavManager.getLength("perma") != 0) {
-                    boardManager = ((SlidingTilesState) currSavManager.getLastState("perma")).getBoardManager();
-                    currSavManager.updateSave("auto");
-                    SlidingTilesState prePermaState = (SlidingTilesState) currSavManager.getLastState("perma");
-                    SlidingTileComplexityActivity.complexity = prePermaState.getComplexity();
-                    Board.numRows = SlidingTileComplexityActivity.complexity;
-                    Board.numCols = SlidingTileComplexityActivity.complexity;
+                if (currSavManager.getLength("perma", SaveManager.sudokuName) != 0) {
+                    boardManager = ((SudokuState) currSavManager.getLastState("perma", SaveManager.sudokuName)).getBoardManager();
+                    currSavManager.updateSave("auto", SaveManager.sudokuName);
+//                    SudokuState prePermaState = (SudokuState) currSavManager.getLastState("perma", SaveManager.sudokuName);
+                    //TODO add difficulty when implemented.
+//                    SlidingTileComplexityActivity.complexity = prePermaState.getComplexity();
+                    Board.numRows = 9;
+                    Board.numCols = 9;
                     makeToastLoadedText();
                     saveToFile();
-                    switchToGame();
+                    switchtoSudoku();
                 } else {
                     Toast.makeText(getApplicationContext(), "Use common sense you can't" +
                             " load if you haven't saved yet!", Toast.LENGTH_SHORT).show();
@@ -125,14 +141,16 @@ public class SudokuStartingActivity  extends AppCompatActivity {
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
                 SaveManager currSavManager = currentAccount.getSaveManager();
 
-                if (currSavManager.getLength("auto") != 0) {
-                    boardManager = ((SlidingTilesState) currSavManager.getLastState("auto")).getBoardManager();
-                    SlidingTilesState lastAutoState = (SlidingTilesState) currSavManager.getLastState("auto");
-                    SlidingTileComplexityActivity.complexity = lastAutoState.getComplexity();
-                    Board.numRows = SlidingTileComplexityActivity.complexity;
-                    Board.numCols = SlidingTileComplexityActivity.complexity;
+                if (currSavManager.getLength("auto", SaveManager.sudokuName) != 0) {
+                    boardManager = ((SudokuState) currSavManager.getLastState("auto", SaveManager.sudokuName)).getBoardManager();
+//                    SudokuState lastAutoState = (SudokuState) currSavManager.getLastState("auto", SaveManager.sudokuName);
+//                    SlidingTileComplexityActivity.complexity = lastAutoState.getComplexity();
+//                    Board.numRows = SlidingTileComplexityActivity.complexity;
+//                    Board.numCols = SlidingTileComplexityActivity.complexity;
+                    Board.numRows = 9;
+                    Board.numCols = 9;
                     makeToastLoadedText();
-                    switchToGame();
+                    switchtoSudoku();
                 } else {
                     Toast.makeText(getApplicationContext(), "you can't continue a game " +
                             "that hasn't started!", Toast.LENGTH_SHORT).show();
@@ -148,14 +166,6 @@ public class SudokuStartingActivity  extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         loadFromFile();
-    }
-
-    /**
-     * Switch to the SlidingTileActivity view to play the game.
-     */
-    private void switchToGame() {
-        Intent tmp = new Intent(this, SlidingTileActivity.class);
-        startActivity(tmp);
     }
 
     /**

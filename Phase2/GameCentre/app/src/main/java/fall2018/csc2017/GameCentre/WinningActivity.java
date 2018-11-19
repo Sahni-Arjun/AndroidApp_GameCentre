@@ -28,8 +28,7 @@ public class WinningActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_winning);
         loadFromFile();
-        ScoreBoardActivity.slidingTileScoreBoard = scoreBoard;
-        int score = ScoreBoardActivity.slidingTileScoreBoard.getLatestScore();
+        int score = scoreBoard.getLatestScore();
         TextView scoreTxt = findViewById(R.id.scoreText);
         String scoreMessage = "Your Score: " + String.valueOf(score);
         scoreTxt.setText(scoreMessage);
@@ -40,8 +39,7 @@ public class WinningActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         loadFromFile();
-        ScoreBoardActivity.slidingTileScoreBoard = scoreBoard;
-        int score = ScoreBoardActivity.slidingTileScoreBoard.getLatestScore();
+        int score = scoreBoard.getLatestScore();
         TextView scoreTxt = findViewById(R.id.scoreText);
         String scoreMessage = "Your Score: " + String.valueOf(score);
         scoreTxt.setText(scoreMessage);

@@ -22,7 +22,7 @@ public class SlidingTileStartingActivity extends AppCompatActivity {
     /**
      * The board manager.
      */
-    public static BoardManager boardManager;
+    public static SlidingTilesBoardManager slidingTilesBoardManager;
 
     /**
      * The account manager.
@@ -32,7 +32,7 @@ public class SlidingTileStartingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        boardManager = new BoardManager();
+        slidingTilesBoardManager = new SlidingTilesBoardManager();
         setContentView(R.layout.activity_starting_);
         addNewGameButtonListener();
         addLoadButtonListener();
@@ -78,10 +78,10 @@ public class SlidingTileStartingActivity extends AppCompatActivity {
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
                 SaveManager currSavManager = currentAccount.getSaveManager();
 
-                if (currSavManager.getLength("perma") != 0) {
-                    boardManager = ((SlidingTilesState) currSavManager.getLastState("perma")).getBoardManager();
-                    currSavManager.updateSave("auto");
-                    SlidingTilesState prePermaState = (SlidingTilesState) currSavManager.getLastState("perma");
+                if (currSavManager.getLength("perma", SaveManager.slidingTilesName) != 0) {
+                    slidingTilesBoardManager = ((SlidingTilesState) currSavManager.getLastState("perma", SaveManager.slidingTilesName)).getSlidingTilesBoardManager();
+                    currSavManager.updateSave("auto", SaveManager.slidingTilesName);
+                    SlidingTilesState prePermaState = (SlidingTilesState) currSavManager.getLastState("perma", SaveManager.slidingTilesName);
                     SlidingTileComplexityActivity.complexity = prePermaState.getComplexity();
                     Board.numRows = SlidingTileComplexityActivity.complexity;
                     Board.numCols = SlidingTileComplexityActivity.complexity;
@@ -115,9 +115,9 @@ public class SlidingTileStartingActivity extends AppCompatActivity {
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
                 SaveManager currSavManager = currentAccount.getSaveManager();
 
-                if (currSavManager.getLength("auto") != 0) {
-                    boardManager = ((SlidingTilesState) currSavManager.getLastState("auto")).getBoardManager();
-                    SlidingTilesState lastAutoState = (SlidingTilesState) currSavManager.getLastState("auto");
+                if (currSavManager.getLength("auto", SaveManager.slidingTilesName) != 0) {
+                    slidingTilesBoardManager = ((SlidingTilesState) currSavManager.getLastState("auto", SaveManager.slidingTilesName)).getSlidingTilesBoardManager();
+                    SlidingTilesState lastAutoState = (SlidingTilesState) currSavManager.getLastState("auto", SaveManager.slidingTilesName);
                     SlidingTileComplexityActivity.complexity = lastAutoState.getComplexity();
                     Board.numRows = SlidingTileComplexityActivity.complexity;
                     Board.numCols = SlidingTileComplexityActivity.complexity;
