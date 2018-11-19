@@ -1,5 +1,6 @@
 package fall2018.csc2017.GameCentre;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -66,11 +67,18 @@ public class IsSolvableOddTest {
     }
 
     /**
+     * Set the complexity for the test.
+     */
+    @Before
+    public void setComplexity(){
+        SlidingTileComplexityActivity.complexity = 3;
+    }
+
+    /**
      * Test if the odd sized board is solvable.
      */
     @Test
     public void testIsSolvableOddSizedBoard(){
-        SlidingTileComplexityActivity.complexity = 3;
         solvableOddBoard();
         assertEquals(true, this.board.isSolvable());
         unsolvableOddBoard();

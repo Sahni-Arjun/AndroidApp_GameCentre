@@ -1,8 +1,5 @@
 package fall2018.csc2017.GameCentre;
 
-import android.support.annotation.NonNull;
-
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,7 +16,7 @@ public class IsSolvableEvenTest {
     Board board;
 
     /**
-     * Create the even board whereb the blank is on the even row and has odd number of inversions.
+     * Create the even board where the blank is on the even row and has odd number of inversions.
      * This board is solvable.b
      */
     private void solvableEvenBoardBlankOnEven() {
@@ -83,11 +80,18 @@ public class IsSolvableEvenTest {
     }
 
     /**
+     * Set the complexity for the test.
+     */
+    @Before
+    public void setComplexity(){
+        SlidingTileComplexityActivity.complexity = 2;
+    }
+
+    /**
      * Test whether or not the even board is solvable.
      */
     @Test
     public void testIsSolvableEvenSizedBoard() {
-        SlidingTileComplexityActivity.complexity = 2;
         solvableEvenBoardBlankOnEven();
         assertEquals(true, this.board.isSolvable());
         unsolvableEvenBoardBlankOnEven();
