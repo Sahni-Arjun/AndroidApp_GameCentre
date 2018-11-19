@@ -21,7 +21,7 @@ public class NotRobotActivity extends AppCompatActivity implements Observer {
     /**
      * The board manager.
      */
-    private BoardManager boardManager = new BoardManager();
+    private SlidingTilesBoardManager slidingTilesBoardManager = new SlidingTilesBoardManager();
 
 
     /**
@@ -57,8 +57,8 @@ public class NotRobotActivity extends AppCompatActivity implements Observer {
         // Add View to activity
         gridView = findViewById(R.id.grid);
         gridView.setNumColumns(Board.numCols);
-        gridView.setBoardManager(boardManager);
-        boardManager.getBoard().addObserver(this);
+        gridView.setBoardManager(slidingTilesBoardManager);
+        slidingTilesBoardManager.getBoard().addObserver(this);
         // Observer sets up desired dimensions as well as calls our display function
         gridView.getViewTreeObserver().addOnGlobalLayoutListener(
                 new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -84,7 +84,7 @@ public class NotRobotActivity extends AppCompatActivity implements Observer {
      */
     private void createTileButtons(Context context) {
 
-        Board board = boardManager.getBoard();
+        Board board = slidingTilesBoardManager.getBoard();
         tileButtons = new ArrayList<>();
 
         for (int row = 0; row != Board.numRows; row++) {
@@ -122,7 +122,7 @@ public class NotRobotActivity extends AppCompatActivity implements Observer {
      * Update the backgrounds on the buttons to match the tiles.
      */
     private void updateTileButtons() {
-        Board board = boardManager.getBoard();
+        Board board = slidingTilesBoardManager.getBoard();
         int nextPos = 0;
 
         for (Button b : tileButtons) {
@@ -144,7 +144,7 @@ public class NotRobotActivity extends AppCompatActivity implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         display();
-        if (boardManager.puzzleSolved()) {
+        if (slidingTilesBoardManager.puzzleSolved()) {
             switchToGameMenu();
         }
     }

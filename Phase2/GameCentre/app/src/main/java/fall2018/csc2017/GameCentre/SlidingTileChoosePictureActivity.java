@@ -45,7 +45,7 @@ public class SlidingTileChoosePictureActivity extends AppCompatActivity {
 
                 Board.numCols = SlidingTileComplexityActivity.complexity;
                 Board.numRows = SlidingTileComplexityActivity.complexity;
-                SlidingTileStartingActivity.boardManager = new BoardManager();
+                SlidingTileStartingActivity.slidingTilesBoardManager = new SlidingTilesBoardManager();
 
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
                 SaveManager currSavManager = currentAccount.getSaveManager();
@@ -53,7 +53,7 @@ public class SlidingTileChoosePictureActivity extends AppCompatActivity {
 
                 //Start new game with chosen number of undos
                 SlidingTilesState newState = new
-                        SlidingTilesState(SlidingTileStartingActivity.boardManager, 0);
+                        SlidingTilesState(SlidingTileStartingActivity.slidingTilesBoardManager, 0);
                 newState.setComplexity(SlidingTileComplexityActivity.complexity);
                 if (SetUndoActivity.unlimited) {
                     newState.setUnlimitedUndo();

@@ -7,9 +7,9 @@ import java.io.Serializable;
  */
 class SlidingTilesState extends GameState implements Serializable {
     /**
-     * The current BoardManager, containing current configuration of tiles.
+     * The current SlidingTilesBoardManager, containing current configuration of tiles.
      */
-    private BoardManager boardManager;
+    private SlidingTilesBoardManager slidingTilesBoardManager;
 
     /**
      * The complexity of the current board.
@@ -24,11 +24,11 @@ class SlidingTilesState extends GameState implements Serializable {
     /**
      * Create sliding tile state with a given board manager and number of moves.
      *
-     * @param boardManager the board manager
+     * @param slidingTilesBoardManager the board manager
      * @param numMoves     the current number of moves
      */
-    SlidingTilesState(BoardManager boardManager, int numMoves) {
-        this.boardManager = boardManager;
+    SlidingTilesState(SlidingTilesBoardManager slidingTilesBoardManager, int numMoves) {
+        this.slidingTilesBoardManager = slidingTilesBoardManager;
         this.numMoves = numMoves;
     }
 
@@ -36,16 +36,16 @@ class SlidingTilesState extends GameState implements Serializable {
      * Create a sliding tile state with a given board manager, number of moves, complexity,
      * max undone, moves undone and if the number of undones are unlimited.
      *
-     * @param boardManager the board manager
+     * @param slidingTilesBoardManager the board manager
      * @param numMoves     the current number of moves
      * @param complexity   the complexity of the board
      * @param maxUndone    max number of undones
      * @param movesUndone  current number of moves undone
      * @param isUnlimited  if the number of moves undone has no limit
      */
-    SlidingTilesState(BoardManager boardManager, int numMoves, int complexity, int maxUndone,
+    SlidingTilesState(SlidingTilesBoardManager slidingTilesBoardManager, int numMoves, int complexity, int maxUndone,
                       int movesUndone, boolean isUnlimited) {
-        this.boardManager = boardManager;
+        this.slidingTilesBoardManager = slidingTilesBoardManager;
         this.numMoves = numMoves;
         this.complexity = complexity;
         this.maxNumMovesUndone = maxUndone;
@@ -54,12 +54,12 @@ class SlidingTilesState extends GameState implements Serializable {
     }
 
     /**
-     * Return the current BoardManager.
+     * Return the current SlidingTilesBoardManager.
      *
-     * @return current BoardManager.
+     * @return current SlidingTilesBoardManager.
      */
-    BoardManager getBoardManager() {
-        return boardManager;
+    SlidingTilesBoardManager getSlidingTilesBoardManager() {
+        return slidingTilesBoardManager;
     }
 
     /**
