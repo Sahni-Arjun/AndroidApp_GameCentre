@@ -176,22 +176,58 @@ class SudokuBoardManager extends BoardManager implements Serializable {
      * @param position the tile to check
      * @return whether the tile at position is surrounded by a blank tile
      */
-    boolean isValidTap(int position) { //TODO implement what it means for a tap to be valid.
+    boolean isValidTap(int position) { //TODO check if the index works for all cases
         int row = position / SudokuBoard.numRows;
         int col = position % SudokuBoard.numCols;
 
         int ternaryRow = row / 3;
         int ternaryCol = col / 3;
 
-        SudokuBoardManager tempBoardManager = new SudokuBoardManager();
-        SudokuBoard tempBoard = new SudokuBoard();
-        tempBoard.setTiles(this.board.getTiles().clone());
-        tempBoardManager.setBoard(tempBoard);
-        Tile tile = new Tile(SudokuActivity.currentNumber-1);
-        tempBoardManager.getBoard().setTile(row, col, tile);
+        List<Integer> rowTiles = new ArrayList<>();
+        List<Integer> colTiles = new ArrayList<>();
 
-        //TODO edit or create new methods for checking isValidTap.
-        return tempBoardManager.checkSingleRow(row) && tempBoardManager.checkSingleCol(col) & tempBoardManager.checkSubBox(ternaryRow, ternaryCol);
+        // get all columns
+        for (int i = 0; i < 9; i++) {
+            //SudokuActivity.currentNumber
+            rowTiles.add(this.board.getTile(row, i).getBackground());
+        }
+
+        // get all rows
+        for (int i = 0; i < 9; i++) {
+            colTiles.add(this.board.getTile(i, col).getBackground());
+        }
+
+        // check if the value we are trying to position at position is already
+        // existing in column or row
+        int value = SudokuActivity.currentNumber;
+        if (rowTiles.contains(value) || colTiles.contains(value)) {
+            return false;
+        }
+
+        List<Integer> boxTiles = new ArrayList<>();
+
+        for (int i = ternaryCol; i < ternaryCol+3; i++) {
+            for (int j = ternaryRow; j < ternaryRow+3;j++) {
+                boxTiles.add(this.board.getTile(j, i).getBackground());
+            }
+        }
+
+        if (boxTiles.contains(value)) {
+            return false;
+        }
+        return true;
+
+
+
+//        SudokuBoardManager tempBoardManager = new SudokuBoardManager();
+//        SudokuBoard tempBoard = new SudokuBoard();
+//        tempBoard.setTiles(this.board.getTiles().clone());
+//        tempBoardManager.setBoard(tempBoard);
+//        Tile tile = new Tile(SudokuActivity.currentNumber-1);
+//        tempBoardManager.getBoard().setTile(row, col, tile);
+
+//        //TODO edit or create new methods for checking isValidTap. do not use checkwithChecker
+//        return tempBoardManager.checkSingleRow(row) && tempBoardManager.checkSingleCol(col) & tempBoardManager.checkSubBox(ternaryRow, ternaryCol);
     }
 
     /**
