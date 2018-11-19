@@ -49,7 +49,7 @@ public class SlidingTileChoosePictureActivity extends AppCompatActivity {
 
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
                 SaveManager currSavManager = currentAccount.getSaveManager();
-                currSavManager.wipeAutoSave();
+                currSavManager.wipeAutoSave(SaveManager.slidingTilesName);
 
                 //Start new game with chosen number of undos
                 SlidingTilesState newState = new
@@ -60,7 +60,7 @@ public class SlidingTileChoosePictureActivity extends AppCompatActivity {
                 } else {
                     newState.setMaxNumMovesUndone(SetUndoActivity.undo);
                 }
-                currSavManager.addState(newState);
+                currSavManager.addState(newState, SaveManager.slidingTilesName);
                 saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER);
                 switchToGame();
             }
