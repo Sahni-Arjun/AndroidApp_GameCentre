@@ -73,7 +73,7 @@ public class HangmanStartingActivity extends AppCompatActivity {
     }
 
     /**
-     * Switch to the SlidingTileComplexityActivity to specify complexity.
+     * Switch to the HangmanActivity to specify complexity.
      */
     private void switchToHangmanComplexity() {
         Intent tmp = new Intent(this, HangmanComplexityActivity.class);
