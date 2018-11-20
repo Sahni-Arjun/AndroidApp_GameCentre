@@ -161,7 +161,7 @@ public class HangmanStartingActivity extends AppCompatActivity {
     }
 
     /**
-     * Switch to the SlidingTileActivity view to play the game.
+     * Switch to the HangmanActivity view to play the game.
      */
     private void switchToGame() {
         Intent tmp = new Intent(this, HangmanActivity.class);
