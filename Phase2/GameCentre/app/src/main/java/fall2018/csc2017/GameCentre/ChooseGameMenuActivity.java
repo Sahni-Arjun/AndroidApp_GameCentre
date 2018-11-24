@@ -17,6 +17,7 @@ public class ChooseGameMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_choose_game_menu);
         addSlidingTilesButtonListener();
         addSudokuButtonListener();
+        addHangmanButtonListener();
     }
 
     /**
@@ -58,6 +59,28 @@ public class ChooseGameMenuActivity extends AppCompatActivity {
      */
     private void switchToSudokuMenu() {
         Intent tmp = new Intent(this, SudokuStartingActivity.class);
+        startActivity(tmp);
+    }
+
+
+    /**
+     * Activate the hangman button.
+     */
+    private void addHangmanButtonListener() {
+        Button button = findViewById(R.id.btnHangMan);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchToHangmanMenu();
+            }
+        });
+    }
+
+    /**
+     * Switch to the Hangman game.
+     */
+    private void switchToHangmanMenu() {
+        Intent tmp = new Intent(this, HangmanComplexityActivity.class);
         startActivity(tmp);
     }
 

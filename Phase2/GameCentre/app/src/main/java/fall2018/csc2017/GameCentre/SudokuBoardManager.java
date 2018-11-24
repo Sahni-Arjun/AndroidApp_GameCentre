@@ -186,30 +186,38 @@ class SudokuBoardManager extends BoardManager implements Serializable {
         // get all columns
         for (int i = 0; i < 9; i++) {
             //SudokuActivity.currentNumber
-            rowTiles.add(this.board.getTile(row, i).getBackground());
+            int item = this.board.getTile(row, i).getId();
+            if (item!=0) {
+                rowTiles.add(item);
+            }
         }
 
         // get all rows
         for (int i = 0; i < 9; i++) {
-            colTiles.add(this.board.getTile(i, col).getBackground());
+            int item = this.board.getTile(i, col).getId();
+            if (item!=0) {
+                colTiles.add(item);
+            }
         }
 
         // check if the value we are trying to position at position is already
         // existing in column or row
         int value = SudokuActivity.currentNumber;
-        if (rowTiles.contains(value) || colTiles.contains(value)) {
-            return false;
-        }
 
         List<Integer> boxTiles = new ArrayList<>();
 
-        for (int i = ternaryCol; i < ternaryCol+3; i++) {
-            for (int j = ternaryRow; j < ternaryRow+3;j++) {
-                boxTiles.add(this.board.getTile(j, i).getBackground());
+        for (int i = 0; i < 3; i++) {
+            int boxRow = ternaryRow * 3 + i;
+            for (int j = 0; j < 3;j++) {
+                int boxCol = ternaryCol * 3 + j;
+                int item = this.board.getTile(boxRow, boxCol).getId();
+                if (item!=0) {
+                    boxTiles.add(item);
+                }
             }
         }
 
-        if (boxTiles.contains(value)) {
+        if (boxTiles.contains(value) || rowTiles.contains(value) || colTiles.contains(value)) {
             return false;
         }
         return true;

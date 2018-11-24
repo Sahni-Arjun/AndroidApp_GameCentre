@@ -10,6 +10,7 @@ class SaveManager implements Serializable {
 
     static final String slidingTilesName = "sliding tiles";
     static final String sudokuName = "sudoku";
+    static final String hangmanName = "hangman";
 
 //    /**
 //     * Permanent save of user's SlidingTiles game.
@@ -34,8 +35,11 @@ class SaveManager implements Serializable {
     SaveManager(){
         permaSave.put(SaveManager.slidingTilesName, new ArrayList<GameState>());
         permaSave.put(SaveManager.sudokuName, new ArrayList<GameState>());
+        permaSave.put(SaveManager.hangmanName, new ArrayList<GameState>());
         autoSave.put(SaveManager.slidingTilesName, new ArrayList<GameState>());
         autoSave.put(SaveManager.sudokuName, new ArrayList<GameState>());
+        autoSave.put(SaveManager.hangmanName, new ArrayList<GameState>());
+
     }
 
     /**
