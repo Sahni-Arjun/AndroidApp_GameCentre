@@ -8,6 +8,7 @@ import java.io.Serializable;
 class Account implements Serializable {
 
     static final long serialVersionUID = 4860302647072124829L;
+    static final String slidingName = "sliding tiles";
 
     /**
      * User's username and password.
@@ -19,6 +20,14 @@ class Account implements Serializable {
      */
     private SaveManager saveManager = new SaveManager();
 
+    private SaveManager[] slidingSaveManager = new SaveManager[3];
+
+    public void setCurrentGame(int currentGame) {
+        this.currentGame = currentGame;
+    }
+
+    private int currentGame;
+
     /**
      * Creates a new User Account with username and password.
      *
@@ -28,6 +37,10 @@ class Account implements Serializable {
     Account(String username, String password) {
         this.username = username;
         this.password = password;
+
+        slidingSaveManager[0] = new SaveManager();
+        slidingSaveManager[1] = new SaveManager();
+        slidingSaveManager[2] = new SaveManager();
     }
 
     /**
@@ -37,6 +50,13 @@ class Account implements Serializable {
      */
     SaveManager getSaveManager() {
         return saveManager;
+    }
+
+    SaveManager getCurrentSaveManager(String gameType){
+        if (gameType.equals(Account.slidingName)){
+            return slidingSaveManager[currentGame-1];
+        }
+        return saveManager;//TODO remove this.
     }
 
     /**

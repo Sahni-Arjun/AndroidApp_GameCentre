@@ -4,17 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.Toast;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -38,6 +32,16 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
      * The account manage for the app.
      */
     private AccountManager accountManager;
+
+    /**
+     * The filesystem.
+     */
+    private FileSystem fileSystem;
+
+    /**
+     * The current context for file reading/writing.
+     */
+    private Context currentContext = this;
 
     /**
      * Scoreboard for the sidling tiles game.
@@ -67,7 +71,8 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        loadFromFile("Account");
+        fileSystem = new FileSystem();
+        accountManager = fileSystem.loadAccount(currentContext);
 //        slidingTilesBoardManager = SlidingTileStartingActivity.slidingTilesBoardManager;
         boardManager = SudokuStartingActivity.boardManager;
         createTileButtons(this);
@@ -115,12 +120,12 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFromFile("Account");
+                accountManager = fileSystem.loadAccount(currentContext);
 
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
                 currentAccount.getSaveManager().updateSave("perma", SaveManager.sudokuName);
 
-                saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+                fileSystem.saveAccount(currentContext, accountManager);
             }
         });
     }
@@ -133,7 +138,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
         undoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFromFile("Account");
+                accountManager = fileSystem.loadAccount(currentContext);
 
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
                 SaveManager currSavManager = currentAccount.getSaveManager();
@@ -152,7 +157,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
 
                     gridView.setBoardManager(boardManager);
                     currSavManager.getLastState("auto", SaveManager.sudokuName).incrementNumMoves(prevMovesUndone);
-                    saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+                    fileSystem.saveAccount(currentContext, accountManager);
                     display();
 
                 } else {
@@ -209,7 +214,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
         long lastTime = lastAutoState.getTime();
         long newTime = lastTime + System.currentTimeMillis() - startTime;
         lastAutoState.setTime(newTime);
-        saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+        fileSystem.saveAccount(currentContext, accountManager);
     }
 
     /**
@@ -218,56 +223,9 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onResume() {
         super.onResume();
-        loadFromFile("Account");
+        accountManager = fileSystem.loadAccount(currentContext);
         startTime = System.currentTimeMillis();
         display();
-    }
-
-    /**
-     * Load scoreboard or account manager from fileName.
-     *
-     */
-    private void loadFromFile(String type) {
-
-        try {
-            InputStream inputStream = this.openFileInput(StartingLoginActivity.SAVE_ACCOUNT_MANAGER);
-            if (inputStream != null) {
-                ObjectInputStream input = new ObjectInputStream(inputStream);
-                if (type.equals("Account")) {
-                    accountManager = (AccountManager) input.readObject();
-                } else {
-                    scoreBoard = (Scoreboard) input.readObject();
-                }
-                inputStream.close();
-            }
-        } catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
-        } catch (IOException e) {
-            Log.e("login activity", "Can not read file: " + e.toString());
-        } catch (ClassNotFoundException e) {
-            Log.e("login activity", "File contained unexpected " +
-                    "data type: " + e.toString());
-        }
-    }
-
-    /**
-     * Save the account manager to fileName.
-     *
-     * @param fileName the name of the file
-     */
-    public void saveToFile(String fileName, String type) {
-        try {
-            ObjectOutputStream outputStream = new ObjectOutputStream(
-                    this.openFileOutput(fileName, MODE_PRIVATE));
-            if (type.equals("Account")) {
-                outputStream.writeObject(accountManager);
-            } else {
-                outputStream.writeObject(scoreBoard);
-            }
-            outputStream.close();
-        } catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
-        }
     }
 
     @Override
@@ -278,7 +236,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        loadFromFile("Account");
+        accountManager = fileSystem.loadAccount(currentContext);
 
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         SaveManager currSavManager = currentAccount.getSaveManager();
@@ -294,7 +252,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
                 lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo(),
                 newTime);
         currSavManager.addState(newState, SaveManager.sudokuName);
-        saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+        fileSystem.saveAccount(currentContext, accountManager);
         Toast.makeText(getApplicationContext(), "" + newTime/1000, Toast.LENGTH_SHORT).show();
         display();
         startTime = System.currentTimeMillis();

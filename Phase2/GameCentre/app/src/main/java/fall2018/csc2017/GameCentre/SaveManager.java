@@ -12,15 +12,8 @@ class SaveManager implements Serializable {
     static final String sudokuName = "sudoku";
     static final String hangmanName = "hangman";
 
-//    /**
-//     * Permanent save of user's SlidingTiles game.
-//     */
-//    private ArrayList<GameState> permaSave = new ArrayList<>();
-//
-//    /**
-//     * Autosave of user's SlidingTiles game.
-//     */
-//    private ArrayList<GameState> autoSave = new ArrayList<>();
+    static final String auto = "auto";
+    static final String perma = "perma";
 
     /**
      * Permanent save of user's games.
@@ -39,7 +32,6 @@ class SaveManager implements Serializable {
         autoSave.put(SaveManager.slidingTilesName, new ArrayList<GameState>());
         autoSave.put(SaveManager.sudokuName, new ArrayList<GameState>());
         autoSave.put(SaveManager.hangmanName, new ArrayList<GameState>());
-
     }
 
     /**
@@ -49,7 +41,7 @@ class SaveManager implements Serializable {
      * @return most recent saved game
      */
     GameState getLastState(String saveType, String gameType) {
-        if (saveType.equals("auto")) {
+        if (saveType.equals(auto)) {
             int numAuto = autoSave.get(gameType).size();
             return autoSave.get(gameType).get(numAuto - 1);
         } else {
@@ -73,7 +65,7 @@ class SaveManager implements Serializable {
      * @param saveType whether erasing the perma or auto save
      */
     void updateSave(String saveType, String gameType) {
-        if (saveType.equals("auto")) {
+        if (saveType.equals(auto)) {
             autoSave.put(gameType, new ArrayList<GameState>());
             autoSave.get(gameType).addAll(permaSave.get(gameType));
         } else {
@@ -82,18 +74,12 @@ class SaveManager implements Serializable {
         }
     }
 
-    /**
-     * Erase the auto save.
-     */
-    void wipeAutoSave(String gameType) {
-        autoSave.put(gameType, new ArrayList<GameState>());
-    }
-
-    /**
-     * Erase the perma save.
-     */
-    void wipePermaSave(String gameType) {
-        permaSave.put(gameType, new ArrayList<GameState>());
+    void wipeSave(String saveType, String gameType) {
+        if (saveType.equals(auto)) {
+            autoSave.put(gameType, new ArrayList<GameState>());
+        } else {
+            permaSave.put(gameType, new ArrayList<GameState>());
+        }
     }
 
     /**
@@ -111,10 +97,49 @@ class SaveManager implements Serializable {
      * @return the number of moves
      */
     int getLength(String saveType, String gameType) {
-        if (saveType.equals("auto")) {
+        if (saveType.equals(auto)) {
             return autoSave.get(gameType).size();
         } else {
             return permaSave.get(gameType).size();
         }
+    }
+
+    void updateState(String gameType, BoardManager boardManager){
+        if (gameType.equals(slidingTilesName)){
+            SlidingTilesState lastAutoState = (SlidingTilesState) this.getLastState("auto", SaveManager.slidingTilesName);
+            int numMoves = this.getLength("auto", SaveManager.slidingTilesName);
+
+            //Creating new game state with field values of the previous state.
+            SlidingTilesState newState = new SlidingTilesState((SlidingTilesBoardManager) boardManager, numMoves,
+                    SlidingTileComplexityActivity.complexity, SetUndoActivity.undo,
+                    lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo());
+            this.addState(newState, SaveManager.slidingTilesName);
+        } else if(gameType.equals(sudokuName)){
+
+        }
+    }
+
+    // TODO make this general for all games?
+    boolean undoMove(){
+        boolean canUndo = getLastState(SaveManager.auto, SaveManager.slidingTilesName).canUndo();
+        SlidingTilesState currentAutoState = (SlidingTilesState) getLastState("auto", SaveManager.slidingTilesName);
+
+        if ((getLength(SaveManager.auto, SaveManager.slidingTilesName) != 1) && canUndo) {
+            int prevMovesUndone = currentAutoState.getNumMovesUndone();
+            undo(SaveManager.slidingTilesName);
+            getLastState(SaveManager.auto, SaveManager.slidingTilesName).incrementNumMoves(prevMovesUndone);
+            return true;
+        }
+        return false;
+    }
+
+    // TODO make this general for all games.
+    Tile[][] getboardArrangement(){
+        // store the previous save in a variable.
+        SlidingTilesState prevState;
+        prevState = (SlidingTilesState) getLastState(SaveManager.auto, SaveManager.slidingTilesName);
+
+        // from the previous save get the tile arrangement.
+        return prevState.getSlidingTilesBoardManager().getBoard().getTiles();
     }
 }
