@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * User Account that contains login info and game state info.
+ * This is a model class that contains only getter and setter methods.
  */
 class Account implements Serializable {
 
@@ -73,27 +74,8 @@ class Account implements Serializable {
      *
      * @return user's password.
      */
-    private String getPassword() {
+    public String getPassword() {
         return this.password;
-    }
-
-    /**
-     * Returns true if the input password is correct.
-     *
-     * @param other newly entered pw
-     * @return true or false
-     */
-    boolean isSamePassword(Account other) {
-        return this.password.equals(other.getPassword()) && this.getUsername().equals(other.getUsername());
-    }
-
-    /**
-     * Check if the account is a valid account.
-     *
-     * @return boolean
-     */
-    boolean isValidAccount() {
-        return !(this.getPassword().isEmpty() || this.getUsername().isEmpty());
     }
 
     /**

@@ -60,7 +60,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 addSignUpFillIn();
-                if (newUser.isValidAccount()) {
+                if (!newUser.getUsername().isEmpty() && !newUser.getPassword().isEmpty()) {
                     loadFromFile();
                     if (!existingFile) {
                         List<Account> emptyAccounts = new ArrayList<>();
