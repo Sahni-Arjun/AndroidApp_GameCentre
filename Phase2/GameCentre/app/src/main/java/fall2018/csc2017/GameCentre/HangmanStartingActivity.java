@@ -58,7 +58,7 @@ public class HangmanStartingActivity extends AppCompatActivity {
 
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
                 SaveManager currSavManager = currentAccount.getSaveManager();
-                currSavManager.wipeAutoSave(SaveManager.hangmanName);
+                currSavManager.wipeSave(SaveManager.auto, SaveManager.hangmanName);
 
                 //Start new game with chosen number of undoes // todo discuss with group
                 HangmanState newState = new
