@@ -4,16 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 /**
  * The activity for loading games for the sliding puzzle tile game.
@@ -100,7 +93,7 @@ public class SlidingTileStartingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 accountManager = fileSystem.loadAccount(currentContext);
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-                SaveManager currSavManager = currentAccount.getSaveManager();
+                SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
 
                 if (currSavManager.getLength("perma", SaveManager.slidingTilesName) != 0) {
                     slidingTilesBoardManager = ((SlidingTilesState) currSavManager.getLastState("perma", SaveManager.slidingTilesName)).getSlidingTilesBoardManager();
@@ -137,7 +130,7 @@ public class SlidingTileStartingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 accountManager = fileSystem.loadAccount(currentContext);
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-                SaveManager currSavManager = currentAccount.getSaveManager();
+                SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
 
                 if (currSavManager.getLength("auto", SaveManager.slidingTilesName) != 0) {
                     slidingTilesBoardManager = ((SlidingTilesState) currSavManager.getLastState("auto", SaveManager.slidingTilesName)).getSlidingTilesBoardManager();

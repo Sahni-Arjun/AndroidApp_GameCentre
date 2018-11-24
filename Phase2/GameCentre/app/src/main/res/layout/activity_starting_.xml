@@ -10,7 +10,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="136dp"
         android:gravity="center"
         android:text="@string/welcome_to_sliding_tiles_n_a_puzzle_game_where_you_must_arrange_the_numbers_in_the_correct_order"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
@@ -38,5 +40,94 @@
         android:layout_below="@+id/GameText"
         android:layout_toEndOf="@+id/NewGameButton"
         android:text="@string/continue_game" />
+
+    <Button
+        android:id="@+id/slidingSave1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="280dp"
+        android:layout_marginEnd="15dp"
+        android:layout_toStartOf="@+id/slidingSave2"
+        android:text="Load Save 1" />
+
+    <Button
+        android:id="@+id/slidingSave2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="280dp"
+        android:text="Load Save 2" />
+
+    <Button
+        android:id="@+id/slidingSave3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="282dp"
+        android:layout_toEndOf="@+id/slidingSave2"
+        android:text="Load Save 3" />
+
+    <Button
+        android:id="@+id/slidingContinue1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="352dp"
+        android:layout_marginEnd="16dp"
+        android:layout_toStartOf="@+id/slidingContinue2"
+        android:text="Continue 1" />
+
+    <Button
+        android:id="@+id/slidingContinue2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="353dp"
+        android:text="Continue 2" />
+
+    <Button
+        android:id="@+id/slidingContinue3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="352dp"
+        android:layout_marginEnd="19dp"
+        android:layout_toEndOf="@+id/slidingContinue2"
+        android:text="Continue 3" />
+
+    <Button
+        android:id="@+id/slidingNewGame1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="432dp"
+        android:layout_marginEnd="22dp"
+        android:layout_toStartOf="@+id/slidingNewGame2"
+        android:text="New Game" />
+
+    <Button
+        android:id="@+id/slidingNewGame2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="431dp"
+        android:text="New Game" />
+
+    <Button
+        android:id="@+id/slidingNewGame3"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="432dp"
+        android:layout_toEndOf="@+id/slidingNewGame2"
+        android:text="New Game" />
 
 </RelativeLayout>

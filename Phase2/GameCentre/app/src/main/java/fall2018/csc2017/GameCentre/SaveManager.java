@@ -32,7 +32,6 @@ class SaveManager implements Serializable {
         autoSave.put(SaveManager.slidingTilesName, new ArrayList<GameState>());
         autoSave.put(SaveManager.sudokuName, new ArrayList<GameState>());
         autoSave.put(SaveManager.hangmanName, new ArrayList<GameState>());
-
     }
 
     /**
@@ -106,7 +105,7 @@ class SaveManager implements Serializable {
     }
 
     void updateState(String gameType, BoardManager boardManager){
-        if (gameType.equals(this.slidingTilesName)){
+        if (gameType.equals(slidingTilesName)){
             SlidingTilesState lastAutoState = (SlidingTilesState) this.getLastState("auto", SaveManager.slidingTilesName);
             int numMoves = this.getLength("auto", SaveManager.slidingTilesName);
 
@@ -115,8 +114,32 @@ class SaveManager implements Serializable {
                     SlidingTileComplexityActivity.complexity, SetUndoActivity.undo,
                     lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo());
             this.addState(newState, SaveManager.slidingTilesName);
-        } else if(gameType.equals(this.sudokuName)){
+        } else if(gameType.equals(sudokuName)){
 
         }
+    }
+
+    // TODO make this general for all games?
+    boolean undoMove(){
+        boolean canUndo = getLastState(SaveManager.auto, SaveManager.slidingTilesName).canUndo();
+        SlidingTilesState currentAutoState = (SlidingTilesState) getLastState("auto", SaveManager.slidingTilesName);
+
+        if ((getLength(SaveManager.auto, SaveManager.slidingTilesName) != 1) && canUndo) {
+            int prevMovesUndone = currentAutoState.getNumMovesUndone();
+            undo(SaveManager.slidingTilesName);
+            getLastState(SaveManager.auto, SaveManager.slidingTilesName).incrementNumMoves(prevMovesUndone);
+            return true;
+        }
+        return false;
+    }
+
+    // TODO make this general for all games.
+    Tile[][] getboardArrangement(){
+        // store the previous save in a variable.
+        SlidingTilesState prevState;
+        prevState = (SlidingTilesState) getLastState(SaveManager.auto, SaveManager.slidingTilesName);
+
+        // from the previous save get the tile arrangement.
+        return prevState.getSlidingTilesBoardManager().getBoard().getTiles();
     }
 }

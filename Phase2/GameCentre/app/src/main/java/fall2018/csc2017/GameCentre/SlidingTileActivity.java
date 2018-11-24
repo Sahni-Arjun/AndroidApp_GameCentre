@@ -4,17 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.Toast;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -28,6 +22,16 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
      * The board manager.
      */
     private SlidingTilesBoardManager slidingTilesBoardManager;
+
+    /**
+     * The filesystem.
+     */
+    private FileSystem fileSystem;
+
+    /**
+     * The current context for file reading/writing.
+     */
+    private Context currentContext = this;
 
     /**
      * The buttons to display.
@@ -60,7 +64,8 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        loadFromFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+        fileSystem = new FileSystem();
+        accountManager = fileSystem.loadAccount(currentContext);
         slidingTilesBoardManager = SlidingTileStartingActivity.slidingTilesBoardManager;
         createTileButtons(this);
         setContentView(R.layout.activity_main);
@@ -97,12 +102,12 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFromFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+                accountManager = fileSystem.loadAccount(currentContext);
 
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-                currentAccount.getSaveManager().updateSave("perma", SaveManager.slidingTilesName);
+                currentAccount.getCurrentSaveManager(Account.slidingName).updateSave("perma", SaveManager.slidingTilesName);
 
-                saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+                fileSystem.saveAccount(currentContext, accountManager);
             }
         });
     }
@@ -115,29 +120,20 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
         undoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFromFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+                // load the account manager.
+                accountManager = fileSystem.loadAccount(currentContext);
 
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-                SaveManager currSavManager = currentAccount.getSaveManager();
+                SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
 
-                boolean canUndo = currSavManager.getLastState("auto", SaveManager.slidingTilesName).canUndo();
-                SlidingTilesState currentAutoState = (SlidingTilesState) currSavManager.getLastState("auto", SaveManager.slidingTilesName);
-
-                if ((currSavManager.getLength("auto", SaveManager.slidingTilesName) != 1) && canUndo) {
-                    int prevMovesUndone = currentAutoState.getNumMovesUndone();
-                    currSavManager.undo(SaveManager.slidingTilesName);
-                    SlidingTilesState prevState;
-                    prevState = (SlidingTilesState) currSavManager.getLastState("auto", SaveManager.slidingTilesName);
-
-                    Tile[][] prevTiles = prevState.getSlidingTilesBoardManager().getBoard().getTiles();
-                    slidingTilesBoardManager.getBoard().setTiles(prevTiles);
-
+                boolean undoed = currSavManager.undoMove();
+                if (undoed){
+                    // update the current board manager with the new tiles.
+                    slidingTilesBoardManager.getBoard().setTiles(currSavManager.getboardArrangement());
                     gridView.setBoardManager(slidingTilesBoardManager);
-                    currSavManager.getLastState("auto", SaveManager.slidingTilesName).incrementNumMoves(prevMovesUndone);
-                    saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+                    fileSystem.saveAccount(currentContext, accountManager);
                     display();
-
-                } else {
+                }else{
                     Toast.makeText(getApplicationContext(), "Max moves undone" +
                             "", Toast.LENGTH_SHORT).show();
                 }
@@ -183,7 +179,7 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onPause() {
         super.onPause();
-        saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+        fileSystem.saveAccount(currentContext, accountManager);
     }
 
     /**
@@ -192,56 +188,8 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onResume() {
         super.onResume();
-        loadFromFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+        accountManager = fileSystem.loadAccount(currentContext);
         display();
-    }
-
-    /**
-     * Load scoreboard or account manager from fileName.
-     *
-     * @param fileName the name of the file
-     */
-    private void loadFromFile(String fileName, String type) {
-
-        try {
-            InputStream inputStream = this.openFileInput(fileName);
-            if (inputStream != null) {
-                ObjectInputStream input = new ObjectInputStream(inputStream);
-                if (type.equals("Account")) {
-                    accountManager = (AccountManager) input.readObject();
-                } else {
-                    scoreBoard = (Scoreboard) input.readObject();
-                }
-                inputStream.close();
-            }
-        } catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
-        } catch (IOException e) {
-            Log.e("login activity", "Can not read file: " + e.toString());
-        } catch (ClassNotFoundException e) {
-            Log.e("login activity", "File contained unexpected " +
-                    "data type: " + e.toString());
-        }
-    }
-
-    /**
-     * Save the account manager to fileName.
-     *
-     * @param fileName the name of the file
-     */
-    public void saveToFile(String fileName, String type) {
-        try {
-            ObjectOutputStream outputStream = new ObjectOutputStream(
-                    this.openFileOutput(fileName, MODE_PRIVATE));
-            if (type.equals("Account")) {
-                outputStream.writeObject(accountManager);
-            } else {
-                outputStream.writeObject(scoreBoard);
-            }
-            outputStream.close();
-        } catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
-        }
     }
 
     @Override
@@ -252,26 +200,33 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        loadFromFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+        // load the account manager.
+        accountManager = fileSystem.loadAccount(currentContext);
 
+        // save the account, savemanager in varaibles for future use.
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-        SaveManager currSavManager = currentAccount.getSaveManager();
+        SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
+
+        // add new save state in save manager.
         currSavManager.updateState(SaveManager.slidingTilesName, slidingTilesBoardManager);
-        saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+
+        // save the account manager.
+        fileSystem.saveAccount(currentContext, accountManager);
+
+        // display the board.
         display();
 
-        SlidingTilesState prevState = (SlidingTilesState) currSavManager.getLastState("auto", SaveManager.slidingTilesName);
+        SlidingTilesState prevState = (SlidingTilesState) currSavManager.getLastState(SaveManager.auto, SaveManager.slidingTilesName);
         //Saving/Displaying the score if the game is over.
         if (slidingTilesBoardManager.puzzleSolved()) {
-            loadFromFile(StartingLoginActivity.SAVE_SCOREBOARD, "scoreboard");
+            scoreBoard = fileSystem.loadScoreboard(currentContext);
             scoreBoard.addToScoreBoard(scoreBoard.createScore(StartingLoginActivity.currentUser,
                     prevState.getScore()));
-            saveToFile(StartingLoginActivity.SAVE_SCOREBOARD, "scoreboard");
+            fileSystem.saveScoreBoard(currentContext, scoreBoard);
 
-
-            currSavManager.wipeAutoSave(SaveManager.slidingTilesName);
-            currSavManager.wipePermaSave(SaveManager.slidingTilesName);
-            saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+            currSavManager.wipeSave(SaveManager.auto, SaveManager.slidingTilesName);
+            currSavManager.wipeSave(SaveManager.perma, SaveManager.slidingTilesName);
+            fileSystem.saveAccount(currentContext, accountManager);
             switchToWinning();
         }
 
