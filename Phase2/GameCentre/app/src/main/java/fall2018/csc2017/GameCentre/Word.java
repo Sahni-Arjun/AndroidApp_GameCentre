@@ -55,4 +55,37 @@ public class Word extends Board{
     public Letter getLetter(int row, int col) {
         return this.letters[0][col];  // TODO: adapt to Hangman
     }
+
+
+    /**
+     * Update letters containing ASCII code letter to be shown
+     */
+
+    void updateLetter(int letter) {
+
+        for (int pos = 0; pos < Word.numCols; pos++) {
+
+            if(letters[0][pos].getId() == letter){
+
+                letters[0][pos].hidden = false;
+
+            }
+        }
+
+        setChanged();
+        notifyObservers();
+    }
+
+
+    /**
+     * Update hangman doll
+     */
+    void updateDoll() {
+
+        // todo update doll background
+        setChanged();
+        notifyObservers();
+    }
+
+
 }
