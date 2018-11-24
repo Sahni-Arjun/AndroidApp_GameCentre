@@ -19,7 +19,7 @@ public class HangmanStartingActivity extends AppCompatActivity {
     /**
      * The word manager.
      */
-    public static final WordManager wordManager;
+    public static WordManager wordManager;
 
     /**
      * The account manager.
@@ -29,7 +29,6 @@ public class HangmanStartingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        wordManager = new WordManager();
         setContentView(R.layout.activity_hangman_starting);
         addNewGameButtonListener();
         addLoadButtonListener();
@@ -50,8 +49,9 @@ public class HangmanStartingActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // switchToHangmanComplexity();
-                Word.numCols = 5;
+
+                Word.numCols = HangmanComplexityActivity.complexity;
+                // numRows must remain 1 or made deprecated:
                 Word.numRows = 1;
 
                 wordManager = new WordManager();
@@ -60,9 +60,13 @@ public class HangmanStartingActivity extends AppCompatActivity {
                 SaveManager currSavManager = currentAccount.getSaveManager();
                 currSavManager.wipeAutoSave(SaveManager.hangmanName);
 
+                //Start new game with chosen number of undoes // todo discuss with group
+                HangmanState newState = new
+                        HangmanState(wordManager, 0);
 
-                // TODO connect with complexity here and use complexity to set lenght (numCols) only
-                // numRows must remain 1 or made deprecated
+                newState.setComplexity(HangmanComplexityActivity.complexity);
+
+                newState.setUnlimitedUndo(); // todo discuss with group
 
                 currSavManager.addState(newState, SaveManager.hangmanName);
                 saveToFile();
@@ -81,7 +85,7 @@ public class HangmanStartingActivity extends AppCompatActivity {
     }
 
     /**
-     * Switch to the HangmanActivity  todo: see where to specify complexity
+     * Switch to the HangmanActivity
      */
     private void switchToHangman() {
         Intent tmp = new Intent(this, HangmanActivity.class);
@@ -100,12 +104,12 @@ public class HangmanStartingActivity extends AppCompatActivity {
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
                 SaveManager currSavManager = currentAccount.getSaveManager();
 
-                if (currSavManager.getLength("perma") != 0) {
-                    wordManager = ((HangmanState) currSavManager.getLastState("perma")).getWordManager();
-                    currSavManager.updateSave("auto");
-                    HangmanState prePermaState = (HangmanState) currSavManager.getLastState("perma");
+                if (currSavManager.getLength("perma", SaveManager.hangmanName) != 0) {
+                    wordManager = ((HangmanState) currSavManager.getLastState("perma", SaveManager.hangmanName)).getWordManager();
+                    currSavManager.updateSave("auto", SaveManager.hangmanName);
+                    HangmanState prePermaState = (HangmanState) currSavManager.getLastState("perma", SaveManager.hangmanName);
                     HangmanComplexityActivity.complexity = prePermaState.getComplexity();
-                    Word.lenght = HangmanComplexityActivity.lenght; // todo see how to access complexity at HangmanComplexityActivity
+                    // Word.length = HangmanComplexityActivity.complexity; // todo: discuss if we shall relate complexity to length or to word content
                     makeToastLoadedText();
                     saveToFile();
                     switchToGame();
@@ -136,11 +140,13 @@ public class HangmanStartingActivity extends AppCompatActivity {
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
                 SaveManager currSavManager = currentAccount.getSaveManager();
 
-                if (currSavManager.getLength("auto") != 0) {
-                    wordManager = ((HangmanState) currSavManager.getLastState("auto")).getWordManager();
-                    HangmanState lastAutoState = (HangmanState) currSavManager.getLastState("auto");
+                if (currSavManager.getLength("auto", SaveManager.hangmanName) != 0) {
+                    wordManager = ((HangmanState) currSavManager.getLastState("auto", SaveManager.hangmanName)).getWordManager();
+                    HangmanState lastAutoState = (HangmanState) currSavManager.getLastState("auto", SaveManager.hangmanName);
                     HangmanComplexityActivity.complexity = lastAutoState.getComplexity();
-                    Word.lenght = HangmanComplexityActivity.complexity;
+                    // Word.length = HangmanComplexityActivity.complexity;
+                    Word.numRows = 1;
+                    Word.numCols = HangmanComplexityActivity.complexity + 1; // todo: discuss if we shall relate complexity to length or to word content
                     makeToastLoadedText();
                     switchToGame();
                 } else {

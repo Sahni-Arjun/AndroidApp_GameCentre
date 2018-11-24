@@ -29,6 +29,7 @@
         <activity android:name=".SlidingTileChoosePictureActivity" />
         <activity android:name=".ScoreBoardActivity" />
         <activity android:name=".SlidingTileScoreActivity" />
+        <activity android:name=".HangmanScoreActivity" />
         <activity android:name=".MainMenuActivity" />
         <activity android:name=".ChooseGameMenuActivity" />
         <activity android:name=".SlidingTileComplexityActivity" />

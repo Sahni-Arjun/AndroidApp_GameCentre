@@ -45,7 +45,7 @@ public class HangmanActivity extends AppCompatActivity implements Observer {
     private Scoreboard scoreBoard;
 
     // one-row-only Grid View and calculated column height and width based on device size
-    private GestureDetectGridView gridView;
+    private HangmanGestureDetectGridView gridView;
     private static int columnWidth, columnHeight;
 
     /**
@@ -60,16 +60,16 @@ public class HangmanActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        loadFromFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+        loadFromFile("Account");
         wordManager = HangmanStartingActivity.wordManager;
         createTileButtons(this);
         setContentView(R.layout.activity_hangman_main);
         addSaveButtonListener();
         addUndoButtonListener();
         // Add View to activity
-        gridView = findViewById(R.id.grid);
-        gridView.setNumColumns(Word.numCols); // todo change to length according to Kevin's implementation, avoid coupling
-        gridView.setBoardManager(wordManager);
+        gridView = findViewById(R.id.HangmanGrid);
+        gridView.setNumColumns(Word.numCols);
+        gridView.setWordManager(wordManager);
         wordManager.getWord().addObserver(this);
         // Observer sets up desired dimensions as well as calls our display function
         gridView.getViewTreeObserver().addOnGlobalLayoutListener(
@@ -97,12 +97,14 @@ public class HangmanActivity extends AppCompatActivity implements Observer {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFromFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+
+                loadFromFile("Account");
 
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
                 currentAccount.getSaveManager().updateSave("perma", SaveManager.hangmanName);
 
                 saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+
             }
         });
     }
@@ -115,7 +117,7 @@ public class HangmanActivity extends AppCompatActivity implements Observer {
         undoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFromFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+                loadFromFile("Account");
 
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
                 SaveManager currSavManager = currentAccount.getSaveManager();
@@ -130,7 +132,7 @@ public class HangmanActivity extends AppCompatActivity implements Observer {
                     prevState = (HangmanState) currSavManager.getLastState("auto", SaveManager.hangmanName);
 
                     Tile[][] prevTiles = prevState.getWordManager().getWord().getTiles();
-                    wordManager.getBoard().setTiles(prevTiles);
+                    wordManager.getWord().setTiles(prevTiles);
 
                     gridView.setWordManager(wordManager);
                     currSavManager.getLastState("auto", SaveManager.hangmanName).incrementNumMoves(prevMovesUndone);
@@ -155,7 +157,7 @@ public class HangmanActivity extends AppCompatActivity implements Observer {
         tileButtons = new ArrayList<>();
         for (int col = 0; col != Word.numCols; col++) { // todo: adjust to kevin's implementation
                 Button tmp = new Button(context);
-                tmp.setBackgroundResource(word.getTile(1, col).getBackground());
+                tmp.setBackgroundResource(word.getLetter(0, col).getBackground());
                 this.tileButtons.add(tmp);
 
         }
@@ -165,13 +167,17 @@ public class HangmanActivity extends AppCompatActivity implements Observer {
      * Update the backgrounds on the buttons to match the letters.
      */
     private void updateTileButtons() {
-        Board board = wordManager.getBoard();
+        Word word = wordManager.getWord();
         int nextPos = 0;
 
         for (Button b : tileButtons) {
-            // deprecated: int row = nextPos / Board.numRows;
-            // deprecated: int col = nextPos % Board.numCols;
-            b.setBackgroundResource(board.getTile(1, nextPos).getBackground());
+
+            if (word.getLetter(1, nextPos).hidden){
+                b.setBackgroundResource(R.drawable.letter_empty);
+            }
+            else{
+                b.setBackgroundResource(word.getLetter(1, nextPos).getBackground());
+            }
             nextPos++;
         }
     }
@@ -191,25 +197,25 @@ public class HangmanActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onResume() {
         super.onResume();
-        loadFromFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+        loadFromFile("Account");
         display();
     }
 
     /**
      * Load scoreboard or account manager from fileName.
      *
-     * @param fileName the name of the file
+     * @param type of loading: scoreboard or account manager
      */
-    private void loadFromFile(String fileName, String type) {
+    private void loadFromFile(String type) {
 
         try {
-            InputStream inputStream = this.openFileInput(fileName);
+            InputStream inputStream = this.openFileInput(StartingLoginActivity.SAVE_ACCOUNT_MANAGER);
             if (inputStream != null) {
                 ObjectInputStream input = new ObjectInputStream(inputStream);
                 if (type.equals("Account")) {
                     accountManager = (AccountManager) input.readObject();
                 } else {
-                    scoreWord = (Scoreword) input.readObject();
+                    scoreBoard = (Scoreboard) input.readObject();
                 }
                 inputStream.close();
             }
@@ -235,7 +241,7 @@ public class HangmanActivity extends AppCompatActivity implements Observer {
             if (type.equals("Account")) {
                 outputStream.writeObject(accountManager);
             } else {
-                outputStream.writeObject(scoreWord);
+                outputStream.writeObject(scoreBoard);
             }
             outputStream.close();
         } catch (IOException e) {
@@ -251,7 +257,7 @@ public class HangmanActivity extends AppCompatActivity implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        loadFromFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+        loadFromFile("Account");
 
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         SaveManager currSavManager = currentAccount.getSaveManager();
@@ -259,7 +265,7 @@ public class HangmanActivity extends AppCompatActivity implements Observer {
         int numMoves = currSavManager.getLength("auto", SaveManager.hangmanName);
 
         //Creating new game state with field values of the previous state.
-        HangmanState newState = new HangmanState(WordManager, numMoves,
+        HangmanState newState = new HangmanState(wordManager, numMoves,
                 HangmanComplexityActivity.complexity, SetUndoActivity.undo,
                 lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo());
         currSavManager.addState(newState, SaveManager.hangmanName);
@@ -268,8 +274,8 @@ public class HangmanActivity extends AppCompatActivity implements Observer {
 
         //Saving/Displaying the score if the game is over.
         if (newState.getWordManager().puzzleSolved()) {
-            loadFromFile(StartingLoginActivity.SAVE_SCOREBOARD, "scoreword");
-            scoreWord.addToScoreWord(scoreWord.createScore(StartingLoginActivity.currentUser,
+            loadFromFile("scoreword");
+            scoreBoard.addToScoreBoard(scoreBoard.createScore(StartingLoginActivity.currentUser,
                     newState.getScore()));
             saveToFile(StartingLoginActivity.SAVE_SCOREBOARD, "scoreword");
             currSavManager.wipeAutoSave(SaveManager.hangmanName);

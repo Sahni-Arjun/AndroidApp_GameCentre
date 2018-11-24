@@ -12,38 +12,38 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.widget.GridView;
 
-public class GestureDetectGridView extends GridView {
-    public static final int SWIPE_MIN_DISTANCE = 100;
+public class HangmanGestureDetectGridView extends GestureDetectGridView {
+
+    // public static final int SWIPE_MIN_DISTANCE = 100;
     private GestureDetector gDetector;
-    private MovementController mController;
+    private HangmanMovementController mController;
     private boolean mFlingConfirmed = false;
     private float mTouchX;
     private float mTouchY;
 
-    public GestureDetectGridView(Context context) {
+    public HangmanGestureDetectGridView(Context context) {
         super(context);
         init(context);
     }
 
-    public GestureDetectGridView(Context context, AttributeSet attrs) {
+    public HangmanGestureDetectGridView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
-    public GestureDetectGridView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public HangmanGestureDetectGridView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
 
     private void init(final Context context) {
-        mController = new MovementController();
+        mController = new HangmanMovementController();
         gDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
 
             @Override
             public boolean onSingleTapConfirmed(MotionEvent event) {
-                int position = GestureDetectGridView.this.pointToPosition
+                int position = HangmanGestureDetectGridView.this.pointToPosition
                         (Math.round(event.getX()), Math.round(event.getY()));
 
                 mController.processTapMovement(context, position);
@@ -91,8 +91,8 @@ public class GestureDetectGridView extends GridView {
         return gDetector.onTouchEvent(ev);
     }
 
-    public void setBoardManager(BoardManager boardManager) {
-        mController.setBoardManager(boardManager);
-    }
 
+    public void setWordManager(WordManager wordManager) {
+        mController.setWordManager(wordManager);
+    }
 }
