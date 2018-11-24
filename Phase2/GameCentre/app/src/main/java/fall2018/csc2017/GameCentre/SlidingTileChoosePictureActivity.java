@@ -1,24 +1,29 @@
 package fall2018.csc2017.GameCentre;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 public class SlidingTileChoosePictureActivity extends AppCompatActivity {
     AccountManager accountManager;
 
+    /**
+     * The filesystem.
+     */
+    private FileSystem fileSystem;
+
+    /**
+     * The current context for file reading/writing.
+     */
+    private Context currentContext = this;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        fileSystem = new FileSystem();
         setContentView(R.layout.activity_sliding_tile_choose_picture);
         addDefaultButtonListener();
     }
@@ -41,15 +46,15 @@ public class SlidingTileChoosePictureActivity extends AppCompatActivity {
         DefaultButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFromFile();
+                accountManager = fileSystem.loadAccount(currentContext);
 
                 Board.numCols = SlidingTileComplexityActivity.complexity;
                 Board.numRows = SlidingTileComplexityActivity.complexity;
                 SlidingTileStartingActivity.slidingTilesBoardManager = new SlidingTilesBoardManager();
 
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-                SaveManager currSavManager = currentAccount.getSaveManager();
-                currSavManager.wipeAutoSave(SaveManager.slidingTilesName);
+                SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
+                currSavManager.wipeSave(SaveManager.auto, SaveManager.slidingTilesName);
 
                 //Start new game with chosen number of undos
                 SlidingTilesState newState = new
@@ -61,47 +66,9 @@ public class SlidingTileChoosePictureActivity extends AppCompatActivity {
                     newState.setMaxNumMovesUndone(SetUndoActivity.undo);
                 }
                 currSavManager.addState(newState, SaveManager.slidingTilesName);
-                saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER);
+                fileSystem.saveAccount(currentContext, accountManager);
                 switchToGame();
             }
         });
     }
-
-    /**
-     * Load the board manager from fileName.
-     */
-    private void loadFromFile() {
-
-        try {
-            InputStream inputStream = this.openFileInput(StartingLoginActivity.SAVE_ACCOUNT_MANAGER);
-            if (inputStream != null) {
-                ObjectInputStream input = new ObjectInputStream(inputStream);
-                accountManager = (AccountManager) input.readObject();
-                inputStream.close();
-            }
-        } catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
-        } catch (IOException e) {
-            Log.e("login activity", "Can not read file: " + e.toString());
-        } catch (ClassNotFoundException e) {
-            Log.e("login activity", "File contained unexpected data type: " + e.toString());
-        }
-    }
-
-    /**
-     * Save the board manager to fileName.
-     *
-     * @param fileName the name of the file
-     */
-    public void saveToFile(String fileName) {
-        try {
-            ObjectOutputStream outputStream = new ObjectOutputStream(
-                    this.openFileOutput(fileName, MODE_PRIVATE));
-            outputStream.writeObject(accountManager);
-            outputStream.close();
-        } catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
-        }
-    }
-
 }

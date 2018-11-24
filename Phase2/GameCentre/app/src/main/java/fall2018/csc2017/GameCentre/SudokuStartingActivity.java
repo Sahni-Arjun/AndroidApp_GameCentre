@@ -1,5 +1,6 @@
 package fall2018.csc2017.GameCentre;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,9 +30,20 @@ public class SudokuStartingActivity  extends AppCompatActivity {
      */
     private AccountManager accountManager;
 
+    /**
+     * The filesystem.
+     */
+    private FileSystem fileSystem;
+
+    /**
+     * The current context for file reading/writing.
+     */
+    private Context currentContext = this;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        fileSystem = new FileSystem();
 //        slidingTilesBoardManager = new SudokuBoardManager();
         setContentView(R.layout.activity_sudoku_starting);
         addNewGameButtonListener();
@@ -59,7 +71,7 @@ public class SudokuStartingActivity  extends AppCompatActivity {
 
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
                 SaveManager currSavManager = currentAccount.getSaveManager();
-                currSavManager.wipeAutoSave(SaveManager.sudokuName);
+                currSavManager.wipeSave(SaveManager.auto, SaveManager.sudokuName);
 
                 //Start new game with chosen number of undos
                 SudokuState newState = new
@@ -77,7 +89,7 @@ public class SudokuStartingActivity  extends AppCompatActivity {
 //                    newState.setMaxNumMovesUndone(SetUndoActivity.undo);
 //                }
                 currSavManager.addState(newState, SaveManager.sudokuName);
-                saveToFile();
+                fileSystem.saveAccount(currentContext, accountManager);
                 switchtoSudoku();
             }
         });
@@ -99,7 +111,7 @@ public class SudokuStartingActivity  extends AppCompatActivity {
         loadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFromFile();
+                accountManager = fileSystem.loadAccount(currentContext);
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
                 SaveManager currSavManager = currentAccount.getSaveManager();
 
@@ -112,7 +124,7 @@ public class SudokuStartingActivity  extends AppCompatActivity {
                     Board.numRows = 9;
                     Board.numCols = 9;
                     makeToastLoadedText();
-                    saveToFile();
+                    fileSystem.saveAccount(currentContext, accountManager);
                     switchtoSudoku();
                 } else {
                     Toast.makeText(getApplicationContext(), "Use common sense you can't" +
@@ -137,7 +149,7 @@ public class SudokuStartingActivity  extends AppCompatActivity {
         loadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFromFile();
+                accountManager = fileSystem.loadAccount(currentContext);
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
                 SaveManager currSavManager = currentAccount.getSaveManager();
 
@@ -165,43 +177,7 @@ public class SudokuStartingActivity  extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadFromFile();
+        accountManager = fileSystem.loadAccount(currentContext);
     }
 
-    /**
-     * Load the account manager from fileName.
-     */
-    private void loadFromFile() {
-
-        try {
-            InputStream inputStream =
-                    this.openFileInput(StartingLoginActivity.SAVE_ACCOUNT_MANAGER);
-            if (inputStream != null) {
-                ObjectInputStream input = new ObjectInputStream(inputStream);
-                accountManager = (AccountManager) input.readObject();
-                inputStream.close();
-            }
-        } catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
-        } catch (IOException e) {
-            Log.e("login activity", "Can not read file: " + e.toString());
-        } catch (ClassNotFoundException e) {
-            Log.e("login activity", "File contained unexpected" +
-                    " data type: " + e.toString());
-        }
-    }
-
-    /**
-     * Save the account manager to fileName.
-     */
-    private void saveToFile() {
-        try {
-            ObjectOutputStream outputStream = new ObjectOutputStream(
-                    this.openFileOutput(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, MODE_PRIVATE));
-            outputStream.writeObject(accountManager);
-            outputStream.close();
-        } catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
-        }
-    }
 }

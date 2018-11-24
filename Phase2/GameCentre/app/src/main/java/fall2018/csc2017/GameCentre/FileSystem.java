@@ -72,7 +72,7 @@ class FileSystem {
      *
      * @param context the context writing the file.
      */
-    public void saveAccount(Context context, AccountManager accountManager) {
+    void saveAccount(Context context, AccountManager accountManager) {
         try {
             ObjectOutputStream outputStream = new ObjectOutputStream(
                     context.openFileOutput(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, MODE_PRIVATE));
@@ -88,7 +88,7 @@ class FileSystem {
      *
      * @param context the context writing the file.
      */
-    public void saveScoreBoard(Context context, Scoreboard scoreboard) {
+    void saveScoreBoard(Context context, Scoreboard scoreboard) {
         try {
             ObjectOutputStream outputStream = new ObjectOutputStream(
                     context.openFileOutput(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, MODE_PRIVATE));
