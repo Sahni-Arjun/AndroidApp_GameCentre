@@ -113,4 +113,18 @@ class SaveManager implements Serializable {
             return permaSave.get(gameType).size();
         }
     }
+    void updateState(String gameType, BoardManager boardManager){
+        if (gameType.equals(this.slidingTilesName)){
+            SlidingTilesState lastAutoState = (SlidingTilesState) this.getLastState("auto", SaveManager.slidingTilesName);
+            int numMoves = this.getLength("auto", SaveManager.slidingTilesName);
+
+            //Creating new game state with field values of the previous state.
+            SlidingTilesState newState = new SlidingTilesState((SlidingTilesBoardManager) boardManager, numMoves,
+                    SlidingTileComplexityActivity.complexity, SetUndoActivity.undo,
+                    lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo());
+            this.addState(newState, SaveManager.slidingTilesName);
+        } else if(gameType.equals(this.sudokuName)){
+
+        }
+    }
 }

@@ -256,23 +256,19 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
 
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         SaveManager currSavManager = currentAccount.getSaveManager();
-        SlidingTilesState lastAutoState = (SlidingTilesState) currSavManager.getLastState("auto", SaveManager.slidingTilesName);
-        int numMoves = currSavManager.getLength("auto", SaveManager.slidingTilesName);
-
-        //Creating new game state with field values of the previous state.
-        SlidingTilesState newState = new SlidingTilesState(slidingTilesBoardManager, numMoves,
-                SlidingTileComplexityActivity.complexity, SetUndoActivity.undo,
-                lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo());
-        currSavManager.addState(newState, SaveManager.slidingTilesName);
+        currSavManager.updateState(SaveManager.slidingTilesName, slidingTilesBoardManager);
         saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
         display();
 
+        SlidingTilesState prevState = (SlidingTilesState) currSavManager.getLastState("auto", SaveManager.slidingTilesName);
         //Saving/Displaying the score if the game is over.
-        if (newState.getSlidingTilesBoardManager().puzzleSolved()) {
+        if (slidingTilesBoardManager.puzzleSolved()) {
             loadFromFile(StartingLoginActivity.SAVE_SCOREBOARD, "scoreboard");
             scoreBoard.addToScoreBoard(scoreBoard.createScore(StartingLoginActivity.currentUser,
-                    newState.getScore()));
+                    prevState.getScore()));
             saveToFile(StartingLoginActivity.SAVE_SCOREBOARD, "scoreboard");
+
+
             currSavManager.wipeAutoSave(SaveManager.slidingTilesName);
             currSavManager.wipePermaSave(SaveManager.slidingTilesName);
             saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
