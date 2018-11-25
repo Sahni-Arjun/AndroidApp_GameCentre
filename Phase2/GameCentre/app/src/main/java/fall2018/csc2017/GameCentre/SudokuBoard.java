@@ -57,7 +57,7 @@ public class SudokuBoard extends Board{
     SudokuBoard(){
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                this.tiles[i][j] = new Tile(0);
+                this.tiles[i][j] = new Tile(-1);
             }
         }
 
