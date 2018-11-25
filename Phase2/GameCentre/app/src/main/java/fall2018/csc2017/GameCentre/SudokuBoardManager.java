@@ -14,8 +14,8 @@ class SudokuBoardManager extends BoardManager implements Serializable {
     /**
      * The board being managed.
      */
-    private SudokuBoard board;
-    private Tile[][] tiles;
+    private SudokuBoard board = new SudokuBoard();
+    private Tile[][] tiles = board.getTiles();
 
     /**
      * Manage a board that has been pre-populated.
@@ -53,13 +53,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
      * Manage a new shuffled board.
      */
     SudokuBoardManager() {
-        Tile[][] tiles = new Tile[9][9];
-        for (int tileNum = 0; tileNum != 9; tileNum++) {
-            for (int num = 0; num != 9; num++) {
-                tiles[tileNum][num] = new Tile(0);
-            }
 
-        }
         int i = 0;
         int j = 0;
         boolean notFinished = true;
@@ -77,15 +71,14 @@ class SudokuBoardManager extends BoardManager implements Serializable {
                 if(j >= 2){j = j-2;}
                 else{i = i-1;}
             }
-            if(i>8){notFinished = false;}
+            if(j>8){notFinished = false;}
 
         }
-        this.tiles = tiles;
         this.board.setTiles(tiles);
     }
 
     private ArrayList<Integer> getNeighbours(int i, int j) {
-        Tile mainTile = tiles[i][j];
+
         ArrayList<Integer> neighbours = new ArrayList<>();
         for (int x = 0; x != 9; x++) {
             if (x != i) {
@@ -110,7 +103,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
     }
 
     private ArrayList<Integer> getAvailable(int i, int j) {
-        ArrayList<Integer> available = new ArrayList<>(Arrays.asList(1,2,3,4,5,6,7,8,9));
+        ArrayList<Integer> available = new ArrayList<>(Arrays.asList(1,2,3,4,5,6,7,8,0));
         ArrayList<Integer> neighbours = getNeighbours(i,j);
         for(Integer x: neighbours){
             if (available.contains(x)){
