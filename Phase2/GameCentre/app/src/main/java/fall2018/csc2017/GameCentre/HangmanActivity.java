@@ -366,8 +366,8 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
             scoreBoard.addToScoreBoard(scoreBoard.createScore(StartingLoginActivity.currentUser,
                     newState.getScore()));
             saveToFile(StartingLoginActivity.SAVE_SCOREBOARD, "scoreboard");
-            currSavManager.wipeAutoSave(SaveManager.hangmanName);
-            currSavManager.wipePermaSave(SaveManager.hangmanName);
+            currSavManager.wipeSave(SaveManager.auto, SaveManager.hangmanName);
+            currSavManager.wipeSave(SaveManager.perma, SaveManager.hangmanName);
             saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
             switchToWinning(); // todo: implement hangman winning and loosing
         }
