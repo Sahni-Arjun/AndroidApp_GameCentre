@@ -45,6 +45,12 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
      */
     private Scoreboard scoreBoard;
 
+
+    /**
+     * The picture of the doll representing the Hangman
+     */
+    private static Button doll;
+
     // one-row only Grid View and calculated column height and width based on device size
     private HangmanGestureDetectGridView gridView;
     private static int columnWidth, columnHeight;
@@ -61,13 +67,15 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        loadFromFile("Account");
+        loadFromFile("Account", StartingLoginActivity.SAVE_ACCOUNT_MANAGER);
         wordManager = HangmanStartingActivity.wordManager;
         createTileButtons(this);
         setContentView(R.layout.activity_hangman_main);
         addSaveButtonListener();
         addUndoButtonListener();
         // Add View to activity
+        doll = findViewById(R.id.doll);
+        doll.setBackgroundResource(R.drawable.hangman_head);
         gridView = findViewById(R.id.HangmanGrid);
         gridView.setNumColumns(Word.numCols);
         gridView.setWordManager(wordManager);
@@ -89,7 +97,6 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
                     }
                 });
     }
-
     /**
      * Activate the save button.
      */
@@ -99,7 +106,7 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
             @Override
             public void onClick(View v) {
 
-                loadFromFile("Account");
+                loadFromFile("Account", StartingLoginActivity.SAVE_ACCOUNT_MANAGER);
 
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
                 currentAccount.getSaveManager().updateSave("perma", SaveManager.hangmanName);
@@ -118,7 +125,7 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
         undoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFromFile("Account");
+                loadFromFile("Account", StartingLoginActivity.SAVE_ACCOUNT_MANAGER);
 
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
                 SaveManager currSavManager = currentAccount.getSaveManager();
@@ -169,6 +176,29 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
      */
     private void updateTileButtons() {
         Word word = wordManager.getWord();
+
+        switch (wordManager.tries){
+
+            case 0:
+                doll.setBackgroundResource(R.drawable.hangman_head);
+                break;
+            case 1:
+                doll.setBackgroundResource(R.drawable.hangman_trunk);
+                break;
+            case 2:
+                doll.setBackgroundResource(R.drawable.hangman_upper_limbs);
+                break;
+            case 3:
+                doll.setBackgroundResource(R.drawable.hangman_lower_limbs);
+                break;
+            case 4:
+                doll.setBackgroundResource(R.drawable.hangman_eyes);
+                break;
+            case 5:
+                doll.setBackgroundResource(R.drawable.hangman_hands);
+                break;
+        }
+
         int nextPos = 0;
 
         for (Button b : tileButtons) {
@@ -285,7 +315,7 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
     @Override
     protected void onResume() {
         super.onResume();
-        loadFromFile("Account");
+        loadFromFile("Account", StartingLoginActivity.SAVE_ACCOUNT_MANAGER);
         display();
     }
 
@@ -294,10 +324,10 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
      *
      * @param type of loading: scoreboard or account manager
      */
-    private void loadFromFile(String type) {
+    private void loadFromFile(String type, String file) {
 
         try {
-            InputStream inputStream = this.openFileInput(StartingLoginActivity.SAVE_ACCOUNT_MANAGER);
+            InputStream inputStream = this.openFileInput(file);
             if (inputStream != null) {
                 ObjectInputStream input = new ObjectInputStream(inputStream);
                 if (type.equals("Account")) {
@@ -345,7 +375,7 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
 
     @Override
     public void update(Observable o, Object arg) {
-        loadFromFile("Account");
+        loadFromFile("Account", StartingLoginActivity.SAVE_ACCOUNT_MANAGER);
 
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         SaveManager currSavManager = currentAccount.getSaveManager();
@@ -361,15 +391,21 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
         display();
 
         //Saving/Displaying the score if the game is over.
-        if (newState.getWordManager().puzzleSolved()) {
-            loadFromFile("scoreboard");
+        if (newState.getWordManager().puzzleSolved() || newState.getWordManager().tries > 5) {
+            loadFromFile("scoreboard", StartingLoginActivity.SAVE_SCOREBOARD);
             scoreBoard.addToScoreBoard(scoreBoard.createScore(StartingLoginActivity.currentUser,
                     newState.getScore()));
             saveToFile(StartingLoginActivity.SAVE_SCOREBOARD, "scoreboard");
-            currSavManager.wipeSave(SaveManager.auto,SaveManager.hangmanName);
-            currSavManager.wipeSave(SaveManager.perma,SaveManager.hangmanName);
+            currSavManager.wipeSave(SaveManager.hangmanName, "scoreboard");
+            currSavManager.wipeSave(SaveManager.hangmanName, "scoreboard");
             saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
-            switchToWinning(); // todo: implement hangman winning and loosing
+
+            if (newState.getWordManager().tries > 5){
+                switchToLoosing();
+            }
+            else{
+                switchToWinning();
+            }
         }
 
     }
@@ -516,7 +552,12 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
      * Switch to the winning/loosing view.
      */
     private void switchToWinning() {
-        Intent tmp = new Intent(this, WinningActivity.class); // todo: implement and connect to hangman winning and loosing
+        Intent tmp = new Intent(this, WinningActivity.class);
+        startActivity(tmp);
+    }
+
+    private void switchToLoosing() {
+        Intent tmp = new Intent(this, LoosingActivity.class);
         startActivity(tmp);
     }
 }

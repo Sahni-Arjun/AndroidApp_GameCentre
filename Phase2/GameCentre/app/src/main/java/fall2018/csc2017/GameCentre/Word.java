@@ -42,10 +42,8 @@ public class Word extends Board{
      */
     Word(List<Letter> l) {
 
-        Iterator<Letter> iterator = l.iterator();
-
         for (int i = 0; i < numCols; i++) {
-            this.letters[0][i] = iterator.next();
+            this.letters[0][i] = l.get(i);
         }
     }
 

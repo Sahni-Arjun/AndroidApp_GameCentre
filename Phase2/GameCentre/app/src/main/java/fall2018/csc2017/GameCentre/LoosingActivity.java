@@ -16,7 +16,7 @@ import java.io.ObjectInputStream;
 /**
  * The activity which activates when the user wins the game.
  */
-public class WinningActivity extends AppCompatActivity {
+public class LoosingActivity extends AppCompatActivity {
 
     /**
      * The scoreboard for the given game.
@@ -26,12 +26,15 @@ public class WinningActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_winning);
+        setContentView(R.layout.activity_loosing);
         loadFromFile();
         int score = scoreBoard.getLatestScore();
-        TextView scoreTxt = findViewById(R.id.scoreText);
+        TextView scoreTxt = findViewById(R.id.scoreTextA);
+        TextView wordMissed = findViewById(R.id.word);
         String scoreMessage = "Your Score: " + String.valueOf(score);
+        String wordMessage = "The word was: " + WordManager.stringWord.toUpperCase() + " !";
         scoreTxt.setText(scoreMessage);
+        wordMissed.setText(wordMessage);
         addBackButtonListener();
     }
 
@@ -40,7 +43,7 @@ public class WinningActivity extends AppCompatActivity {
         super.onResume();
         loadFromFile();
         int score = scoreBoard.getLatestScore();
-        TextView scoreTxt = findViewById(R.id.scoreText);
+        TextView scoreTxt = findViewById(R.id.scoreTextA);
         String scoreMessage = "Your Score: " + String.valueOf(score);
         scoreTxt.setText(scoreMessage);
     }
@@ -71,7 +74,7 @@ public class WinningActivity extends AppCompatActivity {
      * Activate the Back Button.
      */
     private void addBackButtonListener() {
-        Button saveButton = findViewById(R.id.backButton);
+        Button saveButton = findViewById(R.id.backButtonA);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,10 +84,10 @@ public class WinningActivity extends AppCompatActivity {
     }
 
     /**
-     * Switch to the SlidingTilesMenu to start a new game.
+     * Switch to the HangmanComplexityActivity to start a new game.
      */
     private void switchToGameMenu() {
-        Intent tmp = new Intent(this, ChooseGameMenuActivity.class);
+        Intent tmp = new Intent(this, HangmanComplexityActivity.class);
         startActivity(tmp);
     }
 

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Observable;
@@ -18,15 +17,12 @@ import java.util.Observer;
  */
 public class SlidingTileActivity extends AppCompatActivity implements Observer {
 
+    private SlidingTileActivityController slidingTileActivityController;
+
     /**
      * The board manager.
      */
-    private SlidingTilesBoardManager slidingTilesBoardManager;
-
-    /**
-     * The filesystem.
-     */
-    private FileSystem fileSystem;
+    public static SlidingTilesBoardManager slidingTilesBoardManager;
 
     /**
      * The current context for file reading/writing.
@@ -37,16 +33,6 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
      * The buttons to display.
      */
     private ArrayList<Button> tileButtons;
-
-    /**
-     * The account manage for the app.
-     */
-    private AccountManager accountManager;
-
-    /**
-     * Scoreboard for the sidling tiles game.
-     */
-    private Scoreboard scoreBoard;
 
     // Grid View and calculated column height and width based on device size
     private GestureDetectGridView gridView;
@@ -64,8 +50,9 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fileSystem = new FileSystem();
-        accountManager = fileSystem.loadAccount(currentContext);
+        FileSystem fileSystem = new FileSystem();
+        DisplayToast displayToast = new DisplayToast();
+        slidingTileActivityController = new SlidingTileActivityController(fileSystem, displayToast);
         slidingTilesBoardManager = SlidingTileStartingActivity.slidingTilesBoardManager;
         createTileButtons(this);
         setContentView(R.layout.activity_main);
@@ -102,12 +89,7 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                accountManager = fileSystem.loadAccount(currentContext);
-
-                Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-                currentAccount.getCurrentSaveManager(Account.slidingName).updateSave("perma", SaveManager.slidingTilesName);
-
-                fileSystem.saveAccount(currentContext, accountManager);
+                slidingTileActivityController.saveListener(currentContext);
             }
         });
     }
@@ -120,23 +102,8 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
         undoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // load the account manager.
-                accountManager = fileSystem.loadAccount(currentContext);
-
-                Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-                SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
-
-                boolean undoed = currSavManager.undoMove();
-                if (undoed){
-                    // update the current board manager with the new tiles.
-                    slidingTilesBoardManager.getBoard().setTiles(currSavManager.getboardArrangement());
-                    gridView.setBoardManager(slidingTilesBoardManager);
-                    fileSystem.saveAccount(currentContext, accountManager);
-                    display();
-                }else{
-                    Toast.makeText(getApplicationContext(), "Max moves undone" +
-                            "", Toast.LENGTH_SHORT).show();
-                }
+            slidingTileActivityController.undoListener(currentContext);
+            display();
             }
         });
     }
@@ -179,7 +146,6 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onPause() {
         super.onPause();
-        fileSystem.saveAccount(currentContext, accountManager);
     }
 
     /**
@@ -188,8 +154,6 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onResume() {
         super.onResume();
-        accountManager = fileSystem.loadAccount(currentContext);
-        display();
     }
 
     @Override
@@ -200,43 +164,7 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        // load the account manager.
-        accountManager = fileSystem.loadAccount(currentContext);
-
-        // save the account, savemanager in varaibles for future use.
-        Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-        SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
-
-        // add new save state in save manager.
-        currSavManager.updateState(SaveManager.slidingTilesName, slidingTilesBoardManager);
-
-        // save the account manager.
-        fileSystem.saveAccount(currentContext, accountManager);
-
-        // display the board.
+        slidingTileActivityController.updateGameListener(this);
         display();
-
-        SlidingTilesState prevState = (SlidingTilesState) currSavManager.getLastState(SaveManager.auto, SaveManager.slidingTilesName);
-        //Saving/Displaying the score if the game is over.
-        if (slidingTilesBoardManager.puzzleSolved()) {
-            scoreBoard = fileSystem.loadScoreboard(currentContext);
-            scoreBoard.addToScoreBoard(scoreBoard.createScore(StartingLoginActivity.currentUser,
-                    prevState.getScore()));
-            fileSystem.saveScoreBoard(currentContext, scoreBoard);
-
-            currSavManager.wipeSave(SaveManager.auto, SaveManager.slidingTilesName);
-            currSavManager.wipeSave(SaveManager.perma, SaveManager.slidingTilesName);
-            fileSystem.saveAccount(currentContext, accountManager);
-            switchToWinning();
-        }
-
-    }
-
-    /**
-     * Switch to the SlidingTileActivity view to play the game.
-     */
-    private void switchToWinning() {
-        Intent tmp = new Intent(this, WinningActivity.class);
-        startActivity(tmp);
     }
 }

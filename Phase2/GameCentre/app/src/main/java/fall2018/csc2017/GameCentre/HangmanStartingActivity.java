@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Random;
 
 public class HangmanStartingActivity extends AppCompatActivity {
 
@@ -50,11 +51,39 @@ public class HangmanStartingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Word.numCols = HangmanComplexityActivity.complexity;
+                Word.numCols = HangmanComplexityActivity.complexity + 1;
                 // numRows must remain 1 or made deprecated:
                 Word.numRows = 1;
 
-                wordManager = new WordManager();
+                String[] words;
+                String selectedWord ="";
+
+                try {
+                    InputStream is = getAssets().open("words.txt");
+                    int size = is.available();
+                    byte[] buffer = new byte[size];
+                    is.read(buffer);
+                    is.close();
+                    String text = new String(buffer);
+                    words = text.split("\\r?\\n");
+                    Random rand = new Random();
+                    int wordNum = rand.nextInt(900);
+                    selectedWord = words[wordNum];
+                    String test = "test";
+                    while(selectedWord.length() != (HangmanComplexityActivity.complexity + 1) ) {
+                        rand = new Random();
+                        wordNum = rand.nextInt(800);
+                        selectedWord = words[wordNum];
+                    }
+
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+                wordManager = new WordManager(selectedWord);
 
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
                 SaveManager currSavManager = currentAccount.getSaveManager();
