@@ -84,7 +84,7 @@ public class WinningActivity extends AppCompatActivity {
      * Switch to the SlidingTilesMenu to start a new game.
      */
     private void switchToGameMenu() {
-        Intent tmp = new Intent(this, SlidingTileStartingActivity.class);
+        Intent tmp = new Intent(this, ChooseGameMenuActivity.class);
         startActivity(tmp);
     }
 
