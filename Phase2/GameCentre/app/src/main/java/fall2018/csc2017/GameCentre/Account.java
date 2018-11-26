@@ -78,16 +78,6 @@ class Account implements Serializable {
         return this.password;
     }
 
-
-    /**
-     * Check if the account is a valid account.
-     *
-     * @return boolean
-     */
-    boolean isValidAccount() {
-        return !(this.getPassword().isEmpty() || this.getUsername().isEmpty());
-    }
-
     /**
      * Set username.
      *
