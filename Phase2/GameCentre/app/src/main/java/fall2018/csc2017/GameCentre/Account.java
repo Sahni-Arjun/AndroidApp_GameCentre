@@ -74,7 +74,7 @@ class Account implements Serializable {
      *
      * @return user's password.
      */
-    private String getPassword() {
+    public String getPassword() {
         return this.password;
     }
 
