@@ -173,7 +173,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
      * @param position the tile to check
      * @return whether the tile at position is surrounded by a blank tile
      */
-    boolean isValidTap(int position) { //TODO check if the index works for all cases
+    boolean isValidTap(int position) {
         int row = position / SudokuBoard.numRows;
         int col = position % SudokuBoard.numCols;
 
@@ -221,18 +221,6 @@ class SudokuBoardManager extends BoardManager implements Serializable {
             return false;
         }
         return true;
-
-
-
-//        SudokuBoardManager tempBoardManager = new SudokuBoardManager();
-//        SudokuBoard tempBoard = new SudokuBoard();
-//        tempBoard.setTiles(this.board.getTiles().clone());
-//        tempBoardManager.setBoard(tempBoard);
-//        Tile tile = new Tile(SudokuActivity.currentNumber-1);
-//        tempBoardManager.getBoard().setTile(row, col, tile);
-
-//        //TODO edit or create new methods for checking isValidTap. do not use checkwithChecker
-//        return tempBoardManager.checkSingleRow(row) && tempBoardManager.checkSingleCol(col) & tempBoardManager.checkSubBox(ternaryRow, ternaryCol);
     }
 
     /**
