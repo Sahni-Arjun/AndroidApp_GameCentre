@@ -69,7 +69,6 @@ class AccountManager implements Serializable {
     /**
      * Returns true if the input password is correct.
      *
-     * @param other newly entered pw
      * @return true or false
      */
     boolean isSamePassword(Account user, Account otherUser) {
