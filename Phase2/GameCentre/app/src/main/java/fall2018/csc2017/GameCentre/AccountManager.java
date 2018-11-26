@@ -63,7 +63,17 @@ class AccountManager implements Serializable {
             return false;
         }
         Account sameUsername = this.findUser(user.getUsername());
-        return sameUsername.isSamePassword(user);
+        return this.isSamePassword(user, sameUsername);
+    }
+
+    /**
+     * Returns true if the input password is correct.
+     *
+     * @return true or false
+     */
+    boolean isSamePassword(Account user, Account otherUser) {
+        return user.getPassword().equals(otherUser.getPassword()) &&
+                user.getUsername().equals(otherUser.getUsername());
     }
 
     /**
