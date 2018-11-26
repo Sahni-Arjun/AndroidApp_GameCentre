@@ -30,8 +30,11 @@ public class LoosingActivity extends AppCompatActivity {
         loadFromFile();
         int score = scoreBoard.getLatestScore();
         TextView scoreTxt = findViewById(R.id.scoreTextA);
+        TextView wordMissed = findViewById(R.id.word);
         String scoreMessage = "Your Score: " + String.valueOf(score);
+        String wordMessage = "The word was: " + WordManager.stringWord.toUpperCase() + " !";
         scoreTxt.setText(scoreMessage);
+        wordMissed.setText(wordMessage);
         addBackButtonListener();
     }
 

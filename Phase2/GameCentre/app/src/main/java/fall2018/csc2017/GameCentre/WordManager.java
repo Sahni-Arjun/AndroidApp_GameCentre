@@ -1,24 +1,9 @@
 package fall2018.csc2017.GameCentre;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.Scanner;
-import java.util.List;
-import java.util.Random;
 
-import android.content.ContentProvider;
-import android.content.Context;
-import android.content.res.AssetManager;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Manage a word, similarly to a one-row board, including checking for a win or a loose
