@@ -3,6 +3,7 @@ package fall2018.csc2017.GameCentre;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -16,6 +17,8 @@ class SudokuBoardManager extends BoardManager implements Serializable {
      */
     private SudokuBoard board = new SudokuBoard();
     private Tile[][] tiles = board.getTiles();
+    private Tile[][] tempTiles = this.tiles;
+    private ArrayList<Integer> correctInt = new ArrayList<>();
 
     /**
      * Manage a board that has been pre-populated.
@@ -53,39 +56,93 @@ class SudokuBoardManager extends BoardManager implements Serializable {
      * Manage a new shuffled board.
      */
     SudokuBoardManager(){
-        int i = 0;
-        int j = 0;
-        //boolean finished = false;
+        ArrayList<Integer> digits = new ArrayList<>(Arrays.asList(1,2,3,4,5,6,7,8,9));
+        Collections.shuffle(digits);
+        int randomNumber = digits.get(0);
+        SudokuTreeNode root = new SudokuTreeNode(0, 0,randomNumber,0);
+        getCorrectTiles(root);
+        ArrayList<Tile> correctTiles = new ArrayList<>();
+        for(Integer x: correctInt){
+            correctTiles.add(new Tile(x-1));
+        }
+        this.board = new SudokuBoard(correctTiles);
+        this.tiles = this.board.getTiles();
 
-        while (!getAvailable(i,j).isEmpty()){
-                Random rand = new Random();
-                ArrayList<Integer> available = getAvailable(i,j);
-            //if(!available.isEmpty()){
-                int randomNumber = available.get(rand.nextInt(available.size()));
-                tiles[i][j] = new Tile(randomNumber - 1);
 
-                if(j<8){
-                    j++;
-                }
-                else{
-                    i++;
-                    j=0;
-                }
-            //}
-//            else{
-//                if(j>1){
-//                    j = j - 2;
-//                }
-//                else{
-//                    i = i-1;
-//                    j = 8-(1-j);
-//                }
-            if(i>8){break;}
-            }
-        this.board.setTiles(tiles);
+    }
 
+
+
+    class SudokuTreeNode {
+        ArrayList<SudokuTreeNode> children = new ArrayList<>();
+        int row;
+        int col;
+        int value;
+        int length;
+        ArrayList<Integer> ancestors = new ArrayList<>();
+
+        SudokuTreeNode(int i, int j, int x, int length) {
+            this.value = x;
+            this.length = length;
+            this.col = j;
+            this.row = i;
+            this.children = new ArrayList<>();
         }
 
+        ArrayList<SudokuTreeNode> getChildren() {
+            int nRow;
+            int nCol;
+            if(this.col<8){
+                nCol = this.col +1;
+                nRow = this.row;
+            }
+            else{
+                nRow = this.row + 1;
+                nCol = this.col;
+            }
+            if(nRow<9){
+            ArrayList<Integer> available = getAvailable(nRow, nCol);
+            Collections.shuffle(available);
+            for (Integer x : available) {
+                SudokuTreeNode child = new SudokuTreeNode(nRow, nCol, x, this.length + 1);
+                child.ancestors = new ArrayList<>();
+                child.ancestors.addAll(this.ancestors);
+                child.ancestors.add(this.value);
+                this.children.add(child);
+
+            }}
+            return this.children;
+
+        }
+    }
+
+
+
+
+
+    private void getCorrectTiles(SudokuTreeNode node){
+        this.tempTiles[node.row][node.col] = new Tile(node.value - 1);
+
+        if(correctInt.size() == 81){}
+        else {
+            if(node.length == 80){
+
+                node.ancestors.add(node.value);
+                correctInt.addAll(node.ancestors);
+
+            }
+            else if(node.getChildren().isEmpty()){
+                this.tempTiles = this.tiles;
+
+            }
+            else {
+
+                for (SudokuTreeNode x : node.getChildren()) {
+                    getCorrectTiles(x);
+                }
+            }
+        }
+    }
 
 
 
@@ -93,7 +150,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
         ArrayList<Integer> rowBuddies = new ArrayList<>();
         for(int x = 0; x < 9;x++){
             if(x!=j){
-                rowBuddies.add(tiles[i][x].getId());
+                rowBuddies.add(tempTiles[i][x].getId());
 
             }
         }
@@ -103,7 +160,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
         ArrayList<Integer> colBuddies = new ArrayList<>();
         for (int x = 0; x < 9; x++) {
             if (x != i) {
-                colBuddies.add(tiles[x][j].getId());
+                colBuddies.add(tempTiles[x][j].getId());
 
             }
         }
@@ -119,7 +176,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
             for(int y = j3; y < j3+3;y++){
                 if((x==i)&&(y==j)){}
                 else{
-                    squareBuddies.add(tiles[x][y].getId());
+                    squareBuddies.add(tempTiles[x][y].getId());
                 }
 
                 }
