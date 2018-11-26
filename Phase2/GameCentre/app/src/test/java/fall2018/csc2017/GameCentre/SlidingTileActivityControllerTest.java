@@ -15,11 +15,11 @@ public class SlidingTileActivityControllerTest {
     /**
      * The slidingTileActivityController to test.
      */
-    SlidingTileActivityController slidingTileActivityController;
+    private SlidingTileActivityController slidingTileActivityController;
 
-    SlidingTilesBoardManager slidingTilesBoardManager;
+    private SlidingTilesBoardManager slidingTilesBoardManager;
 
-    Account user;
+    private Account user;
 
     /**
      * Make a set of tiles:
@@ -28,20 +28,19 @@ public class SlidingTileActivityControllerTest {
      * 8 5 6
      * @return a set of tiles
      */
-    private List<Tile> makeTiles() {
-        Board.numRows = 3;
-        Board.numCols = 3;
+    private Tile[][] makeTiles() {
         SlidingTileComplexityActivity.complexity = 3;
-        List<Tile> tiles = new ArrayList<>();
-        tiles.add(new Tile(9, 8)); //The blank tile.
-        tiles.add(new Tile(1, 0));
-        tiles.add(new Tile(3, 2));
-        tiles.add(new Tile(2, 1));
-        tiles.add(new Tile(7, 6));
-        tiles.add(new Tile(4, 3));
-        tiles.add(new Tile(8, 7));
-        tiles.add(new Tile(5, 4));
-        tiles.add(new Tile(6, 5));
+        Tile[][] tiles = new Tile[3][3];
+
+        tiles[0][0] = new Tile(9, 8);
+        tiles[0][1] = new Tile(1, 0);
+        tiles[0][2] = new Tile(3, 2);
+        tiles[1][0] = new Tile(2, 1);
+        tiles[1][1] = new Tile(7, 6);
+        tiles[1][2] = new Tile(4, 3);
+        tiles[2][0] = new Tile(8, 7);
+        tiles[2][1] = new Tile(5, 4);
+        tiles[2][2] = new Tile(6, 5);
         return tiles;
     }
 
@@ -49,31 +48,50 @@ public class SlidingTileActivityControllerTest {
      * Make a starting Board.
      */
     private void setUpStartingBoard() {
-        List<Tile> tiles = makeTiles();
-        Board board = new Board(tiles);
+        Tile[][] tiles = makeTiles();
+
+        Board board = new Board();
+        board.setTiles(tiles);
         slidingTilesBoardManager = new SlidingTilesBoardManager(board);
+    }
+
+    private Tile[][] deepCopy(Tile[][] old){
+        Tile[][] newTiles = new Tile[3][3];
+        for(int i = 0; i < 3; i++){
+            newTiles[i] = old[i].clone();
+        }
+
+        return newTiles;
     }
 
     /**
      * Make 3 moves.
      */
     private void setUpAccountWithGame() {
-        makeTiles();
         setUpStartingBoard();
         user = new Account("Hello", "World");
         user.setCurrentGame(1);
-        SaveManager saveManager = user.getSaveManager();
-        SlidingTilesState slidingTilesState1 = new SlidingTilesState(slidingTilesBoardManager, 0, 3, 3, 0, false);
-        saveManager.addState(slidingTilesState1, SaveManager.slidingTilesName);
+        SaveManager saveManager = user.getCurrentSaveManager(Account.slidingName);
 
+        SlidingTilesBoardManager boardManager = new SlidingTilesBoardManager();
+        Board board = new Board();
+        board.setTiles(deepCopy(slidingTilesBoardManager.getBoard().getTiles()));
+        boardManager.setBoard(board);
+
+        SlidingTilesState slidingTilesState1 = new SlidingTilesState(boardManager, 0, 3, 3, 0, true);
+        saveManager.addState(slidingTilesState1, SaveManager.slidingTilesName);
         /**
          * 9 1 3
          * 2 7 4
          * 8 5 6
          */
+
         slidingTilesBoardManager.getBoard().swapTiles(0, 0, 0, 1);
-        SlidingTilesState slidingTilesState2 = new SlidingTilesState(slidingTilesBoardManager, 0, 3, 3, 0, false);
-        saveManager.addState(slidingTilesState2, SaveManager.slidingTilesName);
+        boardManager = new SlidingTilesBoardManager();
+        board = new Board();
+        board.setTiles(deepCopy(slidingTilesBoardManager.getBoard().getTiles()));
+        boardManager.setBoard(board);
+        saveManager.updateState(SaveManager.slidingTilesName, boardManager);
         /**
          * 1 9 3
          * 2 7 4
@@ -81,8 +99,11 @@ public class SlidingTileActivityControllerTest {
          */
 
         slidingTilesBoardManager.getBoard().swapTiles(0, 1, 1, 1);
-        SlidingTilesState slidingTilesState3 = new SlidingTilesState(slidingTilesBoardManager, 0, 3, 3, 0, false);
-        saveManager.addState(slidingTilesState3, SaveManager.slidingTilesName);
+        boardManager = new SlidingTilesBoardManager();
+        board = new Board();
+        board.setTiles(deepCopy(slidingTilesBoardManager.getBoard().getTiles()));
+        boardManager.setBoard(board);
+        saveManager.updateState(SaveManager.slidingTilesName, boardManager);
         /**
          * 1 7 3
          * 2 9 4
@@ -92,22 +113,20 @@ public class SlidingTileActivityControllerTest {
 
     @Before
     public void setUp(){
+        StartingLoginActivity.currentUser = "Hello";
+        setUpAccountWithGame();
+        SlidingTileActivity.slidingTilesBoardManager = new SlidingTilesBoardManager();
         slidingTileActivityController = new SlidingTileActivityController(
                 new FileSystem(){
                     public AccountManager loadAccount(Context context){
                         List<Account> emptyAccounts = new ArrayList<>();
                         AccountManager accountManager = new AccountManager(emptyAccounts);
-                        Account user = new Account("Hello", "World");
-                        user.setCurrentGame(1);
-                        SaveManager saveManager = user.getCurrentSaveManager(Account.slidingName);
-                        SlidingTilesState slidingTilesState = new SlidingTilesState(slidingTilesBoardManager, 0, 3, 3, 0, false);
-                        saveManager.addState(slidingTilesState, SaveManager.slidingTilesName);
-
                         accountManager.addUser(user);
                         return accountManager;
                     }
 
                     public void saveAccount(Context context, AccountManager accountManager){
+                        user = accountManager.findUser("Hello");
                     }
                 }, new DisplayToast(){
             public void displayToast(Context Context, String message){
@@ -117,13 +136,25 @@ public class SlidingTileActivityControllerTest {
         );
     }
 
-//    /**
-//     * Test whether pressing undo will revert back to the previous slidingTile board.
-//     */
-//    @Test
-//    public void testUndo(){
-//        Context context = new AppCompatActivity();
-//        slidingTileActivityController.undoListener(context);
-//
-//    }
+    /**
+     * Test whether pressing undo will revert back to the previous slidingTile board.
+     */
+    @Test
+    public void testUndo(){
+        Context context = new AppCompatActivity();
+        SaveManager saveManager = user.getCurrentSaveManager(Account.slidingName);
+        Tile[][] oldTiles = makeTiles();
+
+        slidingTileActivityController.undoListener(context);
+        slidingTileActivityController.undoListener(context);
+
+        SlidingTilesState state = (SlidingTilesState) saveManager.getLastState(SaveManager.auto, SaveManager.slidingTilesName);
+        Tile[][] newTiles = state.getSlidingTilesBoardManager().getBoard().getTiles();
+
+        for (int i = 0; i < 3; i++){
+            for (int j = 0; j < 3; j++){
+                assertEquals(newTiles[i][j].getBackground(),oldTiles[i][j].getBackground());
+            }
+        }
+    }
 }
