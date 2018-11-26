@@ -37,6 +37,11 @@ public class Tile implements Comparable<Tile>, Serializable {
         return id;
     }
 
+    public void setBackground(int background) {
+        this.background = background;
+    }
+
+
     /**
      * A Tile with id and background. The background may not have a corresponding image.
      *
@@ -60,12 +65,6 @@ public class Tile implements Comparable<Tile>, Serializable {
      */
     Tile(int backgroundId) {
         id = backgroundId + 1;
-
-        if ((SlidingTileComplexityActivity.complexity *
-                SlidingTileComplexityActivity.complexity) == id) {
-            background = R.drawable.tile_25;
-            return;
-        }
 
         switch (backgroundId + 1) {
             case 1:
