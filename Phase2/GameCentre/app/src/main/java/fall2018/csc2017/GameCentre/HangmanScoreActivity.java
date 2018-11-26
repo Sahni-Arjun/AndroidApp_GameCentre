@@ -26,7 +26,7 @@ public class HangmanScoreActivity extends AppCompatActivity {
         setContentView(R.layout.activity_hangman_score);
         loadFromFile();
         TextView hangmanScores = findViewById(R.id.hangmanScores);
-        hangmanScores.setText(hangmanScoreboard.getTopScores());
+        hangmanScores.setText(hangmanScoreboard.createTopScoreText());
     }
 
     /**
