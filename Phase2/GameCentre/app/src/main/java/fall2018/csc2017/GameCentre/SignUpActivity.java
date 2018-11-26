@@ -60,25 +60,27 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 addSignUpFillIn();
-                if (newUser.isValidAccount()) {
-                    loadFromFile();
-                    if (!existingFile) {
-                        List<Account> emptyAccounts = new ArrayList<>();
-                        accountManager = new AccountManager(emptyAccounts);
-                        scoreboard = new Scoreboard();
-                        saveToFile();
-                        existingFile = true;
-                    }
-                    loadFromFile();
-                    if (!accountManager.isExistingUser(newUser.getUsername())) {
-                        Toast.makeText(getApplicationContext(), "Loading...", Toast.LENGTH_SHORT).show();
-                        accountManager.addUser(newUser);
-                        saveToFile();
-                        switchToGameMenu();
-                        StartingLoginActivity.currentUser = newUser.getUsername();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Username exists. " +
-                                "Please choose a different one", Toast.LENGTH_SHORT).show();
+                if (newUser != null) {
+                    if (!(newUser.getUsername().isEmpty() || newUser.getPassword().isEmpty())) {
+                        loadFromFile();
+                        if (!existingFile) {
+                            List<Account> emptyAccounts = new ArrayList<>();
+                            accountManager = new AccountManager(emptyAccounts);
+                            scoreboard = new Scoreboard();
+                            saveToFile();
+                            existingFile = true;
+                        }
+                        loadFromFile();
+                        if (!accountManager.isExistingUser(newUser.getUsername())) {
+                            Toast.makeText(getApplicationContext(), "Loading...", Toast.LENGTH_SHORT).show();
+                            accountManager.addUser(newUser);
+                            saveToFile();
+                            switchToGameMenu();
+                            StartingLoginActivity.currentUser = newUser.getUsername();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Username exists. " +
+                                    "Please choose a different one", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             }
@@ -97,6 +99,7 @@ public class SignUpActivity extends AppCompatActivity {
      * Add new user's information provided
      */
     private void addSignUpFillIn() {
+
         EditText temp_user = findViewById(R.id.editText3);
         EditText temp_password = findViewById(R.id.editText4);
 
