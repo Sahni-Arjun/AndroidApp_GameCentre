@@ -2,7 +2,9 @@ package fall2018.csc2017.GameCentre;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Manage a board, including swapping tiles, checking for a win, and managing taps.
@@ -12,7 +14,8 @@ class SudokuBoardManager extends BoardManager implements Serializable {
     /**
      * The board being managed.
      */
-    private SudokuBoard board;
+    private SudokuBoard board = new SudokuBoard();
+    private Tile[][] tiles = board.getTiles();
 
     /**
      * Manage a board that has been pre-populated.
@@ -49,21 +52,108 @@ class SudokuBoardManager extends BoardManager implements Serializable {
     /**
      * Manage a new shuffled board.
      */
-    SudokuBoardManager() {
-        List<Tile> tiles = new ArrayList<>();
-        final int numTiles = Board.numRows * Board.numCols;
-        for (int tileNum = 0; tileNum != numTiles; tileNum++) {
-            tiles.add(new Tile(-1));
+    SudokuBoardManager(){
+        int i = 0;
+        int j = 0;
+        //boolean finished = false;
+
+        while (!getAvailable(i,j).isEmpty()){
+                Random rand = new Random();
+                ArrayList<Integer> available = getAvailable(i,j);
+            //if(!available.isEmpty()){
+                int randomNumber = available.get(rand.nextInt(available.size()));
+                tiles[i][j] = new Tile(randomNumber - 1);
+
+                if(j<8){
+                    j++;
+                }
+                else{
+                    i++;
+                    j=0;
+                }
+            //}
+//            else{
+//                if(j>1){
+//                    j = j - 2;
+//                }
+//                else{
+//                    i = i-1;
+//                    j = 8-(1-j);
+//                }
+            if(i>8){break;}
+            }
+        this.board.setTiles(tiles);
+
         }
-//        Collections.shuffle(tiles);
-        this.board = new SudokuBoard(tiles);
+
+
+
+
+    private ArrayList<Integer> getRowBuddies(int i, int j ) {
+        ArrayList<Integer> rowBuddies = new ArrayList<>();
+        for(int x = 0; x < 9;x++){
+            if(x!=j){
+                rowBuddies.add(tiles[i][x].getId());
+
+            }
+        }
+        return rowBuddies;
+    }
+    private ArrayList<Integer> getColBuddies(int i, int j ) {
+        ArrayList<Integer> colBuddies = new ArrayList<>();
+        for (int x = 0; x < 9; x++) {
+            if (x != i) {
+                colBuddies.add(tiles[x][j].getId());
+
+            }
+        }
+        return colBuddies;
     }
 
-    /**
-     * Return whether the tiles are in row-major order.
-     *
-     * @return whether the tiles are in row-major order
-     */
+    private ArrayList<Integer> getSquareBuddies(int i, int j ) {
+        int i3 = (i/3)*3;
+        int j3 = (j/3)*3;
+        ArrayList<Integer> squareBuddies = new ArrayList<>();
+
+        for(int x = i3;x < i3+3;x++){
+            for(int y = j3; y < j3+3;y++){
+                if((x==i)&&(y==j)){}
+                else{
+                    squareBuddies.add(tiles[x][y].getId());
+                }
+
+                }
+            }
+        return squareBuddies;
+    }
+
+    private ArrayList<Integer> getAllBuddies(int i, int j ) {
+        ArrayList<Integer> allBuddies = new ArrayList<>();
+        allBuddies.addAll(getRowBuddies(i,j));
+        allBuddies.addAll(getColBuddies(i,j));
+        allBuddies.addAll(getSquareBuddies(i,j));
+        return allBuddies;
+    }
+
+    private ArrayList<Integer> getAvailable(int i, int j){
+        ArrayList<Integer> digits = new ArrayList<>(Arrays.asList(1,2,3,4,5,6,7,8,9));
+        ArrayList<Integer> available = new ArrayList<>();
+        ArrayList<Integer> buddies = getAllBuddies(i,j);
+
+        for (Integer x: digits){
+            if(!buddies.contains(x)){
+                available.add(x);
+            }
+        }
+        return available;
+    }
+
+
+        /**
+         * Return whether the tiles are in row-major order.
+         *
+         * @return whether the tiles are in row-major order
+         */
     boolean puzzleSolved() {
         return this.checkRows() && this.checkCols() && this.checkBoxes();
     }

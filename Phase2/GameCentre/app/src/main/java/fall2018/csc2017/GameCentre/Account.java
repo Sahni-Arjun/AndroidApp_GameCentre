@@ -23,7 +23,7 @@ class Account implements Serializable {
 
     private SaveManager[] slidingSaveManager = new SaveManager[3];
 
-    public void setCurrentGame(int currentGame) {
+    void setCurrentGame(int currentGame) {
         this.currentGame = currentGame;
     }
 
@@ -74,8 +74,27 @@ class Account implements Serializable {
      *
      * @return user's password.
      */
-    public String getPassword() {
+    private String getPassword() {
         return this.password;
+    }
+
+    /**
+     * Returns true if the input password is correct.
+     *
+     * @param other newly entered pw
+     * @return true or false
+     */
+    boolean isSamePassword(Account other) {
+        return this.password.equals(other.getPassword()) && this.getUsername().equals(other.getUsername());
+    }
+
+    /**
+     * Check if the account is a valid account.
+     *
+     * @return boolean
+     */
+    boolean isValidAccount() {
+        return !(this.getPassword().isEmpty() || this.getUsername().isEmpty());
     }
 
     /**

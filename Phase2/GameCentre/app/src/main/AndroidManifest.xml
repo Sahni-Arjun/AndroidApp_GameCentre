@@ -36,6 +36,7 @@
         <activity android:name=".SetUndoActivity" />
         <activity android:name=".NotRobotActivity" />
         <activity android:name=".WinningActivity" />
+        <activity android:name=".LoosingActivity" />
         <activity android:name=".SudokuStartingActivity" />
         <activity android:name=".SudokuActivity" />
         <activity android:name=".HangmanComplexityActivity" />

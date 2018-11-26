@@ -1,15 +1,9 @@
 package fall2018.csc2017.GameCentre;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.Scanner;
 import java.util.List;
-import java.util.Random;
-
 
 /**
  * Manage a word, similarly to a one-row board, including checking for a win or a loose
@@ -39,15 +33,6 @@ class WordManager extends BoardManager implements Serializable {
     public int tries = 0;
 
     /**
-     * Manage a word that has been pre-populated with the appropriate letters.
-     *
-     * @param word the word
-     */
-    WordManager(Word word) {
-        this.word = word;
-    }
-
-    /**
      * Return the current word.
      *
      * @return the current word.
@@ -68,7 +53,7 @@ class WordManager extends BoardManager implements Serializable {
     /**
      * Manage a new retrieved word.
      */
-    WordManager(){
+    WordManager(String selectedWord){
 
         // todo replace this block by retrieving from file according to complexity
         List<Letter> letters = new ArrayList<>();
@@ -76,36 +61,14 @@ class WordManager extends BoardManager implements Serializable {
         final int numLetter = Word.numCols; // todo update according to Kevin's implementation
         this.length = HangmanComplexityActivity.complexity + 1; // todo update according to Kevin's implementation
 
-        //for (int letterNum = 65; letterNum != (65 + numLetter); letterNum++) {  // A is coded as dec 65 in ASCII
-        //    letters.add(new Letter(letterNum));
-        //}
-
-        //String fileName = "words.txt";
-        //Scanner fileScan = new Scanner(fileName);
-        //ArrayList words = new ArrayList();
-        //String tempWord;
-
-        //for(; fileScan.hasNext(); words.add(tempWord)){
-        //    tempWord = fileScan.next();
-        //}
-
-        ArrayList words = new ArrayList();
-        words.add("ball");
-        words.add("band");
-        words.add("base");
-        words.add("bath");
-
-        Random rand = new Random();
-        int wordNum = rand.nextInt(4);
-        String selectedWord = (String)words.get(wordNum);
-
         stringWord = selectedWord;
 
         char[] splittedWord = selectedWord.toCharArray();
 
         for(int count=0; count<splittedWord.length; count++){
 
-            int letterNum = splittedWord[count];
+            char curChar = Character.toUpperCase(splittedWord[count]);
+            int letterNum = curChar;
             letters.add(new Letter(letterNum));
 
         }

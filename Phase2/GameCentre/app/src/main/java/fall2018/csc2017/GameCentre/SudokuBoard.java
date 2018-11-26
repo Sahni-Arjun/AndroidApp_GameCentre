@@ -8,12 +8,12 @@ public class SudokuBoard extends Board{
     /**
      * Number of rows
      */
-    static int numRows = 9;
+    final static int numRows = 9;
 
     /**
      * Number of cols
      */
-    static int numCols = 9;
+    final static int numCols = 9;
 
     /**
      * The tiles on the SudokuBoard in row-major order
@@ -51,6 +51,17 @@ public class SudokuBoard extends Board{
         }
     }
 
+    /**
+     * A new board of all tiles with backgound id 0
+     */
+    SudokuBoard(){
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                this.tiles[i][j] = new Tile(-1);
+            }
+        }
+
+    }
     /**
      * Get the tile in row and col
      */
