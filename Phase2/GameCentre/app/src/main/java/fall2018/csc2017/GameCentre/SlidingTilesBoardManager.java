@@ -50,7 +50,7 @@ class SlidingTilesBoardManager extends BoardManager implements Serializable {
         List<Tile> tiles = new ArrayList<>();
         final int numTiles = Board.numRows * Board.numCols;
         for (int tileNum = 0; tileNum != numTiles; tileNum++) {
-            tiles.add(new Tile(tileNum));
+            tiles.add(new SlidingTilesTile(tileNum));
         }
         Collections.shuffle(tiles);
         this.board = new Board(tiles);
