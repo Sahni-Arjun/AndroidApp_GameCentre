@@ -81,7 +81,7 @@ public class HangmanStartingActivity extends AppCompatActivity {
         loadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(hangmanStartingActivityController.loadButtonListener(currentContext)) {
+                if (hangmanStartingActivityController.loadButtonListener(currentContext)) {
                     switchToGame();
                 }
             }
@@ -96,7 +96,7 @@ public class HangmanStartingActivity extends AppCompatActivity {
         loadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(hangmanStartingActivityController.continueButtonListener(currentContext)) {
+                if (hangmanStartingActivityController.continueButtonListener(currentContext)) {
                     switchToGame();
                 }
             }

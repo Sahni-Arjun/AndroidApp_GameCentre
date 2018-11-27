@@ -37,21 +37,17 @@ class HangmanStartingActivityController {
     }
 
     /**
-     * The logic that must be processed before the new game is created.
-     *
-     * @param context the context for the activity
+     * Return a word from the text file for the given context's word file.
+     * @param context the context for which the text file will be pulled from
+     * @return the word from the context
      */
-    void newGameButtonListener(Context context) {
-        accountManager = fileSystem.loadAccount(context);
-        Word.numCols = HangmanComplexityActivity.complexity + 1;
-        // numRows must remain 1 or made deprecated:
-        Word.numRows = 1;
-
+    private String selectWord(Context context){
         String[] words;
-        String selectedWord ="";
+        String selectedWord = "";
+        final String FILE_NAME = "words.txt";
 
         try {
-            InputStream is = context.getAssets().open("words.txt");
+            InputStream is = context.getAssets().open(FILE_NAME);
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);
@@ -70,6 +66,21 @@ class HangmanStartingActivityController {
             e.printStackTrace();
         }
 
+        return selectedWord;
+    }
+
+    /**
+     * The logic that must be processed before the new game is created.
+     *
+     * @param context the context for the activity
+     */
+    void newGameButtonListener(Context context) {
+        accountManager = fileSystem.loadAccount(context);
+        Word.numCols = HangmanComplexityActivity.complexity + 1;
+        // numRows must remain 1 or made deprecated:
+        Word.numRows = 1;
+
+        String selectedWord = selectWord(context);
         HangmanStartingActivity.wordManager = new WordManager(selectedWord);
 
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
