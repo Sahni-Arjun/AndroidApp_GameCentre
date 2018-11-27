@@ -53,7 +53,7 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
         FileSystem fileSystem = new FileSystem();
         DisplayToast displayToast = new DisplayToast();
         slidingTileActivityController = new SlidingTileActivityController(fileSystem, displayToast);
-        slidingTilesBoardManager = SlidingTileStartingActivity.slidingTilesBoardManager;
+        slidingTileActivityController.onCreateListener(currentContext);
         createTileButtons(this);
         setContentView(R.layout.activity_main);
         addSaveButtonListener();

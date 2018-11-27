@@ -74,14 +74,14 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
         fileSystem = new FileSystem();
         accountManager = fileSystem.loadAccount(currentContext);
 //        slidingTilesBoardManager = SlidingTileStartingActivity.slidingTilesBoardManager;
-        boardManager = SudokuStartingActivity.boardManager;
+        boardManager = SudokuDifficultyActivity.boardManager;
         createTileButtons(this);
         setContentView(R.layout.activity_sudoku);
         addSaveButtonListener();
         addUndoButtonListener();
         // Add View to activity
         gridView = findViewById(R.id.grid);
-        gridView.setNumColumns(Board.numCols);
+        gridView.setNumColumns(SudokuBoard.numCols);
         gridView.setBoardManager(boardManager);
         boardManager.getBoard().addObserver(this);
         // Observer sets up desired dimensions as well as calls our display function
@@ -94,8 +94,8 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
                         int displayWidth = gridView.getMeasuredWidth();
                         int displayHeight = gridView.getMeasuredHeight();
 
-                        columnWidth = displayWidth / Board.numCols;
-                        columnHeight = displayHeight / Board.numRows;
+                        columnWidth = displayWidth / SudokuBoard.numCols;
+                        columnHeight = displayHeight / SudokuBoard.numRows;
 
                         display();
                     }
@@ -176,8 +176,8 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
     private void createTileButtons(Context context) {
 //        SudokuBoard board = slidingTilesBoardManager.getThisBoard();
         tileButtons = new ArrayList<>();
-        for (int row = 0; row != Board.numRows; row++) {
-            for (int col = 0; col != Board.numCols; col++) {
+        for (int row = 0; row != SudokuBoard.numRows; row++) {
+            for (int col = 0; col != SudokuBoard.numCols; col++) {
                 Button tmp = new Button(context);
 //                tmp.setBackgroundResource(board.getTile(row, col).getBackground());
                 //TODO Uncomment the above line after pregenerated board is implemented.

@@ -19,14 +19,10 @@ public class SlidingTileStartingActivity extends AppCompatActivity {
     public static SlidingTilesBoardManager slidingTilesBoardManager;
 
     /**
-     * The account manager.
-     */
-    private AccountManager accountManager;
-
-    /**
      * The filesystem.
      */
-    private FileSystem fileSystem;
+
+    private SlidingTilesStartingActivityController controller;
 
     /**
      * The current context for file reading/writing.
@@ -36,12 +32,11 @@ public class SlidingTileStartingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fileSystem = new FileSystem();
+        FileSystem fileSystem = new FileSystem();
+        DisplayToast displayToast = new DisplayToast();
+        controller = new SlidingTilesStartingActivityController(fileSystem, displayToast);
         slidingTilesBoardManager = new SlidingTilesBoardManager();
         setContentView(R.layout.activity_starting_);
-        addNewGameButtonListener();
-        addLoadButtonListener();
-        addContinueButtonListener();
 
         addSlidingSave1ButtonListener();
         addSlidingSave2ButtonListener();
@@ -63,90 +58,13 @@ public class SlidingTileStartingActivity extends AppCompatActivity {
     }
 
     /**
-     * Activate the start button.
-     */
-    private void addNewGameButtonListener() {
-        Button startButton = findViewById(R.id.NewGameButton);
-        startButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switchToTileComplexity();
-            }
-        });
-    }
-
-    /**
      * Switch to the SlidingTileComplexityActivity to specify complexity.
      */
-    private void switchToTileComplexity() {
+    void switchToTileComplexity() {
         Intent tmp = new Intent(this, SlidingTileComplexityActivity.class);
         startActivity(tmp);
     }
 
-    /**
-     * Activate the load button.
-     */
-    private void addLoadButtonListener() {
-        Button loadButton = findViewById(R.id.LoadButton);
-        loadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                accountManager = fileSystem.loadAccount(currentContext);
-                Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-                SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
-
-                if (currSavManager.getLength("perma", SaveManager.slidingTilesName) != 0) {
-                    slidingTilesBoardManager = ((SlidingTilesState) currSavManager.getLastState("perma", SaveManager.slidingTilesName)).getSlidingTilesBoardManager();
-                    currSavManager.updateSave("auto", SaveManager.slidingTilesName);
-                    SlidingTilesState prePermaState = (SlidingTilesState) currSavManager.getLastState("perma", SaveManager.slidingTilesName);
-                    SlidingTileComplexityActivity.complexity = prePermaState.getComplexity();
-                    Board.numRows = SlidingTileComplexityActivity.complexity;
-                    Board.numCols = SlidingTileComplexityActivity.complexity;
-                    makeToastLoadedText();
-                    fileSystem.saveAccount(currentContext, accountManager);
-                    switchToGame();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Use common sense you can't" +
-                            " load if you haven't saved yet!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-
-    /**
-     * Display that a game was loaded successfully.
-     */
-    private void makeToastLoadedText() {
-        Toast.makeText(this, "Loaded Game", Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * Activate the continue button.
-     */
-    private void addContinueButtonListener() {
-        Button loadButton = findViewById(R.id.ContinueButton);
-        loadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                accountManager = fileSystem.loadAccount(currentContext);
-                Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-                SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
-
-                if (currSavManager.getLength("auto", SaveManager.slidingTilesName) != 0) {
-                    slidingTilesBoardManager = ((SlidingTilesState) currSavManager.getLastState("auto", SaveManager.slidingTilesName)).getSlidingTilesBoardManager();
-                    SlidingTilesState lastAutoState = (SlidingTilesState) currSavManager.getLastState("auto", SaveManager.slidingTilesName);
-                    SlidingTileComplexityActivity.complexity = lastAutoState.getComplexity();
-                    Board.numRows = SlidingTileComplexityActivity.complexity;
-                    Board.numCols = SlidingTileComplexityActivity.complexity;
-                    makeToastLoadedText();
-                    switchToGame();
-                } else {
-                    Toast.makeText(getApplicationContext(), "you can't continue a game " +
-                            "that hasn't started!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
 
     /**
      * Read the account manager from disk.
@@ -154,13 +72,13 @@ public class SlidingTileStartingActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        accountManager = fileSystem.loadAccount(currentContext);
+//        accountManager = fileSystem.loadAccount(currentContext);
     }
 
     /**
      * Switch to the SlidingTileActivity view to play the game.
      */
-    private void switchToGame() {
+    public void switchToGame() {
         Intent tmp = new Intent(this, SlidingTileActivity.class);
         startActivity(tmp);
     }
@@ -202,57 +120,6 @@ public class SlidingTileStartingActivity extends AppCompatActivity {
 //        }
 //    }
 
-
-    private void loadSave(int gameFile){
-        accountManager = fileSystem.loadAccount(currentContext);
-        Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-        currentAccount.setCurrentGame(gameFile);
-        SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
-
-        if (currSavManager.getLength(SaveManager.perma, SaveManager.slidingTilesName) != 0) {
-            slidingTilesBoardManager = ((SlidingTilesState) currSavManager.getLastState(SaveManager.perma, SaveManager.slidingTilesName)).getSlidingTilesBoardManager();
-            currSavManager.updateSave(SaveManager.auto, SaveManager.slidingTilesName);
-            SlidingTilesState prePermaState = (SlidingTilesState) currSavManager.getLastState(SaveManager.perma, SaveManager.slidingTilesName);
-            SlidingTileComplexityActivity.complexity = prePermaState.getComplexity();
-            Board.numRows = SlidingTileComplexityActivity.complexity;
-            Board.numCols = SlidingTileComplexityActivity.complexity;
-            makeToastLoadedText();
-            fileSystem.saveAccount(currentContext, accountManager);
-            switchToGame();
-        } else {
-            Toast.makeText(getApplicationContext(), "Use common sense you can't" +
-                    " load if you haven't saved yet!", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void continueSave(int gameFile){
-        accountManager = fileSystem.loadAccount(currentContext);
-        Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-        currentAccount.setCurrentGame(gameFile);
-        SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
-
-        if (currSavManager.getLength(SaveManager.auto, SaveManager.slidingTilesName) != 0) {
-            slidingTilesBoardManager = ((SlidingTilesState) currSavManager.getLastState(SaveManager.auto, SaveManager.slidingTilesName)).getSlidingTilesBoardManager();
-            SlidingTilesState lastAutoState = (SlidingTilesState) currSavManager.getLastState(SaveManager.auto, SaveManager.slidingTilesName);
-            SlidingTileComplexityActivity.complexity = lastAutoState.getComplexity();
-            Board.numRows = SlidingTileComplexityActivity.complexity;
-            Board.numCols = SlidingTileComplexityActivity.complexity;
-            makeToastLoadedText();
-            switchToGame();
-        } else {
-            Toast.makeText(getApplicationContext(), "you can't continue a game " +
-                    "that hasn't started!", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void newGame(int gameFile){
-        accountManager = fileSystem.loadAccount(currentContext);
-        Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-        currentAccount.setCurrentGame(gameFile);
-        fileSystem.saveAccount(currentContext, accountManager);
-        switchToTileComplexity();
-    }
-
     /**
      * Activate the load save 1 button.
      */
@@ -261,7 +128,7 @@ public class SlidingTileStartingActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadSave(1);
+                controller.loadSave(1, currentContext);
             }
         });
     }
@@ -274,7 +141,7 @@ public class SlidingTileStartingActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadSave(2);
+                controller.loadSave(2, currentContext);
             }
         });
     }
@@ -287,7 +154,7 @@ public class SlidingTileStartingActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadSave(3);
+                controller.loadSave(3, currentContext);
             }
         });
     }
@@ -300,7 +167,7 @@ public class SlidingTileStartingActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                continueSave(1);
+                controller.continueSave(1, currentContext);
             }
         });
     }
@@ -313,7 +180,7 @@ public class SlidingTileStartingActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                continueSave(2);
+                controller.continueSave(2, currentContext);
             }
         });
     }
@@ -326,7 +193,7 @@ public class SlidingTileStartingActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                continueSave(3);
+                controller.continueSave(3, currentContext);
             }
         });
     }
@@ -339,7 +206,7 @@ public class SlidingTileStartingActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                newGame(1);
+                controller.newGame(1, currentContext);
             }
         });
     }
@@ -352,7 +219,7 @@ public class SlidingTileStartingActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                newGame(2);
+                controller.newGame(2, currentContext);
             }
         });
     }
@@ -365,7 +232,7 @@ public class SlidingTileStartingActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                newGame(3);
+                controller.newGame(3, currentContext);
             }
         });
     }

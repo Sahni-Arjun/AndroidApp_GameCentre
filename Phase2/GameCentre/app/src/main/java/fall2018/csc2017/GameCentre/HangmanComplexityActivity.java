@@ -11,6 +11,7 @@ import android.widget.Button;
  */
 public class HangmanComplexityActivity extends AppCompatActivity {
 
+    // todo maybe this variable goes into model?
     /**
      * The complexity of the game.
      */

@@ -24,6 +24,14 @@ class SlidingTileActivityController{
         this. displayToast = displayToast;
     }
 
+    void onCreateListener(Context context){
+        accountManager = fileSystem.loadAccount(context);
+        Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
+        SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
+        String continueOrLoad = currSavManager.getContinueOrLoad();
+        SlidingTileActivity.slidingTilesBoardManager = ((SlidingTilesState)currSavManager.getLastState(continueOrLoad, SaveManager.slidingTilesName)).getSlidingTilesBoardManager();
+    }
+
     void undoListener(Context context){
         // load the account manager.
         accountManager = fileSystem.loadAccount(context);
