@@ -1,12 +1,14 @@
 package fall2018.csc2017.GameCentre;
 
 import android.content.Context;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Random;
 
+/**
+ * The controller for the HangmanStartingActivity.
+ */
 class HangmanStartingActivityController {
 
     /**
@@ -106,8 +108,8 @@ class HangmanStartingActivityController {
             fileSystem.saveAccount(context, accountManager);
             //todo it must only call switchToGame here!!!
         } else {
-            Toast.makeText(context.getApplicationContext(), "Use common sense you can't" +
-                    " load if you haven't saved yet!", Toast.LENGTH_SHORT).show();
+            displayToast.displayToast(context.getApplicationContext(),"you can't continue a game " +
+                    "that hasn't started!");
         }
     }
 
@@ -116,5 +118,22 @@ class HangmanStartingActivityController {
      * @param context the context for the activity
      */
     void continueButtonListener(Context context) {
+        accountManager = fileSystem.loadAccount(context);
+        Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
+        SaveManager currSavManager = currentAccount.getSaveManager();
+
+        if (currSavManager.getLength("auto", SaveManager.hangmanName) != 0) {
+            HangmanStartingActivity.wordManager = ((HangmanState) currSavManager.getLastState("auto", SaveManager.hangmanName)).getWordManager();
+            HangmanState lastAutoState = (HangmanState) currSavManager.getLastState("auto", SaveManager.hangmanName);
+            HangmanComplexityActivity.complexity = lastAutoState.getComplexity();
+            // Word.length = HangmanComplexityActivity.complexity;
+            Word.numRows = 1;
+            Word.numCols = HangmanComplexityActivity.complexity + 1; // todo: discuss if we shall relate complexity to length or to word content
+            displayToast.displayToast(context, "Loaded Game");
+            // todo must switch to game here!!!
+        } else {
+            displayToast.displayToast(context.getApplicationContext(),"you can't continue a game " +
+                    "that hasn't started!");
+        }
     }
 }
