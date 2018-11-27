@@ -66,7 +66,7 @@ public class SudokuStartingActivity  extends AppCompatActivity {
     }
 
     /**
-     * Activate the start button.
+     * Goes to the screen to chose the difficulty of the game.
      */
     private void addNewGameButtonListener() {
         Button startButton = findViewById(R.id.btnSudokuNewGame);
