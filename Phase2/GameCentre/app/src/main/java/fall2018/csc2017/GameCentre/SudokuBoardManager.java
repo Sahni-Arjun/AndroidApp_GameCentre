@@ -327,7 +327,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
     private boolean checkSingleRow(int row) {
         List<Integer> rowTiles = new ArrayList<>();
         for (int col = 0; col < 9; col++) {
-            int val = this.board.getTile(row, col).getBackground() + 1;
+            int val = this.board.getTile(row, col).getId();
             if (val != 0) {
                 rowTiles.add(val);
             }
@@ -355,7 +355,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
     private boolean checkSingleCol(int col) {
         List<Integer> colTiles = new ArrayList<>();
         for (int row = 0; row < 9; row++) {
-            int val = this.board.getTile(row, col).getBackground() + 1;
+            int val = this.board.getTile(row, col).getId();
             if (val != 0) {
                 colTiles.add(val);
             }
@@ -386,7 +386,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
         List<Integer> tiles = new ArrayList<>();
         for (int r = 0; r < 3; r ++) {
             for (int c = 0; c < 3; c ++) {
-                tiles.add(this.board.getTile(3*ternaryRow + r, 3*ternaryCol + c).getBackground() + 1);
+                tiles.add(this.board.getTile(3*ternaryRow + r, 3*ternaryCol + c).getId());
             }
         }
 
