@@ -81,9 +81,9 @@ public class HangmanStartingActivity extends AppCompatActivity {
         loadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hangmanStartingActivityController.loadButtonListener(currentContext);
-                // todo needs to satisfy a certain requirement refer to the controller, maybe make it so that loadbuttonlitsener returns a boolean?
-                switchToGame();
+                if(hangmanStartingActivityController.loadButtonListener(currentContext)) {
+                    switchToGame();
+                }
             }
         });
     }
@@ -96,9 +96,9 @@ public class HangmanStartingActivity extends AppCompatActivity {
         loadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hangmanStartingActivityController.continueButtonListener(currentContext);
-                // todo needs to satisfy a certain requirement refer to the controller, maybe make it so that loadbuttonlitsener returns a boolean?
-                switchToGame();
+                if(hangmanStartingActivityController.continueButtonListener(currentContext)) {
+                    switchToGame();
+                }
             }
         });
     }

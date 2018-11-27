@@ -93,7 +93,7 @@ class HangmanStartingActivityController {
      *
      * @param context the context for the activity
      */
-    void loadButtonListener(Context context) {
+    boolean loadButtonListener(Context context) {
         accountManager = fileSystem.loadAccount(context);
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         SaveManager currSavManager = currentAccount.getSaveManager();
@@ -105,18 +105,18 @@ class HangmanStartingActivityController {
             HangmanComplexityActivity.complexity = prePermaState.getComplexity();
             displayToast.displayToast(context, "Loaded Game");
             fileSystem.saveAccount(context, accountManager);
-            //todo it must only call switchToGame here!!!
         } else {
             displayToast.displayToast(context.getApplicationContext(),"you can't continue a game " +
                     "that hasn't started!");
         }
+        return currSavManager.getLength("perma", SaveManager.hangmanName) != 0;
     }
 
     /**
      * The logic that must be processed before the game is continued.
      * @param context the context for the activity
      */
-    void continueButtonListener(Context context) {
+    boolean  continueButtonListener(Context context) {
         accountManager = fileSystem.loadAccount(context);
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         SaveManager currSavManager = currentAccount.getSaveManager();
@@ -128,10 +128,10 @@ class HangmanStartingActivityController {
             Word.numRows = 1;
             Word.numCols = HangmanComplexityActivity.complexity + 1; // todo: discuss if we shall relate complexity to length or to word content
             displayToast.displayToast(context, "Loaded Game");
-            // todo must switch to game here!!!
         } else {
             displayToast.displayToast(context.getApplicationContext(),"you can't continue a game " +
                     "that hasn't started!");
         }
+        return currSavManager.getLength("auto", SaveManager.hangmanName) != 0;
     }
 }
