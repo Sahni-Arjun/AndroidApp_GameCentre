@@ -152,4 +152,18 @@ class SaveManager implements Serializable {
         // from the previous save get the tile arrangement.
         return prevState.getSlidingTilesBoardManager().getBoard().getTiles();
     }
+
+
+    Letter[][] getWordArrangement(){
+        // store the previous save in a variable.
+        HangmanState prevState;
+        prevState = (HangmanState) getLastState(SaveManager.auto, SaveManager.hangmanName);
+
+        // from the previous save get the word arrangement.
+        return prevState.getWordManager().getWord().getLetters();
+    }
+
+
+
+
 }

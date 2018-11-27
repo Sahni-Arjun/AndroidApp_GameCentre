@@ -22,7 +22,7 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
     /**
      * The board manager.
      */
-    public static SlidingTilesBoardManager slidingTilesBoardManager;
+    private SlidingTilesBoardManager slidingTilesBoardManager;
 
     /**
      * The current context for file reading/writing.
@@ -53,7 +53,7 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
         FileSystem fileSystem = new FileSystem();
         DisplayToast displayToast = new DisplayToast();
         slidingTileActivityController = new SlidingTileActivityController(fileSystem, displayToast);
-        slidingTileActivityController.onCreateListener(currentContext);
+        slidingTileActivityController.onCreateListener((SlidingTileActivity) currentContext);
         createTileButtons(this);
         setContentView(R.layout.activity_main);
         addSaveButtonListener();
@@ -82,6 +82,21 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
     }
 
     /**
+     * Setter method for slidingTilesBoardManager field
+     * @param newBoardManager
+     */
+    void setSlidingTilesBoardManager(SlidingTilesBoardManager newBoardManager) {
+        this.slidingTilesBoardManager = newBoardManager;
+    }
+
+    /**
+     * Getter method for slidingTilesBoardManager field
+     */
+    public SlidingTilesBoardManager getSlidingTilesBoardManager() {
+        return this.slidingTilesBoardManager;
+    }
+
+    /**
      * Activate the save button.
      */
     private void addSaveButtonListener() {
@@ -102,7 +117,7 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
         undoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            slidingTileActivityController.undoListener(currentContext);
+            slidingTileActivityController.undoListener((SlidingTileActivity) currentContext);
             display();
             }
         });
@@ -167,4 +182,5 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
         slidingTileActivityController.updateGameListener(this);
         display();
     }
+
 }

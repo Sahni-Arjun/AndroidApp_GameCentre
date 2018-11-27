@@ -30,7 +30,7 @@ class WordManager extends BoardManager implements Serializable {
     /**
      * The number of guessed already made.
      */
-    public int tries = 0;
+    public static int tries = 0;
 
     /**
      * Return the current word.

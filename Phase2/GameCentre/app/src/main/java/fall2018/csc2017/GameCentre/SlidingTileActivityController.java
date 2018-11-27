@@ -24,15 +24,16 @@ class SlidingTileActivityController{
         this. displayToast = displayToast;
     }
 
-    void onCreateListener(Context context){
+    void onCreateListener(SlidingTileActivity context){
         accountManager = fileSystem.loadAccount(context);
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
         String continueOrLoad = currSavManager.getContinueOrLoad();
-        SlidingTileActivity.slidingTilesBoardManager = ((SlidingTilesState)currSavManager.getLastState(continueOrLoad, SaveManager.slidingTilesName)).getSlidingTilesBoardManager();
+        SlidingTilesBoardManager newBoardManager = ((SlidingTilesState)currSavManager.getLastState(continueOrLoad, SaveManager.slidingTilesName)).getSlidingTilesBoardManager();
+        context.setSlidingTilesBoardManager(newBoardManager);
     }
 
-    void undoListener(Context context){
+    void undoListener(SlidingTileActivity context){
         // load the account manager.
         accountManager = fileSystem.loadAccount(context);
 
@@ -42,20 +43,20 @@ class SlidingTileActivityController{
         boolean undone = currSavManager.undoMove();
         if (undone){
             // update the current board manager with the new tiles.
-            SlidingTileActivity.slidingTilesBoardManager.getBoard().setTiles(currSavManager.getboardArrangement());
+            context.getSlidingTilesBoardManager().getBoard().setTiles(currSavManager.getboardArrangement());
             fileSystem.saveAccount(context, accountManager);
         }else{
             displayToast.displayToast(context, "Max moves undone");
         }
     }
 
-    void updateGameListener(Context context){
+    void updateGameListener(SlidingTileActivity context){
         accountManager = fileSystem.loadAccount(context);
 
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
 
-        currSavManager.updateState(SaveManager.slidingTilesName, SlidingTileActivity.slidingTilesBoardManager);
+        currSavManager.updateState(SaveManager.slidingTilesName, (context.getSlidingTilesBoardManager()));
 
         fileSystem.saveAccount(context, accountManager);
 
