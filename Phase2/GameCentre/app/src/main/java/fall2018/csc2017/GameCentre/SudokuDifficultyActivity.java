@@ -9,7 +9,7 @@ import android.widget.Button;
 
 public class SudokuDifficultyActivity extends AppCompatActivity {
     /**
-     * The complexity of the game.
+     * The difficulty of the game.
      */
     public static Integer difficulty;
 
@@ -50,10 +50,17 @@ public class SudokuDifficultyActivity extends AppCompatActivity {
         startActivity(tmp);
     }
 
+    /**
+     * this goes to SudokuActivity (the actual game).
+     */
     private void switchToSudoku() {
         Intent tmp = new Intent(this, SudokuActivity.class);
         startActivity(tmp);
     }
+
+    /**
+     * intitiates everything needed for the game to start.
+     */
     private void startGame() {
 
         boardManager = new SudokuBoardManager();
@@ -82,12 +89,9 @@ public class SudokuDifficultyActivity extends AppCompatActivity {
         switchToSudoku();
     }
 
-    /**
-     * Switch to picture selection for the tiles.
-     */
 
     /**
-     * Activate button to set complexity to 3.
+     * Activate button to set difficulty to 1(easy).
      */
     private void addButtonNoobListener() {
         Button button3x3 = findViewById(R.id.Noob);
@@ -102,7 +106,7 @@ public class SudokuDifficultyActivity extends AppCompatActivity {
     }
 
     /**
-     * Activate button to set complexity to 4.
+     * Activate button to set difficulty to 2(medium).
      */
     private void addButtonAmateurListener() {
         Button button4x4 = findViewById(R.id.Amateur);
@@ -116,7 +120,7 @@ public class SudokuDifficultyActivity extends AppCompatActivity {
     }
 
     /**
-     * Activate button to set complexity to 5.
+     * Activate button to set difficulty to 4(hard).
      */
     private void addButtonProListener() {
         Button button5x5 = findViewById(R.id.Pro);
