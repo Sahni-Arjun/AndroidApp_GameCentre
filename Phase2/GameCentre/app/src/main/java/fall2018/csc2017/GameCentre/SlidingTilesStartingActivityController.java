@@ -96,27 +96,4 @@ class SlidingTilesStartingActivityController {
         fileSystem.saveAccount(currentContext, accountManager);
         ((SlidingTileStartingActivity) currentContext).switchToTileComplexity();
     }
-
-    /**
-     * Activate the continue button.
-     */
-    void continueButtonListener(Context currentContext) {
-        accountManager = fileSystem.loadAccount(currentContext);
-        Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-        SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
-
-        if (currSavManager.getLength("auto", SaveManager.slidingTilesName) != 0) {
-            SlidingTileStartingActivity.slidingTilesBoardManager = ((SlidingTilesState) currSavManager.getLastState("auto", SaveManager.slidingTilesName)).getSlidingTilesBoardManager();
-            SlidingTilesState lastAutoState = (SlidingTilesState) currSavManager.getLastState("auto", SaveManager.slidingTilesName);
-            SlidingTileComplexityActivity.complexity = lastAutoState.getComplexity();
-            Board.numRows = SlidingTileComplexityActivity.complexity;
-            Board.numCols = SlidingTileComplexityActivity.complexity;
-            displayToast.displayToast(currentContext,"Loaded Game");
-            ((SlidingTileStartingActivity) currentContext).switchToTileComplexity();
-        } else {
-            displayToast.displayToast(currentContext, "you can't continue a game " +
-                    "that hasn't started!");
-        }
-    }
-
 }
