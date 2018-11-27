@@ -1,5 +1,6 @@
 package fall2018.csc2017.GameCentre;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,16 @@ import java.util.Random;
 public class HangmanStartingActivity extends AppCompatActivity {
 
     /**
+     * The activity controller.
+     */
+    private HangmanStartingActivityController hangmanStartingActivityController;
+
+    /**
+     * The current context used for file reading/writing.
+     */
+    private Context currentContext = this;
+
+    /**
      * The word manager.
      */
     public static WordManager wordManager;
@@ -30,6 +41,9 @@ public class HangmanStartingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FileSystem fileSystem = new FileSystem();
+        DisplayToast displayToast = new DisplayToast();
+        hangmanStartingActivityController = new HangmanStartingActivityController(fileSystem);
         setContentView(R.layout.activity_hangman_starting);
         addNewGameButtonListener();
         addLoadButtonListener();
@@ -51,56 +65,7 @@ public class HangmanStartingActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Word.numCols = HangmanComplexityActivity.complexity + 1;
-                // numRows must remain 1 or made deprecated:
-                Word.numRows = 1;
-
-                String[] words;
-                String selectedWord ="";
-
-                try {
-                    InputStream is = getAssets().open("words.txt");
-                    int size = is.available();
-                    byte[] buffer = new byte[size];
-                    is.read(buffer);
-                    is.close();
-                    String text = new String(buffer);
-                    words = text.split("\\r?\\n");
-                    Random rand = new Random();
-                    int wordNum = rand.nextInt(900);
-                    selectedWord = words[wordNum];
-                    String test = "test";
-                    while(selectedWord.length() != (HangmanComplexityActivity.complexity + 1) ) {
-                        rand = new Random();
-                        wordNum = rand.nextInt(800);
-                        selectedWord = words[wordNum];
-                    }
-
-
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-
-                wordManager = new WordManager(selectedWord);
-
-                Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-                SaveManager currSavManager = currentAccount.getSaveManager();
-                currSavManager.wipeSave(SaveManager.auto, SaveManager.hangmanName);
-
-                //Start new game with chosen number of undoes // todo discuss with group
-                HangmanState newState = new
-                        HangmanState(wordManager, 0);
-
-                newState.setComplexity(HangmanComplexityActivity.complexity);
-
-                newState.setUnlimitedUndo(); // todo discuss with group
-
-                currSavManager.addState(newState, SaveManager.hangmanName);
-                saveToFile();
-
+                hangmanStartingActivityController.newGameButtonListener(currentContext);
                 switchToHangman();
             }
         });
@@ -131,23 +96,9 @@ public class HangmanStartingActivity extends AppCompatActivity {
         loadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFromFile();
-                Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-                SaveManager currSavManager = currentAccount.getSaveManager();
-
-                if (currSavManager.getLength("perma", SaveManager.hangmanName) != 0) {
-                    wordManager = ((HangmanState) currSavManager.getLastState("perma", SaveManager.hangmanName)).getWordManager();
-                    currSavManager.updateSave("auto", SaveManager.hangmanName);
-                    HangmanState prePermaState = (HangmanState) currSavManager.getLastState("perma", SaveManager.hangmanName);
-                    HangmanComplexityActivity.complexity = prePermaState.getComplexity();
-                    // Word.length = HangmanComplexityActivity.complexity; // todo: discuss if we shall relate complexity to length or to word content
-                    makeToastLoadedText();
-                    saveToFile();
-                    switchToGame();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Use common sense you can't" +
-                            " load if you haven't saved yet!", Toast.LENGTH_SHORT).show();
-                }
+                hangmanStartingActivityController.loadButtonListener(currentContext);
+                // todo needs to satisfy a certain requirement refer to the controller, maybe make it so that loadbuttonlitsener returns a boolean?
+                switchToGame();
             }
         });
     }
