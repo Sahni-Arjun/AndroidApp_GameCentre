@@ -58,39 +58,22 @@ public class SudokuStartingActivity  extends AppCompatActivity {
     }
 
     /**
-     * Activate the start button.
+     * goes to SudokuDifficultActivity
+     */
+    public void switchToDifficulty(){
+        Intent tmp = new Intent(this, SudokuDifficultyActivity.class);
+        startActivity(tmp);
+    }
+
+    /**
+     * Goes to the screen to chose the difficulty of the game.
      */
     private void addNewGameButtonListener() {
         Button startButton = findViewById(R.id.btnSudokuNewGame);
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Board.numCols = 9;
-                Board.numRows = 9;
-                boardManager = new SudokuBoardManager();
-
-                Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-                SaveManager currSavManager = currentAccount.getSaveManager();
-                currSavManager.wipeSave(SaveManager.auto, SaveManager.sudokuName);
-
-                //Start new game with chosen number of undos
-                SudokuState newState = new
-                        SudokuState(boardManager, 0);
-
-                //TODO set correct difficulty when implemented.
-                newState.setDifficulty(0);
-
-                //TODO set number of undos when implemented.
-                newState.setUnlimitedUndo();
-
-//                if (SetUndoActivity.unlimited) {
-//                    newState.setUnlimitedUndo();
-//                } else {
-//                    newState.setMaxNumMovesUndone(SetUndoActivity.undo);
-//                }
-                currSavManager.addState(newState, SaveManager.sudokuName);
-                fileSystem.saveAccount(currentContext, accountManager);
-                switchtoSudoku();
+                switchToDifficulty();
             }
         });
     }

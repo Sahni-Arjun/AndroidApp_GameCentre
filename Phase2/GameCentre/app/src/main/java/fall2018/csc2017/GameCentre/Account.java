@@ -10,6 +10,8 @@ class Account implements Serializable {
 
     static final long serialVersionUID = 4860302647072124829L;
     static final String slidingName = "sliding tiles";
+    static final String hangmanName = "Hangman";
+    static final String sudokuName = "sudoku";
 
     /**
      * User's username and password.
@@ -22,6 +24,8 @@ class Account implements Serializable {
     private SaveManager saveManager = new SaveManager();
 
     private SaveManager[] slidingSaveManager = new SaveManager[3];
+    private SaveManager[] hangmanSaveManager = new SaveManager[3];
+    private SaveManager[] sudokuSaveManager = new SaveManager[3];
 
     void setCurrentGame(int currentGame) {
         this.currentGame = currentGame;
@@ -42,6 +46,14 @@ class Account implements Serializable {
         slidingSaveManager[0] = new SaveManager();
         slidingSaveManager[1] = new SaveManager();
         slidingSaveManager[2] = new SaveManager();
+
+        hangmanSaveManager[0] = new SaveManager();
+        hangmanSaveManager[1] = new SaveManager();
+        hangmanSaveManager[2] = new SaveManager();
+
+        sudokuSaveManager[0] = new SaveManager();
+        sudokuSaveManager[1] = new SaveManager();
+        sudokuSaveManager[2] = new SaveManager();
     }
 
     /**
@@ -56,6 +68,14 @@ class Account implements Serializable {
     SaveManager getCurrentSaveManager(String gameType){
         if (gameType.equals(Account.slidingName)){
             return slidingSaveManager[currentGame-1];
+        }
+
+        if (gameType.equals(Account.hangmanName)){
+            return hangmanSaveManager[currentGame-1];
+        }
+
+        if (gameType.equals(Account.sudokuName)){
+            return sudokuSaveManager[currentGame-1];
         }
         return saveManager;//TODO remove this.
     }
@@ -74,7 +94,7 @@ class Account implements Serializable {
      *
      * @return user's password.
      */
-    public String getPassword() {
+    String getPassword() {
         return this.password;
     }
 
