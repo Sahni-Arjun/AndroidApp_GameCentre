@@ -26,7 +26,7 @@ public class SlidingTileScoreActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sliding_tile_score);
         loadFromFile();
         TextView slidingTileScores = findViewById(R.id.sldingTilesScores);
-        slidingTileScores.setText(slidingTileScoreboard.getTopScores());
+        slidingTileScores.setText(slidingTileScoreboard.createTopScoreText());
     }
 
     /**

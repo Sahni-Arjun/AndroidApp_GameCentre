@@ -23,7 +23,7 @@ class Account implements Serializable {
 
     private SaveManager[] slidingSaveManager = new SaveManager[3];
 
-    public void setCurrentGame(int currentGame) {
+    void setCurrentGame(int currentGame) {
         this.currentGame = currentGame;
     }
 

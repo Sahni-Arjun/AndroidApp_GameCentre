@@ -18,30 +18,6 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
     <Button
-        android:id="@+id/NewGameButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/GameText"
-        android:layout_centerHorizontal="true"
-        android:text="@string/new_game" />
-
-    <Button
-        android:id="@+id/LoadButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/GameText"
-        android:layout_toStartOf="@+id/NewGameButton"
-        android:text="@string/load_saved_game" />
-
-    <Button
-        android:id="@+id/ContinueButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/GameText"
-        android:layout_toEndOf="@+id/NewGameButton"
-        android:text="@string/continue_game" />
-
-    <Button
         android:id="@+id/slidingSave1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
