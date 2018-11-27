@@ -21,10 +21,11 @@ public class SudokuBoard extends Board{
     private Tile[][] tiles = new Tile[numRows][numCols]; //TODO: Change this to SudokuTile once implemented
 
     void setTile(int row, int col, Tile tile){
+        if(tiles[row][col].getId()==0){
         tiles[row][col] = tile;
         setChanged();
         notifyObservers();
-    }
+    }}
 
     public void setTiles(Tile[][] tiles) {
         this.tiles = tiles;
