@@ -19,11 +19,6 @@ public class SlidingTileStartingActivity extends AppCompatActivity {
     public static SlidingTilesBoardManager slidingTilesBoardManager;
 
     /**
-     * The account manager.
-     */
-    private AccountManager accountManager;
-
-    /**
      * The filesystem.
      */
 

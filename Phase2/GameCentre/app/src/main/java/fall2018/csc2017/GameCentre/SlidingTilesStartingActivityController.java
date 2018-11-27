@@ -59,6 +59,11 @@ class SlidingTilesStartingActivityController {
         }
     }
 
+    /**
+     * Load the continue
+     * @param gameFile
+     * @param currentContext
+     */
     void continueSave(int gameFile, Context currentContext){
         accountManager = fileSystem.loadAccount(currentContext);
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
@@ -79,6 +84,11 @@ class SlidingTilesStartingActivityController {
         }
     }
 
+    /**
+     * Load new game
+     * @param gameFile
+     * @param currentContext
+     */
     void newGame(int gameFile, Context currentContext){
         accountManager = fileSystem.loadAccount(currentContext);
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
