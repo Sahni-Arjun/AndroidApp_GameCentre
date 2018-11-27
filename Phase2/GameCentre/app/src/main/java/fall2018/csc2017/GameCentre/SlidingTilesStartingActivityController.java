@@ -1,9 +1,6 @@
 package fall2018.csc2017.GameCentre;
 
 import android.content.Context;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
 
 /**
  * Controller class for SlidingTilesStartingActivity
@@ -62,6 +59,11 @@ class SlidingTilesStartingActivityController {
         }
     }
 
+    /**
+     * Load the continue
+     * @param gameFile
+     * @param currentContext
+     */
     void continueSave(int gameFile, Context currentContext){
         accountManager = fileSystem.loadAccount(currentContext);
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
@@ -82,6 +84,11 @@ class SlidingTilesStartingActivityController {
         }
     }
 
+    /**
+     * Load new game
+     * @param gameFile
+     * @param currentContext
+     */
     void newGame(int gameFile, Context currentContext){
         accountManager = fileSystem.loadAccount(currentContext);
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
