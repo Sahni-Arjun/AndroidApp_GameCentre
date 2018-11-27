@@ -56,6 +56,10 @@ public class SudokuStartingActivity  extends AppCompatActivity {
         Intent tmp = new Intent(this, ChooseGameMenuActivity.class);
         startActivity(tmp);
     }
+
+    /**
+     * goes to SudokuDifficultActivity
+     */
     public void switchToDifficulty(){
         Intent tmp = new Intent(this, SudokuDifficultyActivity.class);
         startActivity(tmp);
