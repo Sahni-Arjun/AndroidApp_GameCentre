@@ -103,7 +103,6 @@ class HangmanStartingActivityController {
             currSavManager.updateSave("auto", SaveManager.hangmanName);
             HangmanState prePermaState = (HangmanState) currSavManager.getLastState("perma", SaveManager.hangmanName);
             HangmanComplexityActivity.complexity = prePermaState.getComplexity();
-            // Word.length = HangmanComplexityActivity.complexity; // todo: discuss if we shall relate complexity to length or to word content
             displayToast.displayToast(context, "Loaded Game");
             fileSystem.saveAccount(context, accountManager);
             //todo it must only call switchToGame here!!!
@@ -126,7 +125,6 @@ class HangmanStartingActivityController {
             HangmanStartingActivity.wordManager = ((HangmanState) currSavManager.getLastState("auto", SaveManager.hangmanName)).getWordManager();
             HangmanState lastAutoState = (HangmanState) currSavManager.getLastState("auto", SaveManager.hangmanName);
             HangmanComplexityActivity.complexity = lastAutoState.getComplexity();
-            // Word.length = HangmanComplexityActivity.complexity;
             Word.numRows = 1;
             Word.numCols = HangmanComplexityActivity.complexity + 1; // todo: discuss if we shall relate complexity to length or to word content
             displayToast.displayToast(context, "Loaded Game");
