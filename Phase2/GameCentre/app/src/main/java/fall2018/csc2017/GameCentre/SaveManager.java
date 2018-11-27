@@ -15,6 +15,16 @@ class SaveManager implements Serializable {
     static final String auto = "auto";
     static final String perma = "perma";
 
+    public String getContinueOrLoad() {
+        return continueOrLoad;
+    }
+
+    public void setContinueOrLoad(String continueOrLoad) {
+        this.continueOrLoad = continueOrLoad;
+    }
+
+    private String continueOrLoad = "auto";
+
     /**
      * Permanent save of user's games.
      */

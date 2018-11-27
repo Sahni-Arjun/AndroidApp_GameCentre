@@ -1,9 +1,6 @@
 package fall2018.csc2017.GameCentre;
 
 import android.content.Context;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
 
 /**
  * Controller class for SlidingTilesStartingActivity
@@ -27,8 +24,8 @@ class SlidingTilesStartingActivityController {
 
     /**
      * Constructor
-     * @param fileSystem
-     * @param displayToast
+     * @param fileSystem the filesystem for this controller.
+     * @param displayToast the toast displayer.
      */
     SlidingTilesStartingActivityController(FileSystem fileSystem, DisplayToast displayToast) {
         this.fileSystem = fileSystem;
@@ -47,7 +44,7 @@ class SlidingTilesStartingActivityController {
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
 
         if (currSavManager.getLength(SaveManager.perma, SaveManager.slidingTilesName) != 0) {
-            SlidingTileStartingActivity.slidingTilesBoardManager = ((SlidingTilesState) currSavManager.getLastState(SaveManager.perma, SaveManager.slidingTilesName)).getSlidingTilesBoardManager();
+            currSavManager.setContinueOrLoad(SaveManager.perma);
             currSavManager.updateSave(SaveManager.auto, SaveManager.slidingTilesName);
             SlidingTilesState prePermaState = (SlidingTilesState) currSavManager.getLastState(SaveManager.perma, SaveManager.slidingTilesName);
             SlidingTileComplexityActivity.complexity = prePermaState.getComplexity();
@@ -69,7 +66,7 @@ class SlidingTilesStartingActivityController {
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
 
         if (currSavManager.getLength(SaveManager.auto, SaveManager.slidingTilesName) != 0) {
-            SlidingTileStartingActivity.slidingTilesBoardManager = ((SlidingTilesState) currSavManager.getLastState(SaveManager.auto, SaveManager.slidingTilesName)).getSlidingTilesBoardManager();
+            currSavManager.setContinueOrLoad(SaveManager.auto);
             SlidingTilesState lastAutoState = (SlidingTilesState) currSavManager.getLastState(SaveManager.auto, SaveManager.slidingTilesName);
             SlidingTileComplexityActivity.complexity = lastAutoState.getComplexity();
             Board.numRows = SlidingTileComplexityActivity.complexity;
@@ -89,27 +86,4 @@ class SlidingTilesStartingActivityController {
         fileSystem.saveAccount(currentContext, accountManager);
         ((SlidingTileStartingActivity) currentContext).switchToTileComplexity();
     }
-
-    /**
-     * Activate the continue button.
-     */
-    void continueButtonListener(Context currentContext) {
-        accountManager = fileSystem.loadAccount(currentContext);
-        Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-        SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
-
-        if (currSavManager.getLength("auto", SaveManager.slidingTilesName) != 0) {
-            SlidingTileStartingActivity.slidingTilesBoardManager = ((SlidingTilesState) currSavManager.getLastState("auto", SaveManager.slidingTilesName)).getSlidingTilesBoardManager();
-            SlidingTilesState lastAutoState = (SlidingTilesState) currSavManager.getLastState("auto", SaveManager.slidingTilesName);
-            SlidingTileComplexityActivity.complexity = lastAutoState.getComplexity();
-            Board.numRows = SlidingTileComplexityActivity.complexity;
-            Board.numCols = SlidingTileComplexityActivity.complexity;
-            displayToast.displayToast(currentContext,"Loaded Game");
-            ((SlidingTileStartingActivity) currentContext).switchToTileComplexity();
-        } else {
-            displayToast.displayToast(currentContext, "you can't continue a game " +
-                    "that hasn't started!");
-        }
-    }
-
 }
