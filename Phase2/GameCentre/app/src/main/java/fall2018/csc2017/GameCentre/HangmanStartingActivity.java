@@ -42,6 +42,7 @@ public class HangmanStartingActivity extends AppCompatActivity {
         startActivity(tmp);
     }
 
+    // todo make into mvc
     /**
      * Activate the start button.
      */
@@ -121,6 +122,7 @@ public class HangmanStartingActivity extends AppCompatActivity {
         startActivity(tmp);
     }
 
+    // todo make into mvc
     /**
      * Activate the load button.
      */
@@ -157,6 +159,7 @@ public class HangmanStartingActivity extends AppCompatActivity {
         Toast.makeText(this, "Loaded Game", Toast.LENGTH_SHORT).show();
     }
 
+    // todo make mvc
     /**
      * Activate the continue button.
      */
@@ -203,6 +206,7 @@ public class HangmanStartingActivity extends AppCompatActivity {
         startActivity(tmp);
     }
 
+    // todo make into mvc
     /**
      * Load the account manager from fileName.
      */
