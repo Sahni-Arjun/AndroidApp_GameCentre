@@ -468,8 +468,8 @@ class SudokuBoardManager extends BoardManager implements Serializable {
      * @param position the position
      */
     void touchMove(int position) {
-        int row = position / Board.numRows;
-        int col = position % Board.numCols;
+        int row = position / SudokuBoard.numRows;
+        int col = position % SudokuBoard.numCols;
 
         if (isValidTap(position)){
             Tile newTile = new Tile(SudokuActivity.currentNumber-1);
