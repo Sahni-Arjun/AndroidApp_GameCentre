@@ -37,17 +37,16 @@ class HangmanStartingActivityController {
     }
 
     /**
-     * Return a word from the text file for the given context's word file.
-     * @param context the context for which the text file will be pulled from
-     * @return the word from the context
+     * The logic that must be processed before the new game is created.
+     *
+     * @param context the context for the activity
      */
     private String selectWord(Context context){
         String[] words;
-        String selectedWord = "";
-        final String FILE_NAME = "words.txt";
+        String selectedWord ="";
 
         try {
-            InputStream is = context.getAssets().open(FILE_NAME);
+            InputStream is = context.getAssets().open("words.txt");
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);

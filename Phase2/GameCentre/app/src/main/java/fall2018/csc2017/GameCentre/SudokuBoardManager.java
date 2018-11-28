@@ -1,6 +1,7 @@
 package fall2018.csc2017.GameCentre;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -18,6 +19,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
     private SudokuBoard board = new SudokuBoard();
     private Tile[][] tiles = board.getTiles();
     private boolean found = false;
+
 
     /**
      * Manage a board that has been pre-populated.
@@ -55,13 +57,42 @@ class SudokuBoardManager extends BoardManager implements Serializable {
      * Manage a new shuffled board.
      */
     SudokuBoardManager() {
+        createSolvedBoard();
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                ArrayList<Integer[]> random = new ArrayList<>();
+                ArrayList<Integer> iList = new ArrayList<>(Arrays.asList(i*3,i*3+1,i*3+2));
+                ArrayList<Integer> jList = new ArrayList<>(Arrays.asList(j*3,j*3+1,j*3+2));
+                while(random.size() < SudokuDifficultyActivity.difficulty){
+                    Collections.shuffle(iList);
+                    Collections.shuffle(jList);
+                    Integer ri = iList.get(0);
+                    Integer rj = jList.get(0);
+                    Integer[] rCo = {ri,rj};
+                    if(!random.contains(rCo)) {
+                        random.add(rCo);
+                    }
+                    }
+                    for(int i3 = i*3;i3 < i*3 +3;i3++){
+                        for(int j3 = j*3;j3 < j*3+3;j3++){
+                            Integer j1 = j3;
+                            Integer i1 = i3;
+                            for (Integer[] x:random){
+                                if ((x[0]==i1) && (x[1]==j1)){
+                                    tiles[i3][j3] = new Tile(-1);
+                                }
 
-        ArrayList<Integer> digits = new ArrayList<>(Arrays.asList(1,2,3,4,5,6,7,8,9));
-        Collections.shuffle(digits);
-        int randomNumber = digits.get(0);
-        SudokuTreeNode root = new SudokuTreeNode(0, 0,randomNumber,0);
-        getCorrectTiles(root);
-        this.board.setTiles(tiles);
+                            }
+                        }
+
+                }
+
+
+            }}
+            this.board.setTiles(tiles);
+        }
+
+
 
 //        ArrayList<Integer> values = new ArrayList<>(Arrays.asList(1,2,3,4,5,6,7,8,9));
 //        Collections.shuffle(values);
@@ -102,7 +133,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
 //                    values1.remove(0);
 //                    }
 //                y++;
-            }
+
 
 //        this.tiles = tempTiles;
 //        this.board.setTiles(tempTiles);
@@ -142,7 +173,14 @@ class SudokuBoardManager extends BoardManager implements Serializable {
 
 
 
+    private void createSolvedBoard(){
+        ArrayList<Integer> digits = new ArrayList<>(Arrays.asList(1,2,3,4,5,6,7,8,9));
+        Collections.shuffle(digits);
+        int randomNumber = digits.get(0);
+        SudokuTreeNode root = new SudokuTreeNode(0, 0,randomNumber,0);
+        getCorrectTiles(root);
 
+    }
 
     class SudokuTreeNode {
         ArrayList<SudokuTreeNode> children;
@@ -289,7 +327,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
     private boolean checkSingleRow(int row) {
         List<Integer> rowTiles = new ArrayList<>();
         for (int col = 0; col < 9; col++) {
-            int val = this.board.getTile(row, col).getBackground() + 1;
+            int val = this.board.getTile(row, col).getId();
             if (val != 0) {
                 rowTiles.add(val);
             }
@@ -317,7 +355,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
     private boolean checkSingleCol(int col) {
         List<Integer> colTiles = new ArrayList<>();
         for (int row = 0; row < 9; row++) {
-            int val = this.board.getTile(row, col).getBackground() + 1;
+            int val = this.board.getTile(row, col).getId();
             if (val != 0) {
                 colTiles.add(val);
             }
@@ -348,7 +386,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
         List<Integer> tiles = new ArrayList<>();
         for (int r = 0; r < 3; r ++) {
             for (int c = 0; c < 3; c ++) {
-                tiles.add(this.board.getTile(3*ternaryRow + r, 3*ternaryCol + c).getBackground() + 1);
+                tiles.add(this.board.getTile(3*ternaryRow + r, 3*ternaryCol + c).getId());
             }
         }
 
@@ -430,8 +468,8 @@ class SudokuBoardManager extends BoardManager implements Serializable {
      * @param position the position
      */
     void touchMove(int position) {
-        int row = position / Board.numRows;
-        int col = position % Board.numCols;
+        int row = position / SudokuBoard.numRows;
+        int col = position % SudokuBoard.numCols;
 
         if (isValidTap(position)){
             Tile newTile = new Tile(SudokuActivity.currentNumber-1);

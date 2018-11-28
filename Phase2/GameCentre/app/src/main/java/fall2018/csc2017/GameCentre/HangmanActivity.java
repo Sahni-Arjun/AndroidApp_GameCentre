@@ -4,18 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.Toast;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -25,26 +18,26 @@ import java.util.Observer;
  */
 public class HangmanActivity extends AppCompatActivity implements Observer, KeyEvent.Callback {
 
+
+    /**
+     * The controller for this activity.
+     */
+    private HangmanActivityController hangmanActivityController;
+
     /**
      * The board manager.
      */
-    private WordManager wordManager;
+    public static WordManager wordManager;
+
+    /**
+     * The current context for file reading/writing.
+     */
+    private Context currentContext = this;
 
     /**
      * The letters to display.
      */
     private ArrayList<Button> tileButtons;
-
-    /**
-     * The account manage for the app.
-     */
-    private AccountManager accountManager;
-
-    /**
-     * Scoreboard for the Hangman game.
-     */
-    private Scoreboard scoreBoard;
-
 
     /**
      * The picture of the doll representing the Hangman
@@ -67,7 +60,9 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        loadFromFile("Account", StartingLoginActivity.SAVE_ACCOUNT_MANAGER);
+        FileSystem fileSystem = new FileSystem();
+        DisplayToast displayToast = new DisplayToast();
+        hangmanActivityController = new HangmanActivityController(fileSystem, displayToast);
         wordManager = HangmanStartingActivity.wordManager;
         createTileButtons(this);
         setContentView(R.layout.activity_hangman_main);
@@ -101,18 +96,12 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
      * Activate the save button.
      */
     private void addSaveButtonListener() {
+
         Button saveButton = findViewById(R.id.SaveButton);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                loadFromFile("Account", StartingLoginActivity.SAVE_ACCOUNT_MANAGER);
-
-                Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-                currentAccount.getSaveManager().updateSave("perma", SaveManager.hangmanName);
-
-                saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
-
+                hangmanActivityController.saveListener(currentContext);
             }
         });
     }
@@ -121,36 +110,13 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
      * Activate the start button.
      */
     private void addUndoButtonListener() {
+
         Button undoButton = findViewById(R.id.UndoButton);
         undoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFromFile("Account", StartingLoginActivity.SAVE_ACCOUNT_MANAGER);
-
-                Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-                SaveManager currSavManager = currentAccount.getSaveManager();
-
-                boolean canUndo = currSavManager.getLastState("auto", SaveManager.hangmanName).canUndo();
-                HangmanState currentAutoState = (HangmanState) currSavManager.getLastState("auto", SaveManager.hangmanName);
-
-                if ((currSavManager.getLength("auto", SaveManager.hangmanName) != 1) && canUndo) {
-                    int prevMovesUndone = currentAutoState.getNumMovesUndone();
-                    currSavManager.undo(SaveManager.hangmanName);
-                    HangmanState prevState;
-                    prevState = (HangmanState) currSavManager.getLastState("auto", SaveManager.hangmanName);
-
-                    Tile[][] prevTiles = prevState.getWordManager().getWord().getTiles();
-                    wordManager.getWord().setTiles(prevTiles);
-
-                    gridView.setWordManager(wordManager);
-                    currSavManager.getLastState("auto", SaveManager.hangmanName).incrementNumMoves(prevMovesUndone);
-                    saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
-                    display();
-
-                } else {
-                    Toast.makeText(getApplicationContext(), "Max moves undone" +
-                            "", Toast.LENGTH_SHORT).show();
-                }
+                hangmanActivityController.undoListener(currentContext);
+                display();
             }
         });
     }
@@ -163,11 +129,10 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
     private void createTileButtons(Context context) {
         Word word = wordManager.getWord();
         tileButtons = new ArrayList<>();
-        for (int col = 0; col != Word.numCols; col++) { // todo: adjust to kevin's implementation
+        for (int col = 0; col != Word.numCols; col++) {
                 Button tmp = new Button(context);
                 tmp.setBackgroundResource(word.getLetter(0, col).getBackground());
                 this.tileButtons.add(tmp);
-
         }
     }
 
@@ -177,7 +142,7 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
     private void updateTileButtons() {
         Word word = wordManager.getWord();
 
-        switch (wordManager.tries){
+        switch (WordManager.tries){
 
             case 0:
                 doll.setBackgroundResource(R.drawable.hangman_head);
@@ -306,7 +271,6 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
     @Override
     protected void onPause() {
         super.onPause();
-        saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
     }
 
     /**
@@ -315,57 +279,8 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
     @Override
     protected void onResume() {
         super.onResume();
-        loadFromFile("Account", StartingLoginActivity.SAVE_ACCOUNT_MANAGER);
-        display();
     }
 
-    /**
-     * Load scoreboard or account manager from fileName.
-     *
-     * @param type of loading: scoreboard or account manager
-     */
-    private void loadFromFile(String type, String file) {
-
-        try {
-            InputStream inputStream = this.openFileInput(file);
-            if (inputStream != null) {
-                ObjectInputStream input = new ObjectInputStream(inputStream);
-                if (type.equals("Account")) {
-                    accountManager = (AccountManager) input.readObject();
-                } else {
-                    scoreBoard = (Scoreboard) input.readObject();
-                }
-                inputStream.close();
-            }
-        } catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
-        } catch (IOException e) {
-            Log.e("login activity", "Can not read file: " + e.toString());
-        } catch (ClassNotFoundException e) {
-            Log.e("login activity", "File contained unexpected " +
-                    "data type: " + e.toString());
-        }
-    }
-
-    /**
-     * Save the account manager to fileName.
-     *
-     * @param fileName the name of the file
-     */
-    public void saveToFile(String fileName, String type) {
-        try {
-            ObjectOutputStream outputStream = new ObjectOutputStream(
-                    this.openFileOutput(fileName, MODE_PRIVATE));
-            if (type.equals("Account")) {
-                outputStream.writeObject(accountManager);
-            } else {
-                outputStream.writeObject(scoreBoard);
-            }
-            outputStream.close();
-        } catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
-        }
-    }
 
     @Override
     public void onBackPressed() {
@@ -375,39 +290,9 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
 
     @Override
     public void update(Observable o, Object arg) {
-        loadFromFile("Account", StartingLoginActivity.SAVE_ACCOUNT_MANAGER);
 
-        Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-        SaveManager currSavManager = currentAccount.getSaveManager();
-        HangmanState lastAutoState = (HangmanState) currSavManager.getLastState("auto", SaveManager.hangmanName);
-        int numMoves = currSavManager.getLength("auto", SaveManager.hangmanName);
-
-        //Creating new game state with field values of the previous state.
-        HangmanState newState = new HangmanState(wordManager, numMoves,
-                HangmanComplexityActivity.complexity, SetUndoActivity.undo,
-                lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo());
-        currSavManager.addState(newState, SaveManager.hangmanName);
-        saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
+        hangmanActivityController.updateGameListener(this);
         display();
-
-        //Saving/Displaying the score if the game is over.
-        if (newState.getWordManager().puzzleSolved() || newState.getWordManager().tries > 5) {
-            loadFromFile("scoreboard", StartingLoginActivity.SAVE_SCOREBOARD);
-            scoreBoard.addToScoreBoard(scoreBoard.createScore(StartingLoginActivity.currentUser,
-                    newState.getScore()));
-            saveToFile(StartingLoginActivity.SAVE_SCOREBOARD, "scoreboard");
-            currSavManager.wipeSave(SaveManager.hangmanName, "scoreboard");
-            currSavManager.wipeSave(SaveManager.hangmanName, "scoreboard");
-            saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
-
-            if (newState.getWordManager().tries > 5){
-                switchToLoosing();
-            }
-            else{
-                switchToWinning();
-            }
-        }
-
     }
 
 

@@ -76,6 +76,8 @@ class SlidingTilesStartingActivityController {
             SlidingTileComplexityActivity.complexity = lastAutoState.getComplexity();
             Board.numRows = SlidingTileComplexityActivity.complexity;
             Board.numCols = SlidingTileComplexityActivity.complexity;
+            fileSystem.saveAccount(currentContext, accountManager);
+
             displayToast.displayToast(currentContext, "Loaded Game " + gameFile);
             ((SlidingTileStartingActivity) currentContext).switchToGame();
         } else {

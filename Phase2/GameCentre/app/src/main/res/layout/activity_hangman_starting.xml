@@ -10,37 +10,100 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="137dp"
+        android:layout_marginTop="155dp"
         android:gravity="center"
         android:text="Welcome to Hangman!"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
     <Button
-        android:id="@+id/btnHangManNewGame"
+        android:id="@+id/hangmanSave1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/GameText"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="0dp"
-        android:layout_toEndOf="@+id/btnHangManLoad"
-        android:text="@string/new_game" />
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="280dp"
+        android:layout_marginEnd="15dp"
+        android:layout_toStartOf="@+id/hangmanSave2"
+        android:text="Load Save 1" />
 
     <Button
-        android:id="@+id/btnHangManLoad"
+        android:id="@+id/hangmanSave2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/GameText"
-        android:layout_toStartOf="@+id/NewGameButton"
-        android:text="@string/load_saved_game" />
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="280dp"
+        android:text="Load Save 2" />
 
     <Button
-        android:id="@+id/btnHangManContinue"
+        android:id="@+id/hangmanSave3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/GameText"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="0dp"
-        android:layout_toEndOf="@+id/btnHangManNewGame"
-        android:text="@string/continue_game" />
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="282dp"
+        android:layout_toEndOf="@+id/hangmanSave2"
+        android:text="Load Save 3" />
+
+    <Button
+        android:id="@+id/hangmanContinue1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="352dp"
+        android:layout_marginEnd="16dp"
+        android:layout_toStartOf="@+id/hangmanContinue2"
+        android:text="Continue 1" />
+
+    <Button
+        android:id="@+id/hangmanContinue2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="353dp"
+        android:text="Continue 2" />
+
+    <Button
+        android:id="@+id/hangmanContinue3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="352dp"
+        android:layout_marginEnd="19dp"
+        android:layout_toEndOf="@+id/hangmanContinue2"
+        android:text="Continue 3" />
+
+    <Button
+        android:id="@+id/hangmanNewGame1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="432dp"
+        android:layout_marginEnd="22dp"
+        android:layout_toStartOf="@+id/hangmanNewGame2"
+        android:text="New Game" />
+
+    <Button
+        android:id="@+id/hangmanNewGame2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="431dp"
+        android:text="New Game" />
+
+    <Button
+        android:id="@+id/hangmanNewGame3"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="432dp"
+        android:layout_toEndOf="@+id/hangmanNewGame2"
+        android:text="New Game" />
 
 </RelativeLayout>
