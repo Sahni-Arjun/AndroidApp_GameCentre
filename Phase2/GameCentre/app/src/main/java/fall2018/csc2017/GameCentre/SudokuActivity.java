@@ -250,15 +250,15 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
         //TODO set the difficulty of the game when it is implemented. (Currently it's 0).
         //Creating new game state with field values of the previous state.
         SudokuState newState = new SudokuState(boardManager, numMoves,
-                SudokuDifficultyActivity.difficulty, SetUndoActivity.undo,
+                lastAutoState.getDifficulty(), SetUndoActivity.undo,
                 lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo(),
                 newTime);
         currSavManager.addState(newState, SaveManager.sudokuName);
         fileSystem.saveAccount(currentContext, accountManager);
-        Toast.makeText(getApplicationContext(), "" + newTime/1000, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "" + newTime/1000 + " " + newTime, Toast.LENGTH_SHORT).show();
         display();
         startTime = System.currentTimeMillis();
-        Toast.makeText(getApplicationContext(), "" + newState.getBoardManager().puzzleSolved(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(), "" + newState.getBoardManager().puzzleSolved(), Toast.LENGTH_SHORT).show();
 
         //Saving/Displaying the score if the game is over.
         if (newState.getBoardManager().puzzleSolved()) {

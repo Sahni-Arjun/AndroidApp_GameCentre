@@ -93,7 +93,7 @@ public class SudokuDifficultyActivity extends AppCompatActivity {
                 difficulty = 1;
                 boardManager = new SudokuBoardManager();
                 sCon.boardManager = SudokuDifficultyActivity.boardManager;
-                sCon.startGame(currentContext);
+                sCon.startGame(currentContext, difficulty);
             }
         });
 
@@ -110,7 +110,7 @@ public class SudokuDifficultyActivity extends AppCompatActivity {
                 difficulty = 2;
                 boardManager = new SudokuBoardManager();
                 sCon.boardManager = SudokuDifficultyActivity.boardManager;
-                sCon.startGame(currentContext);
+                sCon.startGame(currentContext, difficulty);
             }
         });
     }
@@ -126,7 +126,7 @@ public class SudokuDifficultyActivity extends AppCompatActivity {
                 difficulty = 4;
                 boardManager = new SudokuBoardManager();
                 sCon.boardManager = SudokuDifficultyActivity.boardManager;
-                sCon.startGame(currentContext);
+                sCon.startGame(currentContext, difficulty);
             }
         });
     }

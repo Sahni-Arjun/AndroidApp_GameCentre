@@ -84,11 +84,14 @@ class SudokuState extends GameState implements Serializable {
      */
     int getScore() { //TODO create formula for getScore based on double time.
         if (difficulty == 1) {
-            return (int) (Math.round((500 * Math.exp(-(double) time / 35))));
+            // Expecting a completion time of 2 mins
+            return (int) (Math.round((500 * Math.exp(-(double) (time/1000) / 100))));
         } else if (difficulty == 2) {
-            return (int) (Math.round((1000 * Math.exp(-(double) time / 20))));
+            // Expecting a completion time of 15 mins
+            return (int) (Math.round((1000 * Math.exp(-(double) (time/1000) / 400))));
         } else {
-            return (int) (Math.round((3000 * Math.exp(-(double) time / 100))));
+            // Expecting a completion time of 30 mins
+            return (int) (Math.round((3000 * Math.exp(-(double) (time/1000) / 600))));
         }
 
     }

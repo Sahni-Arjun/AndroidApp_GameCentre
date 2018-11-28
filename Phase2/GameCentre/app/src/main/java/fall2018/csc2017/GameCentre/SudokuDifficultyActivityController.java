@@ -30,7 +30,7 @@ public class SudokuDifficultyActivityController {
      * starts the sudoku game
      * @param context
      */
-    void startGame(SudokuDifficultyActivity context) {
+    void startGame(SudokuDifficultyActivity context, int difficulty) {
 
         accountManager = fileSystem.loadAccount(context);
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
@@ -42,7 +42,7 @@ public class SudokuDifficultyActivityController {
                 SudokuState(boardManager, 0);
 
         //TODO set correct difficulty when implemented.
-
+        newState.setDifficulty(difficulty);
 
         //TODO set number of undos when implemented.
         newState.setUnlimitedUndo();

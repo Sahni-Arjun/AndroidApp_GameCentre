@@ -8,11 +8,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
 
 class FileSystem {
-
     /**
      * Load account manager from fileName.
      *
@@ -31,6 +31,8 @@ class FileSystem {
             }
         } catch (FileNotFoundException e) {
             Log.e("login activity", "File not found: " + e.toString());
+            saveAccount(context, new AccountManager(new ArrayList<Account>()));
+            saveScoreBoard(context, new Scoreboard());
         } catch (IOException e) {
             Log.e("login activity", "Can not read file: " + e.toString());
         } catch (ClassNotFoundException e) {
@@ -91,7 +93,7 @@ class FileSystem {
     void saveScoreBoard(Context context, Scoreboard scoreboard) {
         try {
             ObjectOutputStream outputStream = new ObjectOutputStream(
-                    context.openFileOutput(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, MODE_PRIVATE));
+                    context.openFileOutput(StartingLoginActivity.SAVE_SCOREBOARD, MODE_PRIVATE));
             outputStream.writeObject(scoreboard);
             outputStream.close();
         } catch (IOException e) {
