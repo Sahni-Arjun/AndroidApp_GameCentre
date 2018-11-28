@@ -39,7 +39,7 @@ class SlidingTileActivityController{
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
 
-        boolean undone = currSavManager.undoMove();
+        boolean undone = currSavManager.undoMove("sliding tiles");
         if (undone){
             // update the current board manager with the new tiles.
             SlidingTileActivity.slidingTilesBoardManager.getBoard().setTiles(currSavManager.getboardArrangement());

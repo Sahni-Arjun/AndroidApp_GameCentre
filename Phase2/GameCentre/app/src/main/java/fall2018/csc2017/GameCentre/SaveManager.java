@@ -124,23 +124,76 @@ class SaveManager implements Serializable {
                     SlidingTileComplexityActivity.complexity, SetUndoActivity.undo,
                     lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo());
             this.addState(newState, SaveManager.slidingTilesName);
-        } else if(gameType.equals(sudokuName)){
+        }
+
+        if (gameType.equals(hangmanName)){
+
+            if(autoSave.get(gameType).size() == 0){
+
+                HangmanState newState = new HangmanState((WordManager) boardManager, 0,
+                        HangmanComplexityActivity.complexity, 10,
+                        0, true); // todo update
+                this.addState(newState, SaveManager.hangmanName);
+
+            }
+
+            HangmanState lastAutoState = (HangmanState) this.getLastState("auto", SaveManager.hangmanName);
+            int numMoves = this.getLength("auto", SaveManager.hangmanName);
+
+            //Creating new game state with field values of the previous state.
+            HangmanState newState = new HangmanState((WordManager) boardManager, numMoves,
+                    HangmanComplexityActivity.complexity, SetUndoActivity.undo,
+                    lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo());
+            this.addState(newState, SaveManager.hangmanName);
+        }
+
+        if(gameType.equals(sudokuName)){
 
         }
     }
 
     // TODO make this general for all games?
-    boolean undoMove(){
-        boolean canUndo = getLastState(SaveManager.auto, SaveManager.slidingTilesName).canUndo();
-        SlidingTilesState currentAutoState = (SlidingTilesState) getLastState("auto", SaveManager.slidingTilesName);
+    boolean undoMove(String gameType){
 
-        if ((getLength(SaveManager.auto, SaveManager.slidingTilesName) != 1) && canUndo) {
-            int prevMovesUndone = currentAutoState.getNumMovesUndone();
-            undo(SaveManager.slidingTilesName);
-            getLastState(SaveManager.auto, SaveManager.slidingTilesName).incrementNumMoves(prevMovesUndone);
-            return true;
+        if (gameType.equals(slidingTilesName)) {
+            boolean canUndo = getLastState(SaveManager.auto, SaveManager.slidingTilesName).canUndo();
+            SlidingTilesState currentAutoState = (SlidingTilesState) getLastState("auto", SaveManager.slidingTilesName);
+
+            if ((getLength(SaveManager.auto, SaveManager.slidingTilesName) != 1) && canUndo) {
+                int prevMovesUndone = currentAutoState.getNumMovesUndone();
+                undo(SaveManager.slidingTilesName);
+                getLastState(SaveManager.auto, SaveManager.slidingTilesName).incrementNumMoves(prevMovesUndone);
+                return true;
+            }
+            return false;
         }
-        return false;
+
+        if (gameType.equals(hangmanName)) {
+            boolean canUndo = getLastState(SaveManager.auto, SaveManager.hangmanName).canUndo();
+            HangmanState currentAutoState = (HangmanState) getLastState("auto", SaveManager.hangmanName);
+
+            if ((getLength(SaveManager.auto, SaveManager.hangmanName) != 1) && canUndo) {
+                int prevMovesUndone = currentAutoState.getNumMovesUndone();
+                undo(SaveManager.hangmanName);
+                getLastState(SaveManager.auto, SaveManager.hangmanName).incrementNumMoves(prevMovesUndone);
+                return true;
+            }
+            return false;
+        }
+
+        else {
+            boolean canUndo = getLastState(SaveManager.auto, SaveManager.sudokuName).canUndo();
+            SudokuState currentAutoState = (SudokuState) getLastState("auto", SaveManager.sudokuName);
+
+            if ((getLength(SaveManager.auto, SaveManager.sudokuName) != 1) && canUndo) {
+                int prevMovesUndone = currentAutoState.getNumMovesUndone();
+                undo(SaveManager.sudokuName);
+                getLastState(SaveManager.auto, SaveManager.sudokuName).incrementNumMoves(prevMovesUndone);
+                return true;
+            }
+            return false;
+        }
+
     }
 
     // TODO make this general for all games.

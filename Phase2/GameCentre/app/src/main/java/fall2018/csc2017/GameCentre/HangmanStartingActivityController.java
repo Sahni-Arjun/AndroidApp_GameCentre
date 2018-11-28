@@ -11,38 +11,44 @@ import java.util.Random;
  */
 class HangmanStartingActivityController {
 
+
     /**
-     * The filesystem for this class.
+     * FileSystem field
      */
     private FileSystem fileSystem;
 
     /**
-     * The toast view class.
+     * DisplayToast object for displaying toast
      */
     private DisplayToast displayToast;
 
     /**
-     * The account manager for this class.
+     * AccountManager object
      */
     private AccountManager accountManager;
 
     /**
-     * Initializes the fileSystem for the controller.
-     *
-     * @param fileSystem the fileSystem
+     * Constructor
+     * @param fileSystem the filesystem for this controller.
+     * @param displayToast the toast displayer.
      */
     HangmanStartingActivityController(FileSystem fileSystem, DisplayToast displayToast) {
         this.fileSystem = fileSystem;
         this.displayToast = displayToast;
     }
 
+
     /**
      * The logic that must be processed before the new game is created.
      *
      * @param context the context for the activity
+     * @param gameFile the location of the new game
+     *
      */
-    void newGameButtonListener(Context context) {
+    void newGame(int gameFile, Context context) {
+
         accountManager = fileSystem.loadAccount(context);
+
         Word.numCols = HangmanComplexityActivity.complexity + 1;
         // numRows must remain 1 or made deprecated:
         Word.numRows = 1;
@@ -69,33 +75,40 @@ class HangmanStartingActivityController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         HangmanStartingActivity.wordManager = new WordManager(selectedWord);
 
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
+
+        currentAccount.setCurrentGame(gameFile);
+
+
         SaveManager currSavManager = currentAccount.getSaveManager();
         currSavManager.wipeSave(SaveManager.auto, SaveManager.hangmanName);
 
         //Start new game with chosen number of undoes // todo discuss with group
         HangmanState newState = new
                 HangmanState(HangmanStartingActivity.wordManager, 0);
-
         newState.setComplexity(HangmanComplexityActivity.complexity);
-
         newState.setUnlimitedUndo(); // todo discuss with group
-
         currSavManager.addState(newState, SaveManager.hangmanName);
+
         fileSystem.saveAccount(context, accountManager);
+
+        ((HangmanStartingActivity) context).switchToHangman();
+
     }
 
-    /**
-     * The logic that must be processed before the game is loaded.
-     *
-     * @param context the context for the activity
+
+
+     /**
+     * The method that loads saved files and logic that must be processed before the game is loaded.
+     * @param gameFile the number of the game file the user would like to open
+     * @param context the current HangmanStartingActivity
      */
-    boolean loadButtonListener(Context context) {
+    void loadSave(int gameFile, Context context) {
         accountManager = fileSystem.loadAccount(context);
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
+        currentAccount.setCurrentGame(gameFile);
         SaveManager currSavManager = currentAccount.getSaveManager();
 
         if (currSavManager.getLength("perma", SaveManager.hangmanName) != 0) {
@@ -105,33 +118,49 @@ class HangmanStartingActivityController {
             HangmanComplexityActivity.complexity = prePermaState.getComplexity();
             displayToast.displayToast(context, "Loaded Game");
             fileSystem.saveAccount(context, accountManager);
+            ((HangmanStartingActivity) context).switchToHangman();
         } else {
             displayToast.displayToast(context.getApplicationContext(),"you can't continue a game " +
                     "that hasn't started!");
         }
-        return currSavManager.getLength("perma", SaveManager.hangmanName) != 0;
     }
+
 
     /**
-     * The logic that must be processed before the game is continued.
-     * @param context the context for the activity
+     * Load the continue
+     * @param gameFile the number of the game file the user would like to open
+     * @param currentContext the current HangmanStartingActivity
      */
-    boolean  continueButtonListener(Context context) {
-        accountManager = fileSystem.loadAccount(context);
+    void continueSave(int gameFile, Context currentContext){
+        accountManager = fileSystem.loadAccount(currentContext);
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-        SaveManager currSavManager = currentAccount.getSaveManager();
+        currentAccount.setCurrentGame(gameFile);
+        SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.hangmanName);
 
-        if (currSavManager.getLength("auto", SaveManager.hangmanName) != 0) {
-            HangmanStartingActivity.wordManager = ((HangmanState) currSavManager.getLastState("auto", SaveManager.hangmanName)).getWordManager();
-            HangmanState lastAutoState = (HangmanState) currSavManager.getLastState("auto", SaveManager.hangmanName);
+        if (currSavManager.getLength(SaveManager.auto, SaveManager.hangmanName) != 0) {
+            currSavManager.setContinueOrLoad(SaveManager.auto);
+            HangmanState lastAutoState = (HangmanState) currSavManager.getLastState(SaveManager.auto, SaveManager.hangmanName);
             HangmanComplexityActivity.complexity = lastAutoState.getComplexity();
-            Word.numRows = 1;
-            Word.numCols = HangmanComplexityActivity.complexity + 1; // todo: discuss if we shall relate complexity to length or to word content
-            displayToast.displayToast(context, "Loaded Game");
+            Board.numRows = HangmanComplexityActivity.complexity;
+            Board.numCols = HangmanComplexityActivity.complexity;
+            displayToast.displayToast(currentContext, "Loaded Game " + gameFile);
+            ((HangmanStartingActivity) currentContext).switchToHangman();
         } else {
-            displayToast.displayToast(context.getApplicationContext(),"you can't continue a game " +
+            displayToast.displayToast(currentContext, "you can't continue a game " +
                     "that hasn't started!");
         }
-        return currSavManager.getLength("auto", SaveManager.hangmanName) != 0;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+    
 }

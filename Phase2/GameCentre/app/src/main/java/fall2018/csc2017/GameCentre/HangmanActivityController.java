@@ -32,7 +32,7 @@ public class HangmanActivityController {
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.hangmanName);
 
-        boolean undone = currSavManager.undoMove();
+        boolean undone = currSavManager.undoMove("hangman");
         if (undone){
             // update the current word manager with the new letters.
             HangmanActivity.wordManager.getWord().setLetters(currSavManager.getWordArrangement());
