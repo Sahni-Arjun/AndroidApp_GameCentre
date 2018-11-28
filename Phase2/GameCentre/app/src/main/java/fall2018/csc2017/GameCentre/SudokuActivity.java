@@ -248,7 +248,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
         //TODO set the difficulty of the game when it is implemented. (Currently it's 0).
         //Creating new game state with field values of the previous state.
         SudokuState newState = new SudokuState(boardManager, numMoves,
-                0, SetUndoActivity.undo,
+                SudokuDifficultyActivity.difficulty, SetUndoActivity.undo,
                 lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo(),
                 newTime);
         currSavManager.addState(newState, SaveManager.sudokuName);
@@ -284,6 +284,9 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
     /**
      * Activate the Choose one button.
      */
+
+
+
     private void addChooseOneButtonListener() {
         Button saveButton = findViewById(R.id.btnSudoku1);
         saveButton.setOnClickListener(new View.OnClickListener() {
