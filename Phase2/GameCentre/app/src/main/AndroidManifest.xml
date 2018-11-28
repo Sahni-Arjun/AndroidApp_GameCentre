@@ -43,7 +43,7 @@
         <activity android:name=".HangmanComplexityActivity" />
         <activity android:name=".HangmanStartingActivity" />
         <activity android:name=".HangmanActivity" />
-
+        <activity android:name=".SudokuScoreActivity"></activity>
     </application>
 
 </manifest>
