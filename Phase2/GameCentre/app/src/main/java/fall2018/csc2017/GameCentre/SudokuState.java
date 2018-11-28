@@ -14,7 +14,7 @@ class SudokuState extends GameState implements Serializable {
     /**
      * The difficulty of the current board.
      */
-    private int difficulty = 0;
+    private int difficulty;
 
     long getTime() {
         return time;
@@ -83,14 +83,14 @@ class SudokuState extends GameState implements Serializable {
      * @return score of this SudokuState.
      */
     int getScore() { //TODO create formula for getScore based on double time.
-//        if (complexity == 3) {
-//            return (int) (Math.round((500 * Math.exp(-(double) numMoves / 35))));
-//        } else if (complexity == 4) {
-//            return (int) (Math.round((1000 * Math.exp(-(double) numMoves / 20))));
-//        } else {
-//            return (int) (Math.round((3000 * Math.exp(-(double) numMoves / 100))));
-//        }
-        return 0;
+        if (difficulty == 1) {
+            return (int) (Math.round((500 * Math.exp(-(double) time / 35))));
+        } else if (difficulty == 2) {
+            return (int) (Math.round((1000 * Math.exp(-(double) time / 20))));
+        } else {
+            return (int) (Math.round((3000 * Math.exp(-(double) time / 100))));
+        }
+
     }
 
     /**
