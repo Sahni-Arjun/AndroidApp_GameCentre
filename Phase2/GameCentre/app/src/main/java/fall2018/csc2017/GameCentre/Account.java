@@ -33,6 +33,12 @@ class Account implements Serializable {
 
     private int currentGame;
 
+    public void setLastPlayedGame(String lastPlayedGame) {
+        this.lastPlayedGame = lastPlayedGame;
+    }
+
+    private String lastPlayedGame;
+
     /**
      * Creates a new User Account with username and password.
      *
@@ -114,5 +120,9 @@ class Account implements Serializable {
      */
     void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getLastPlayedGame() {
+        return lastPlayedGame;
     }
 }
