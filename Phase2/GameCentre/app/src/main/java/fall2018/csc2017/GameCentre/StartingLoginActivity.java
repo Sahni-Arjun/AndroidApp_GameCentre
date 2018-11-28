@@ -13,7 +13,9 @@ public class StartingLoginActivity extends AppCompatActivity {
      * The names of the save account manager ser file and scoreboard ser file.
      */
     public static final String SAVE_ACCOUNT_MANAGER = "save_account_manager.ser";
-    public static final String SAVE_SCOREBOARD = "save_scoreboard.ser";
+    public static final String SAVE_SLIDING_SCOREBOARD = "save_sliding_scoreboard.ser";
+    public static final String SAVE_SUDOKU_SCOREBOARD = "save_sudoku_scoreboard.ser";
+    public static final String SAVE_HANGMAN_SCOREBOARD = "save_hangman_scoreboard.ser";
 
     /**
      * The current user's name.

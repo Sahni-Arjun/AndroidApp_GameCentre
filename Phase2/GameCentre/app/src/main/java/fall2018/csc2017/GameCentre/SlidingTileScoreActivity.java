@@ -20,33 +20,17 @@ public class SlidingTileScoreActivity extends AppCompatActivity {
      */
     Scoreboard slidingTileScoreboard;
 
+    /**
+     * The file system.
+     */
+    private FileSystem fileSystem = new FileSystem();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sliding_tile_score);
-        loadFromFile();
+        slidingTileScoreboard = fileSystem.loadScoreboard(this, StartingLoginActivity.SAVE_SLIDING_SCOREBOARD);
         TextView slidingTileScores = findViewById(R.id.sldingTilesScores);
         slidingTileScores.setText(slidingTileScoreboard.createTopScoreText());
-    }
-
-    /**
-     * Load the board manager from fileName.
-     */
-    private void loadFromFile() {
-
-        try {
-            InputStream inputStream = this.openFileInput(StartingLoginActivity.SAVE_SCOREBOARD);
-            if (inputStream != null) {
-                ObjectInputStream input = new ObjectInputStream(inputStream);
-                slidingTileScoreboard = (Scoreboard) input.readObject();
-                inputStream.close();
-            }
-        } catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
-        } catch (IOException e) {
-            Log.e("login activity", "Can not read file: " + e.toString());
-        } catch (ClassNotFoundException e) {
-            Log.e("login activity", "File contained unexpected data type: " + e.toString());
-        }
     }
 }

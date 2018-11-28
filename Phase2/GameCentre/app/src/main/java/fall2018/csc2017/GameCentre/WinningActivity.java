@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.io.FileNotFoundException;
@@ -23,11 +24,19 @@ public class WinningActivity extends AppCompatActivity {
      */
     private Scoreboard scoreBoard;
 
+    /**
+     * The file system.
+     */
+    private FileSystem fileSystem = new FileSystem();
+
+    private String filename;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_winning);
-        loadFromFile();
+        findFilename();
+        scoreBoard = fileSystem.loadScoreboard(this, filename);
         int score = scoreBoard.getLatestScore();
         TextView scoreTxt = findViewById(R.id.scoreText);
         String scoreMessage = "Your Score: " + String.valueOf(score);
@@ -35,36 +44,39 @@ public class WinningActivity extends AppCompatActivity {
         addBackButtonListener();
     }
 
+    private void findFilename(){
+        /*
+      The account manager.
+     */ /**
+         * The account manager.
+         */AccountManager accountManager = fileSystem.loadAccount(this);
+        Account user = accountManager.findUser(StartingLoginActivity.currentUser);
+        String lastPlayedGame = user.getLastPlayedGame();
+
+        switch (lastPlayedGame) {
+            case Account.slidingName:
+                filename = StartingLoginActivity.SAVE_SLIDING_SCOREBOARD;
+                break;
+            case Account.hangmanName:
+                filename = StartingLoginActivity.SAVE_HANGMAN_SCOREBOARD;
+                break;
+            case Account.sudokuName:
+                filename = StartingLoginActivity.SAVE_SUDOKU_SCOREBOARD;
+                break;
+            default:
+                filename = StartingLoginActivity.SAVE_SUDOKU_SCOREBOARD;
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-        loadFromFile();
+        findFilename();
+        scoreBoard = fileSystem.loadScoreboard(this, filename);
         int score = scoreBoard.getLatestScore();
         TextView scoreTxt = findViewById(R.id.scoreText);
         String scoreMessage = "Your Score: " + String.valueOf(score);
         scoreTxt.setText(scoreMessage);
-    }
-
-    /**
-     * Load scoreboard from fileName.
-     */
-    private void loadFromFile() {
-
-        try {
-            InputStream inputStream = this.openFileInput(StartingLoginActivity.SAVE_SCOREBOARD);
-            if (inputStream != null) {
-                ObjectInputStream input = new ObjectInputStream(inputStream);
-                scoreBoard = (Scoreboard) input.readObject();
-                inputStream.close();
-            }
-        } catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
-        } catch (IOException e) {
-            Log.e("login activity", "Can not read file: " + e.toString());
-        } catch (ClassNotFoundException e) {
-            Log.e("login activity", "File contained unexpected " +
-                    "data type: " + e.toString());
-        }
     }
 
     /**

@@ -64,13 +64,14 @@ class SlidingTileActivityController{
         SlidingTilesBoardManager slidingTilesBoardManager = prevState.getSlidingTilesBoardManager();
         //Saving/Displaying the score if the game is over.
         if (slidingTilesBoardManager.puzzleSolved()) {
-            Scoreboard scoreboard = fileSystem.loadScoreboard(context);
+            Scoreboard scoreboard = fileSystem.loadScoreboard(context, StartingLoginActivity.SAVE_SLIDING_SCOREBOARD);
 
             scoreboard.addToScoreBoard(scoreboard.createScore(StartingLoginActivity.currentUser,
                     prevState.getScore()));
 
-            fileSystem.saveScoreBoard(context, scoreboard);
+            fileSystem.saveScoreBoard(context, StartingLoginActivity.SAVE_SLIDING_SCOREBOARD, scoreboard);
 
+            accountManager.findUser(StartingLoginActivity.currentUser).setLastPlayedGame(Account.slidingName);
             currSavManager.wipeSave(SaveManager.auto, SaveManager.slidingTilesName);
             currSavManager.wipeSave(SaveManager.perma, SaveManager.slidingTilesName);
 
