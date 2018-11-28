@@ -34,24 +34,17 @@ public class SudokuDifficultyActivityController {
 
         accountManager = fileSystem.loadAccount(context);
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-        SaveManager currSavManager = currentAccount.getSaveManager();
+        SaveManager currSavManager = currentAccount.getCurrentSaveManager(SaveManager.sudokuName);
         currSavManager.wipeSave(SaveManager.auto, SaveManager.sudokuName);
 
         //Start new game with chosen number of undos
         SudokuState newState = new
                 SudokuState(boardManager, 0);
 
-        //TODO set correct difficulty when implemented.
         newState.setDifficulty(difficulty);
 
-        //TODO set number of undos when implemented.
         newState.setUnlimitedUndo();
 
-//                if (SetUndoActivity.unlimited) {
-//                    newState.setUnlimitedUndo();
-//                } else {
-//                    newState.setMaxNumMovesUndone(SetUndoActivity.undo);
-//                }
         currSavManager.addState(newState, SaveManager.sudokuName);
         fileSystem.saveAccount(context, accountManager);
         context.switchToSudoku();

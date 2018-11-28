@@ -123,7 +123,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
                 accountManager = fileSystem.loadAccount(currentContext);
 
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-                currentAccount.getSaveManager().updateSave("perma", SaveManager.sudokuName);
+                currentAccount.getCurrentSaveManager(SaveManager.sudokuName).updateSave("perma", SaveManager.sudokuName);
 
                 fileSystem.saveAccount(currentContext, accountManager);
             }
@@ -141,7 +141,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
                 accountManager = fileSystem.loadAccount(currentContext);
 
                 Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-                SaveManager currSavManager = currentAccount.getSaveManager();
+                SaveManager currSavManager = currentAccount.getCurrentSaveManager(SaveManager.sudokuName);
 
                 boolean canUndo = currSavManager.getLastState("auto", SaveManager.sudokuName).canUndo();
                 SudokuState currentAutoState = (SudokuState) currSavManager.getLastState("auto", SaveManager.sudokuName);
@@ -154,7 +154,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
 
                     Tile[][] prevTiles = prevState.getBoardManager().getBoard().getTiles();
                     boardManager.getBoard().setTiles(prevTiles);
-
+                    Toast.makeText(getApplicationContext(), "" + currSavManager.getLength("auto", SaveManager.sudokuName), Toast.LENGTH_SHORT).show();
                     gridView.setBoardManager(boardManager);
                     currSavManager.getLastState("auto", SaveManager.sudokuName).incrementNumMoves(prevMovesUndone);
                     fileSystem.saveAccount(currentContext, accountManager);
@@ -209,7 +209,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
     protected void onPause() {
         super.onPause();
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-        SaveManager currSavManager = currentAccount.getSaveManager();
+        SaveManager currSavManager = currentAccount.getCurrentSaveManager(SaveManager.sudokuName);
         if (currSavManager.getLength(SaveManager.auto, SaveManager.sudokuName) != 0) {
             SudokuState lastAutoState = (SudokuState) currSavManager.getLastState("auto", SaveManager.sudokuName);
             long lastTime = lastAutoState.getTime();
@@ -225,7 +225,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onResume() {
         super.onResume();
-        accountManager = fileSystem.loadAccount(currentContext);
+//        accountManager = fileSystem.loadAccount(currentContext);
         startTime = System.currentTimeMillis();
         display();
     }
@@ -241,13 +241,12 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
         accountManager = fileSystem.loadAccount(currentContext);
 
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-        SaveManager currSavManager = currentAccount.getSaveManager();
+        SaveManager currSavManager = currentAccount.getCurrentSaveManager(SaveManager.sudokuName);
         SudokuState lastAutoState = (SudokuState) currSavManager.getLastState("auto", SaveManager.sudokuName);
         int numMoves = currSavManager.getLength("auto", SaveManager.sudokuName);
         long lastTime = lastAutoState.getTime();
         long newTime = lastTime + System.currentTimeMillis() - startTime;
 
-        //TODO set the difficulty of the game when it is implemented. (Currently it's 0).
         //Creating new game state with field values of the previous state.
         SudokuState newState = new SudokuState(boardManager, numMoves,
                 lastAutoState.getDifficulty(), SetUndoActivity.undo,
@@ -255,20 +254,18 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
                 newTime);
         currSavManager.addState(newState, SaveManager.sudokuName);
         fileSystem.saveAccount(currentContext, accountManager);
-        Toast.makeText(getApplicationContext(), "" + newTime/1000 + " " + newTime, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(), "" + newTime/1000 + " " + newTime, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(), "" + currSavManager.getLength("auto", SaveManager.sudokuName), Toast.LENGTH_SHORT).show();
+
         display();
         startTime = System.currentTimeMillis();
-//        Toast.makeText(getApplicationContext(), "" + newState.getBoardManager().puzzleSolved(), Toast.LENGTH_SHORT).show();
 
         //Saving/Displaying the score if the game is over.
         if (newState.getBoardManager().puzzleSolved()) {
             scoreBoard = fileSystem.loadScoreboard(currentContext);
-//            loadFromFile(StartingLoginActivity.SAVE_SCOREBOARD, "scoreboard");
             scoreBoard.addToScoreBoard(scoreBoard.createScore(StartingLoginActivity.currentUser,
                     newState.getScore()));
-//            ScoreBoardActivity.slidingTileScoreBoard = scoreBoard;
             fileSystem.saveScoreBoard(currentContext, scoreBoard);
-//            saveToFile(StartingLoginActivity.SAVE_SCOREBOARD, "scoreboard");
             currSavManager.wipeSave(SaveManager.auto, SaveManager.sudokuName);
             currSavManager.wipeSave(SaveManager.perma, SaveManager.sudokuName);
             fileSystem.saveAccount(currentContext, accountManager);

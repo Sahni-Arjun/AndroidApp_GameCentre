@@ -31,8 +31,8 @@ class FileSystem {
             }
         } catch (FileNotFoundException e) {
             Log.e("login activity", "File not found: " + e.toString());
-            saveAccount(context, new AccountManager(new ArrayList<Account>()));
-            saveScoreBoard(context, new Scoreboard());
+//            saveAccount(context, new AccountManager(new ArrayList<Account>()));
+//            saveScoreBoard(context, new Scoreboard());
         } catch (IOException e) {
             Log.e("login activity", "Can not read file: " + e.toString());
         } catch (ClassNotFoundException e) {
