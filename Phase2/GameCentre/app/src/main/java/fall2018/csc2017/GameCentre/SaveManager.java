@@ -15,11 +15,11 @@ class SaveManager implements Serializable {
     static final String auto = "auto";
     static final String perma = "perma";
 
-    public String getContinueOrLoad() {
+    String getContinueOrLoad() {
         return continueOrLoad;
     }
 
-    public void setContinueOrLoad(String continueOrLoad) {
+    void setContinueOrLoad(String continueOrLoad) {
         this.continueOrLoad = continueOrLoad;
     }
 
@@ -125,8 +125,22 @@ class SaveManager implements Serializable {
                     lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo());
             this.addState(newState, SaveManager.slidingTilesName);
         } else if(gameType.equals(sudokuName)){
+            SudokuState lastAutoState = (SudokuState) this.getLastState("auto", SaveManager.sudokuName);
+            int numMoves = this.getLength("auto", SaveManager.sudokuName);
+            long lastTime = lastAutoState.getTime();
 
+            //Creating new game state with field values of the previous state.
+            SudokuState newState = new SudokuState((SudokuBoardManager) boardManager, numMoves,
+                    lastAutoState.getDifficulty(), SetUndoActivity.undo,
+                    lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo(),
+                    lastTime);
+            this.addState(newState, SaveManager.sudokuName);
         }
+    }
+
+    void updateSudokuTime(long startTime){
+        SudokuState lastAutoState = (SudokuState) this.getLastState("auto", SaveManager.sudokuName);
+        lastAutoState.setTime(lastAutoState.getTime() + System.currentTimeMillis() - startTime);
     }
 
     // TODO make this general for all games?
