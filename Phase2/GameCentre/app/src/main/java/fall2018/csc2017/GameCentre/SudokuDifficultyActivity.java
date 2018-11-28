@@ -41,6 +41,7 @@ public class SudokuDifficultyActivity extends AppCompatActivity {
         startActivity(tmp);
     }
 
+
     /**
      * this goes to SudokuActivity (the actual game).
      */
