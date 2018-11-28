@@ -53,25 +53,20 @@ class SudokuActivityController {
 
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(SaveManager.sudokuName);
-        SudokuState lastAutoState = (SudokuState) currSavManager.getLastState("auto", SaveManager.sudokuName);
-        int numMoves = currSavManager.getLength("auto", SaveManager.sudokuName);
-        long lastTime = lastAutoState.getTime();
-        long newTime = lastTime + System.currentTimeMillis() - startTime;
 
-        //Creating new game state with field values of the previous state.
-        SudokuState newState = new SudokuState(boardManager, numMoves,
-                lastAutoState.getDifficulty(), SetUndoActivity.undo,
-                lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo(),
-                newTime);
-        currSavManager.addState(newState, SaveManager.sudokuName);
+        currSavManager.updateState(SaveManager.sudokuName, boardManager);
+
+        currSavManager.updateSudokuTime(startTime);
         fileSystem.saveAccount(context, accountManager);
         startTime = System.currentTimeMillis();
 
+        SudokuState prevState = (SudokuState) currSavManager.getLastState(SaveManager.auto, SaveManager.sudokuName);
+        SudokuBoardManager sudokuBoardManager = prevState.getBoardManager();
         //Saving/Displaying the score if the game is over.
-        if (newState.getBoardManager().puzzleSolved()) {
+        if (sudokuBoardManager.puzzleSolved()) {
             Scoreboard scoreBoard = fileSystem.loadScoreboard(context);
             scoreBoard.addToScoreBoard(scoreBoard.createScore(StartingLoginActivity.currentUser,
-                    newState.getScore()));
+                    prevState.getScore()));
             fileSystem.saveScoreBoard(context, scoreBoard);
             currSavManager.wipeSave(SaveManager.auto, SaveManager.sudokuName);
             currSavManager.wipeSave(SaveManager.perma, SaveManager.sudokuName);

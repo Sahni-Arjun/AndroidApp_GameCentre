@@ -1,9 +1,5 @@
 package fall2018.csc2017.GameCentre;
 
-import java.util.Iterator;
-import java.util.List;
-
-
 public class SudokuBoard extends Board{
     /**
      * Number of rows
@@ -18,24 +14,25 @@ public class SudokuBoard extends Board{
     /**
      * The tiles on the SudokuBoard in row-major order
      */
-    private Tile[][] tiles = new Tile[numRows][numCols]; //TODO: Change this to SudokuTile once implemented
+    private Tile[][] tiles = new Tile[numRows][numCols];
 
     /**
      * replaces a previous Tile with the indicated tile.
      * @param row of the tile
      * @param col of the tile
-     * @param tile replaces the previous Tile at the indicated podition
+     * @param tile replaces the previous Tile at the indicated position
      */
-    void setTile(int row, int col, Tile tile){
+    public void setTile(int row, int col, Tile tile){
         if(tiles[row][col].getId()==0){
-        tiles[row][col] = tile;
-        setChanged();
-        notifyObservers();
-    }}
+            tiles[row][col] = tile;
+            setChanged();
+            notifyObservers();
+        }
+    }
 
     /**
      * set the tiles of the board
-     * @param tiles
+     * @param tiles tiles of the board.
      */
     public void setTiles(Tile[][] tiles) {
         this.tiles = tiles;

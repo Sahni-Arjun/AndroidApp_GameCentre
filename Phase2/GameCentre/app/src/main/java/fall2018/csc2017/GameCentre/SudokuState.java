@@ -28,7 +28,6 @@ class SudokuState extends GameState implements Serializable {
      * The current amount of time spent solving the game already.
      */
     private long time = 0;
-    // TODO add time to one of the constructors.
 
     /**
      * The serialVersionUID of this serializable object.
@@ -82,7 +81,7 @@ class SudokuState extends GameState implements Serializable {
      *
      * @return score of this SudokuState.
      */
-    int getScore() { //TODO create formula for getScore based on double time.
+    int getScore() {
         if (difficulty == 1) {
             // Expecting a completion time of 2 mins
             return (int) (Math.round((500 * Math.exp(-(double) (time/1000) / 100))));
@@ -93,7 +92,6 @@ class SudokuState extends GameState implements Serializable {
             // Expecting a completion time of 30 mins
             return (int) (Math.round((3000 * Math.exp(-(double) (time/1000) / 600))));
         }
-
     }
 
     /**
