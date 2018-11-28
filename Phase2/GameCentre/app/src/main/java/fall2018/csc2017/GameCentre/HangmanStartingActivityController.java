@@ -65,7 +65,6 @@ class HangmanStartingActivityController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return selectedWord;
     }
 

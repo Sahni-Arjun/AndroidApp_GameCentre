@@ -54,7 +54,6 @@ public class Word extends Board{
         return this.letters[0][col];  // TODO: adapt to Hangman
     }
 
-
     /**
      * Update letters containing ASCII code letter to be shown
      */
@@ -74,7 +73,6 @@ public class Word extends Board{
         notifyObservers();
     }
 
-
     /**
      * Update hangman doll
      */
@@ -84,6 +82,4 @@ public class Word extends Board{
         setChanged();
         notifyObservers();
     }
-
-
 }
