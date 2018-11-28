@@ -210,11 +210,13 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
         super.onPause();
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         SaveManager currSavManager = currentAccount.getSaveManager();
-        SudokuState lastAutoState = (SudokuState) currSavManager.getLastState("auto", SaveManager.sudokuName);
-        long lastTime = lastAutoState.getTime();
-        long newTime = lastTime + System.currentTimeMillis() - startTime;
-        lastAutoState.setTime(newTime);
-        fileSystem.saveAccount(currentContext, accountManager);
+        if (currSavManager.getLength(SaveManager.auto, SaveManager.sudokuName) != 0) {
+            SudokuState lastAutoState = (SudokuState) currSavManager.getLastState("auto", SaveManager.sudokuName);
+            long lastTime = lastAutoState.getTime();
+            long newTime = lastTime + System.currentTimeMillis() - startTime;
+            lastAutoState.setTime(newTime);
+            fileSystem.saveAccount(currentContext, accountManager);
+        }
     }
 
     /**
@@ -256,30 +258,33 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
         Toast.makeText(getApplicationContext(), "" + newTime/1000, Toast.LENGTH_SHORT).show();
         display();
         startTime = System.currentTimeMillis();
-//
-//        //Saving/Displaying the score if the game is over.
-//        if (newState.getSlidingTilesBoardManager().puzzleSolved()) {
+        Toast.makeText(getApplicationContext(), "" + newState.getBoardManager().puzzleSolved(), Toast.LENGTH_SHORT).show();
+
+        //Saving/Displaying the score if the game is over.
+        if (newState.getBoardManager().puzzleSolved()) {
+            scoreBoard = fileSystem.loadScoreboard(currentContext);
 //            loadFromFile(StartingLoginActivity.SAVE_SCOREBOARD, "scoreboard");
-//            scoreBoard.addToScoreBoard(scoreBoard.createScore(StartingLoginActivity.currentUser,
-//                    newState.getScore()));
+            scoreBoard.addToScoreBoard(scoreBoard.createScore(StartingLoginActivity.currentUser,
+                    newState.getScore()));
 //            ScoreBoardActivity.slidingTileScoreBoard = scoreBoard;
+            fileSystem.saveScoreBoard(currentContext, scoreBoard);
 //            saveToFile(StartingLoginActivity.SAVE_SCOREBOARD, "scoreboard");
-//            currSavManager.wipeAutoSave();
-//            currSavManager.wipePermaSave();
-//            saveToFile(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, "Account");
-//            switchToWinning();
-//        }
+            currSavManager.wipeSave(SaveManager.auto, SaveManager.sudokuName);
+            currSavManager.wipeSave(SaveManager.perma, SaveManager.sudokuName);
+            fileSystem.saveAccount(currentContext, accountManager);
+            switchToWinning();
+        }
 
     }
 
     //TODO Implement winning screen.
-//    /**
-//     * Switch to the SlidingTileActivity view to play the game.
-//     */
-//    private void switchToWinning() {
-//        Intent tmp = new Intent(this, WinningActivity.class);
-//        startActivity(tmp);
-//    }
+    /**
+     * Switch to the SlidingTileActivity view to play the game.
+     */
+    private void switchToWinning() {
+        Intent tmp = new Intent(this, WinningActivity.class);
+        startActivity(tmp);
+    }
 
     /**
      * Activate the Choose one button.
