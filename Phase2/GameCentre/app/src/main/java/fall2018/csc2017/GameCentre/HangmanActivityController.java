@@ -56,12 +56,13 @@ public class HangmanActivityController {
         WordManager wordManager = prevState.getWordManager();
         //Saving/Displaying the score if the game is over.
         if (wordManager.puzzleSolved()) {
-            Scoreboard scoreboard = fileSystem.loadScoreboard(context);
+            Scoreboard scoreboard = fileSystem.loadScoreboard(context, StartingLoginActivity.SAVE_HANGMAN_SCOREBOARD);
 
             scoreboard.addToScoreBoard(scoreboard.createScore(StartingLoginActivity.currentUser,
                     prevState.getScore()));
 
-            fileSystem.saveScoreBoard(context, scoreboard);
+            fileSystem.saveScoreBoard(context, StartingLoginActivity.SAVE_HANGMAN_SCOREBOARD, scoreboard);
+            accountManager.findUser(StartingLoginActivity.currentUser).setLastPlayedGame(Account.hangmanName);
 
             currSavManager.wipeSave(SaveManager.auto, SaveManager.hangmanName);
             currSavManager.wipeSave(SaveManager.perma, SaveManager.hangmanName);

@@ -8,10 +8,23 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
 
 class FileSystem {
+
+    void testExistingFile(Context context) {
+        try {
+            context.openFileInput(StartingLoginActivity.SAVE_ACCOUNT_MANAGER);
+        }catch(FileNotFoundException e){
+            Log.e("login activity", "File not found: " + e.toString());
+            saveAccount(context, new AccountManager(new ArrayList<Account>()));
+            saveScoreBoard(context, StartingLoginActivity.SAVE_SLIDING_SCOREBOARD, new Scoreboard());
+            saveScoreBoard(context, StartingLoginActivity.SAVE_HANGMAN_SCOREBOARD, new Scoreboard());
+            saveScoreBoard(context, StartingLoginActivity.SAVE_SUDOKU_SCOREBOARD, new Scoreboard());
+        }
+    }
 
     /**
      * Load account manager from fileName.
@@ -31,6 +44,8 @@ class FileSystem {
             }
         } catch (FileNotFoundException e) {
             Log.e("login activity", "File not found: " + e.toString());
+//            saveAccount(context, new AccountManager(new ArrayList<Account>()));
+//            saveScoreBoard(context, new Scoreboard());
         } catch (IOException e) {
             Log.e("login activity", "Can not read file: " + e.toString());
         } catch (ClassNotFoundException e) {
@@ -45,10 +60,10 @@ class FileSystem {
      *
      * @param context the context.
      */
-    Scoreboard loadScoreboard(Context context) {
+    Scoreboard loadScoreboard(Context context, String filename) {
 
         try {
-            InputStream inputStream = context.openFileInput(StartingLoginActivity.SAVE_SCOREBOARD);
+            InputStream inputStream = context.openFileInput(filename);
             Scoreboard scoreBoard;
             if (inputStream != null) {
                 ObjectInputStream input = new ObjectInputStream(inputStream);
@@ -88,10 +103,10 @@ class FileSystem {
      *
      * @param context the context writing the file.
      */
-    void saveScoreBoard(Context context, Scoreboard scoreboard) {
+    void saveScoreBoard(Context context, String filename, Scoreboard scoreboard) {
         try {
             ObjectOutputStream outputStream = new ObjectOutputStream(
-                    context.openFileOutput(StartingLoginActivity.SAVE_ACCOUNT_MANAGER, MODE_PRIVATE));
+                    context.openFileOutput(filename, MODE_PRIVATE));
             outputStream.writeObject(scoreboard);
             outputStream.close();
         } catch (IOException e) {

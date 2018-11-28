@@ -16,6 +16,7 @@ public class ScoreBoardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score_board);
         addSlidingTileScoreButtonListener();
+        addSudokuScoreButtonListener();
     }
 
     /**
@@ -32,10 +33,31 @@ public class ScoreBoardActivity extends AppCompatActivity {
     }
 
     /**
+     * Activate sliding tile scoreboard button.
+     */
+    private void addSudokuScoreButtonListener() {
+        Button button = findViewById(R.id.buttonSudokuScore);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchToSudokuScore();
+            }
+        });
+    }
+
+    /**
      * Switch to sliding tile scoreboard.
      */
     private void switchToSlidingTilesScore() {
         Intent tmp = new Intent(this, SlidingTileScoreActivity.class);
+        startActivity(tmp);
+    }
+
+    /**
+     * Switch to sudoku scoreboard.
+     */
+    private void switchToSudokuScore() {
+        Intent tmp = new Intent(this, SudokuScoreActivity.class);
         startActivity(tmp);
     }
 }

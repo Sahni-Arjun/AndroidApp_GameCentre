@@ -35,7 +35,7 @@ public class HangmanScoreActivity extends AppCompatActivity {
     private void loadFromFile() {
 
         try {
-            InputStream inputStream = this.openFileInput(StartingLoginActivity.SAVE_SCOREBOARD);
+            InputStream inputStream = this.openFileInput(StartingLoginActivity.SAVE_HANGMAN_SCOREBOARD);
             if (inputStream != null) {
                 ObjectInputStream input = new ObjectInputStream(inputStream);
                 hangmanScoreboard = (Scoreboard) input.readObject();
