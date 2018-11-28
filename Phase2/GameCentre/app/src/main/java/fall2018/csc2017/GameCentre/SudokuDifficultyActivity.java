@@ -1,6 +1,5 @@
 package fall2018.csc2017.GameCentre;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,12 +17,9 @@ public class SudokuDifficultyActivity extends AppCompatActivity {
     private SudokuDifficultyActivity currentContext = this;
 
     /**
-     * the controoler for this actvity
+     * the controller for this activity
      */
     private SudokuDifficultyActivityController sCon;
-
-    public static SudokuBoardManager boardManager;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,38 +47,6 @@ public class SudokuDifficultyActivity extends AppCompatActivity {
     }
 
     /**
-     * intitiates everything needed for the game to start.
-     */
-//    private void startGame() {
-//
-//        boardManager = new SudokuBoardManager();
-//        accountManager = fileSystem.loadAccount(currentContext);
-//        Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-//        SaveManager currSavManager = currentAccount.getSaveManager();
-//        currSavManager.wipeSave(SaveManager.auto, SaveManager.sudokuName);
-//
-//        //Start new game with chosen number of undos
-//        SudokuState newState = new
-//                SudokuState(boardManager, 0);
-//
-//        //TODO set correct difficulty when implemented.
-//        newState.setDifficulty(0);
-//
-//        //TODO set number of undos when implemented.
-//        newState.setUnlimitedUndo();
-//
-////                if (SetUndoActivity.unlimited) {
-////                    newState.setUnlimitedUndo();
-////                } else {
-////                    newState.setMaxNumMovesUndone(SetUndoActivity.undo);
-////                }
-//        currSavManager.addState(newState, SaveManager.sudokuName);
-//        fileSystem.saveAccount(currentContext, accountManager);
-//        switchToSudoku();
-//    }
-//
-
-    /**
      * Activate button to set difficulty to 1(easy).
      */
     private void addButtonNoobListener() {
@@ -91,12 +55,9 @@ public class SudokuDifficultyActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 difficulty = 1;
-                boardManager = new SudokuBoardManager();
-                sCon.boardManager = SudokuDifficultyActivity.boardManager;
                 sCon.startGame(currentContext, difficulty);
             }
         });
-
     }
 
     /**
@@ -108,8 +69,6 @@ public class SudokuDifficultyActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 difficulty = 2;
-                boardManager = new SudokuBoardManager();
-                sCon.boardManager = SudokuDifficultyActivity.boardManager;
                 sCon.startGame(currentContext, difficulty);
             }
         });
@@ -124,8 +83,6 @@ public class SudokuDifficultyActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 difficulty = 4;
-                boardManager = new SudokuBoardManager();
-                sCon.boardManager = SudokuDifficultyActivity.boardManager;
                 sCon.startGame(currentContext, difficulty);
             }
         });

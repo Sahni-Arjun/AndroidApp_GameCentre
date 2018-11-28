@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Observable;
@@ -29,24 +28,21 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
     private ArrayList<Button> tileButtons;
 
     /**
-     * The account manage for the app.
-     */
-    private AccountManager accountManager;
-
-    /**
      * The filesystem.
      */
-    private FileSystem fileSystem;
+    private FileSystem fileSystem = new FileSystem();
+
+    /**
+     * The toast view
+     */
+    private DisplayToast displayToast = new DisplayToast();
 
     /**
      * The current context for file reading/writing.
      */
     private Context currentContext = this;
 
-    /**
-     * Scoreboard for the sidling tiles game.
-     */
-    private Scoreboard scoreBoard;
+    private SudokuActivityController controller;
 
     // Grid View and calculated column height and width based on device size
     private GestureDetectGridView gridView;
@@ -56,8 +52,6 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
      * The current number selected.
      */
     public static int currentNumber = 1;
-
-    private long startTime;
 
     /**
      * Set up the background image for each button based on the master list
@@ -71,10 +65,9 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fileSystem = new FileSystem();
-        accountManager = fileSystem.loadAccount(currentContext);
-//        slidingTilesBoardManager = SlidingTileStartingActivity.slidingTilesBoardManager;
-        boardManager = SudokuDifficultyActivity.boardManager;
+        controller = new SudokuActivityController(fileSystem, displayToast);
+        boardManager = controller.onCreateListener((SudokuActivity) currentContext);
+
         createTileButtons(this);
         setContentView(R.layout.activity_sudoku);
         addSaveButtonListener();
@@ -109,7 +102,6 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
         addChooseSevenButtonListener();
         addChooseEightButtonListener();
         addChooseNineButtonListener();
-        startTime = System.currentTimeMillis();
     }
 
     /**
@@ -120,12 +112,13 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                accountManager = fileSystem.loadAccount(currentContext);
-
-                Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-                currentAccount.getCurrentSaveManager(SaveManager.sudokuName).updateSave("perma", SaveManager.sudokuName);
-
-                fileSystem.saveAccount(currentContext, accountManager);
+//                accountManager = fileSystem.loadAccount(currentContext);
+//
+//                Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
+//                currentAccount.getCurrentSaveManager(SaveManager.sudokuName).updateSave("perma", SaveManager.sudokuName);
+//
+//                fileSystem.saveAccount(currentContext, accountManager);
+                controller.saveListener((SudokuActivity) currentContext);
             }
         });
     }
@@ -138,31 +131,35 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
         undoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                accountManager = fileSystem.loadAccount(currentContext);
-
-                Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-                SaveManager currSavManager = currentAccount.getCurrentSaveManager(SaveManager.sudokuName);
-
-                boolean canUndo = currSavManager.getLastState("auto", SaveManager.sudokuName).canUndo();
-                SudokuState currentAutoState = (SudokuState) currSavManager.getLastState("auto", SaveManager.sudokuName);
-
-                if ((currSavManager.getLength("auto", SaveManager.sudokuName) != 1) && canUndo) {
-                    int prevMovesUndone = currentAutoState.getNumMovesUndone();
-                    currSavManager.undo(SaveManager.sudokuName);
-                    SudokuState prevState;
-                    prevState = (SudokuState) currSavManager.getLastState("auto", SaveManager.sudokuName);
-
-                    Tile[][] prevTiles = prevState.getBoardManager().getBoard().getTiles();
-                    boardManager.getBoard().setTiles(prevTiles);
-                    Toast.makeText(getApplicationContext(), "" + currSavManager.getLength("auto", SaveManager.sudokuName), Toast.LENGTH_SHORT).show();
-                    gridView.setBoardManager(boardManager);
-                    currSavManager.getLastState("auto", SaveManager.sudokuName).incrementNumMoves(prevMovesUndone);
-                    fileSystem.saveAccount(currentContext, accountManager);
+//                accountManager = fileSystem.loadAccount(currentContext);
+//
+//                Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
+//                SaveManager currSavManager = currentAccount.getCurrentSaveManager(SaveManager.sudokuName);
+//
+//                boolean canUndo = currSavManager.getLastState("auto", SaveManager.sudokuName).canUndo();
+//                SudokuState currentAutoState = (SudokuState) currSavManager.getLastState("auto", SaveManager.sudokuName);
+//
+//                if ((currSavManager.getLength("auto", SaveManager.sudokuName) != 1) && canUndo) {
+//                    int prevMovesUndone = currentAutoState.getNumMovesUndone();
+//                    currSavManager.undo(SaveManager.sudokuName);
+//                    SudokuState prevState;
+//                    prevState = (SudokuState) currSavManager.getLastState("auto", SaveManager.sudokuName);
+//
+//                    Tile[][] prevTiles = prevState.getBoardManager().getBoard().getTiles();
+//                    boardManager.getBoard().setTiles(prevTiles);
+//                    Toast.makeText(getApplicationContext(), "" + currSavManager.getLength("auto", SaveManager.sudokuName), Toast.LENGTH_SHORT).show();
+//                    gridView.setBoardManager(boardManager);
+//                    currSavManager.getLastState("auto", SaveManager.sudokuName).incrementNumMoves(prevMovesUndone);
+//                    fileSystem.saveAccount(currentContext, accountManager);
+//                    display();
+//
+//                } else {
+//                    Toast.makeText(getApplicationContext(), "Max moves undone" +
+//                            "", Toast.LENGTH_SHORT).show();
+//                }
+                Boolean undone = controller.undoListener((SudokuActivity) currentContext, boardManager);
+                if (undone){
                     display();
-
-                } else {
-                    Toast.makeText(getApplicationContext(), "Max moves undone" +
-                            "", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -174,13 +171,10 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
      * @param context the context
      */
     private void createTileButtons(Context context) {
-//        SudokuBoard board = slidingTilesBoardManager.getThisBoard();
         tileButtons = new ArrayList<>();
         for (int row = 0; row != SudokuBoard.numRows; row++) {
             for (int col = 0; col != SudokuBoard.numCols; col++) {
                 Button tmp = new Button(context);
-//                tmp.setBackgroundResource(board.getTile(row, col).getBackground());
-                //TODO Uncomment the above line after pregenerated board is implemented.
                 tmp.setBackgroundResource(R.drawable.tile_25);
                 this.tileButtons.add(tmp);
             }
@@ -208,15 +202,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onPause() {
         super.onPause();
-        Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-        SaveManager currSavManager = currentAccount.getCurrentSaveManager(SaveManager.sudokuName);
-        if (currSavManager.getLength(SaveManager.auto, SaveManager.sudokuName) != 0) {
-            SudokuState lastAutoState = (SudokuState) currSavManager.getLastState("auto", SaveManager.sudokuName);
-            long lastTime = lastAutoState.getTime();
-            long newTime = lastTime + System.currentTimeMillis() - startTime;
-            lastAutoState.setTime(newTime);
-            fileSystem.saveAccount(currentContext, accountManager);
-        }
+        controller.onPauseListener((SudokuActivity) currentContext);
     }
 
     /**
@@ -225,9 +211,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onResume() {
         super.onResume();
-//        accountManager = fileSystem.loadAccount(currentContext);
-        startTime = System.currentTimeMillis();
-        display();
+        controller.onResumeListener();
     }
 
     @Override
@@ -238,43 +222,13 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        accountManager = fileSystem.loadAccount(currentContext);
-
-        Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-        SaveManager currSavManager = currentAccount.getCurrentSaveManager(SaveManager.sudokuName);
-        SudokuState lastAutoState = (SudokuState) currSavManager.getLastState("auto", SaveManager.sudokuName);
-        int numMoves = currSavManager.getLength("auto", SaveManager.sudokuName);
-        long lastTime = lastAutoState.getTime();
-        long newTime = lastTime + System.currentTimeMillis() - startTime;
-
-        //Creating new game state with field values of the previous state.
-        SudokuState newState = new SudokuState(boardManager, numMoves,
-                lastAutoState.getDifficulty(), SetUndoActivity.undo,
-                lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo(),
-                newTime);
-        currSavManager.addState(newState, SaveManager.sudokuName);
-        fileSystem.saveAccount(currentContext, accountManager);
-//        Toast.makeText(getApplicationContext(), "" + newTime/1000 + " " + newTime, Toast.LENGTH_SHORT).show();
-//        Toast.makeText(getApplicationContext(), "" + currSavManager.getLength("auto", SaveManager.sudokuName), Toast.LENGTH_SHORT).show();
-
         display();
-        startTime = System.currentTimeMillis();
-
-        //Saving/Displaying the score if the game is over.
-        if (newState.getBoardManager().puzzleSolved()) {
-            scoreBoard = fileSystem.loadScoreboard(currentContext);
-            scoreBoard.addToScoreBoard(scoreBoard.createScore(StartingLoginActivity.currentUser,
-                    newState.getScore()));
-            fileSystem.saveScoreBoard(currentContext, scoreBoard);
-            currSavManager.wipeSave(SaveManager.auto, SaveManager.sudokuName);
-            currSavManager.wipeSave(SaveManager.perma, SaveManager.sudokuName);
-            fileSystem.saveAccount(currentContext, accountManager);
+        Boolean gameOver = controller.updateListener((SudokuActivity) currentContext, boardManager);
+        if (gameOver){
             switchToWinning();
         }
-
     }
 
-    //TODO Implement winning screen.
     /**
      * Switch to the SlidingTileActivity view to play the game.
      */
@@ -286,9 +240,6 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
     /**
      * Activate the Choose one button.
      */
-
-
-
     private void addChooseOneButtonListener() {
         Button saveButton = findViewById(R.id.btnSudoku1);
         saveButton.setOnClickListener(new View.OnClickListener() {

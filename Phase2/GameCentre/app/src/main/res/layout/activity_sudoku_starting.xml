@@ -10,37 +10,101 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="125dp"
+        android:layout_marginTop="157dp"
         android:gravity="center"
         android:text="Welcome to Sudoku!"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
     <Button
-        android:id="@+id/btnSudokuNewGame"
+        android:id="@+id/sudokuSave1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/GameText"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="0dp"
-        android:layout_toEndOf="@+id/btnSudokuLoad"
-        android:text="@string/new_game" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="213dp"
+        android:text="Load Save 1" />
 
     <Button
-        android:id="@+id/btnSudokuLoad"
+        android:id="@+id/sudokuSave2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/GameText"
-        android:layout_toStartOf="@+id/NewGameButton"
-        android:text="@string/load_saved_game" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="139dp"
+        android:layout_marginTop="211dp"
+        android:text="Load Save 2" />
 
     <Button
-        android:id="@+id/btnSudokuContinue"
+        android:id="@+id/sudokuSave3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/GameText"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="0dp"
-        android:layout_toEndOf="@+id/btnSudokuNewGame"
-        android:text="@string/continue_game" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="262dp"
+        android:layout_marginTop="209dp"
+        android:text="Load Save 3" />
+
+    <Button
+        android:id="@+id/sudokuContinue1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="279dp"
+        android:text="Continue 1" />
+
+    <Button
+        android:id="@+id/sudokuContinue3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="261dp"
+        android:layout_marginTop="279dp"
+        android:text="Continue 3" />
+
+    <Button
+        android:id="@+id/sudokuNewGame1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="348dp"
+        android:text="New Game 1" />
+
+    <Button
+        android:id="@+id/sudokuNewGame2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="139dp"
+        android:layout_marginTop="348dp"
+        android:text="New Game 2" />
+
+    <Button
+        android:id="@+id/sudokuNewGame3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="262dp"
+        android:layout_marginTop="349dp"
+        android:text="New Game 3" />
+
+    <Button
+        android:id="@+id/sudokuContinue2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="139dp"
+        android:layout_marginTop="278dp"
+        android:text="Continue 2" />
 
 </RelativeLayout>

@@ -1,9 +1,6 @@
 package fall2018.csc2017.GameCentre;
 
-import android.content.Context;
-import android.content.Intent;
-
-public class SudokuDifficultyActivityController {
+class SudokuDifficultyActivityController {
     /**
      * The account manager.
      */
@@ -12,7 +9,7 @@ public class SudokuDifficultyActivityController {
     /**
      * the boardmanager
      */
-    public SudokuBoardManager boardManager;
+    private SudokuBoardManager boardManager;
 
     /**
      * The filesystem.
@@ -22,7 +19,6 @@ public class SudokuDifficultyActivityController {
 
     SudokuDifficultyActivityController(){
         this.fileSystem = new FileSystem();
-
     }
 
 
@@ -36,7 +32,7 @@ public class SudokuDifficultyActivityController {
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(SaveManager.sudokuName);
         currSavManager.wipeSave(SaveManager.auto, SaveManager.sudokuName);
-
+        boardManager = new SudokuBoardManager();
         //Start new game with chosen number of undos
         SudokuState newState = new
                 SudokuState(boardManager, 0);
