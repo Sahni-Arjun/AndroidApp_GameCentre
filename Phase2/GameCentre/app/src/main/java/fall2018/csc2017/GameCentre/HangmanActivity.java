@@ -50,8 +50,6 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
 
     AccountManager accountManager;
 
-    Account user;
-
     FileSystem fileSystem;
 
 
@@ -441,24 +439,4 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
         }
     }
 
-    /**
-     * Switch to the winning/loosing view.
-     */
-    private void switchToWinning() {
-
-        accountManager = fileSystem.loadAccount(this);
-        user = accountManager.findUser(StartingLoginActivity.currentUser);
-        user.setLastPlayedGame(Account.hangmanName);
-        Intent tmp = new Intent(this, WinningActivity.class);
-        startActivity(tmp);
-    }
-
-    private void switchToLoosing() {
-
-        accountManager = fileSystem.loadAccount(this);
-        user = accountManager.findUser(StartingLoginActivity.currentUser);
-        user.setLastPlayedGame(Account.hangmanName);
-        Intent tmp = new Intent(this, LoosingActivity.class);
-        startActivity(tmp);
-    }
 }
