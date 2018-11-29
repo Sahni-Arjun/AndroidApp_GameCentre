@@ -26,8 +26,6 @@ abstract class GameState implements Serializable {
      */
     boolean unlimitedUndo = false;
 
-    abstract int getScore();
-
     /**
      * Return the number of moves already undone.
      *

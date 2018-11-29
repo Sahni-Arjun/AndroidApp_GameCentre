@@ -62,20 +62,8 @@ class SlidingTilesState extends GameState implements Serializable {
         return slidingTilesBoardManager;
     }
 
-    /**
-     * Calculate and return the score based on number of moves taken.
-     *
-     * @return score of this SlidingTilesState.
-     */
-    int getScore() {
-        if (complexity == 3) {
-            return (int) (Math.round((500 * Math.exp(-(double) numMoves / 35))));
-        } else if (complexity == 4) {
-            return (int) (Math.round((1000 * Math.exp(-(double) numMoves / 20))));
-        } else {
-            return (int) (Math.round((3000 * Math.exp(-(double) numMoves / 100))));
-        }
-    }
+
+    int getNumMoves() {return this.numMoves;}
 
     /**
      * Return the complexity of this SlidingTilesState.

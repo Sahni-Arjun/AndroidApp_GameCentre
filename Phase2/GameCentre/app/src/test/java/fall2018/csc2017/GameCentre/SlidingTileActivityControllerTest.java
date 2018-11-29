@@ -86,7 +86,7 @@ public class SlidingTileActivityControllerTest {
          * 8 5 6
          */
 
-        slidingTilesBoardManager.getBoard().swapTiles(0, 0, 0, 1);
+        slidingTilesBoardManager.swapTiles(0, 0, 0, 1);
         boardManager = new SlidingTilesBoardManager();
         board = new Board();
         board.setTiles(deepCopy(slidingTilesBoardManager.getBoard().getTiles()));
@@ -98,7 +98,7 @@ public class SlidingTileActivityControllerTest {
          * 8 5 6
          */
 
-        slidingTilesBoardManager.getBoard().swapTiles(0, 1, 1, 1);
+        slidingTilesBoardManager.swapTiles(0, 1, 1, 1);
         boardManager = new SlidingTilesBoardManager();
         board = new Board();
         board.setTiles(deepCopy(slidingTilesBoardManager.getBoard().getTiles()));
@@ -115,7 +115,7 @@ public class SlidingTileActivityControllerTest {
     public void setUp(){
         StartingLoginActivity.currentUser = "Hello";
         setUpAccountWithGame();
-        SlidingTileActivity.slidingTilesBoardManager = new SlidingTilesBoardManager();
+//        SlidingTileActivity.slidingTilesBoardManager = new SlidingTilesBoardManager();
         slidingTileActivityController = new SlidingTileActivityController(
                 new FileSystem(){
                     public AccountManager loadAccount(Context context){
@@ -145,8 +145,8 @@ public class SlidingTileActivityControllerTest {
         SaveManager saveManager = user.getCurrentSaveManager(Account.slidingName);
         Tile[][] oldTiles = makeTiles();
 
-        slidingTileActivityController.undoListener(context);
-        slidingTileActivityController.undoListener(context);
+        slidingTileActivityController.undoListener((SlidingTileActivity) context);
+        slidingTileActivityController.undoListener((SlidingTileActivity) context);
 
         SlidingTilesState state = (SlidingTilesState) saveManager.getLastState(SaveManager.auto, SaveManager.slidingTilesName);
         Tile[][] newTiles = state.getSlidingTilesBoardManager().getBoard().getTiles();

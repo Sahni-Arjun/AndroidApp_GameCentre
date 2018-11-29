@@ -11,7 +11,6 @@ import java.util.Random;
  */
 class HangmanStartingActivityController {
 
-
     /**
      * FileSystem field
      */
@@ -105,7 +104,7 @@ class HangmanStartingActivityController {
      * @param gameFile the number of the game file the user would like to open
      * @param context the current HangmanStartingActivity
      */
-    void loadSave(int gameFile, Context context) {
+    void loadSave(int gameFile, Context context) { // adapt
         accountManager = fileSystem.loadAccount(context);
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         currentAccount.setCurrentGame(gameFile);

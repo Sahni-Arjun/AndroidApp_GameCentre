@@ -66,7 +66,7 @@ class SudokuActivityController {
         if (sudokuBoardManager.puzzleSolved()) {
             Scoreboard scoreBoard = fileSystem.loadScoreboard(context,StartingLoginActivity.SAVE_SUDOKU_SCOREBOARD);
             scoreBoard.addToScoreBoard(scoreBoard.createScore(StartingLoginActivity.currentUser,
-                    prevState.getScore()));
+                    currSavManager.getFinalScore(SaveManager.sudokuName)));
             fileSystem.saveScoreBoard(context, StartingLoginActivity.SAVE_SUDOKU_SCOREBOARD, scoreBoard);
             accountManager.findUser(StartingLoginActivity.currentUser).setLastPlayedGame(Account.sudokuName);
             currSavManager.wipeSave(SaveManager.auto, SaveManager.sudokuName);
