@@ -120,7 +120,7 @@ public class SlidingTilesBoardManagerTest {
         StartingLoginActivity.currentUser = "Hello";
         setUpAccountWithGame();
         SlidingTileActivity slidingTileActivity = new SlidingTileActivity();
-        slidingTileActivity.setSlidingTilesBoardManager(new SlidingTilesBoardManager());
+//        slidingTileActivity.setSlidingTilesBoardManager(new SlidingTilesBoardManager());
         slidingTileActivityController = new SlidingTileActivityController(
                 new FileSystem(){
                     public AccountManager loadAccount(Context context){
@@ -133,11 +133,7 @@ public class SlidingTilesBoardManagerTest {
                     public void saveAccount(Context context, AccountManager accountManager){
                         user = accountManager.findUser("Hello");
                     }
-                }, new DisplayToast(){
-            public void displayToast(Context Context, String message){
-                System.out.println(message);
-            }
-        }
+                }
         );
     }
 

@@ -6,7 +6,7 @@ package fall2018.csc2017.GameCentre;
 import android.content.Context;
 import android.content.Intent;
 
-class SlidingTileActivityController{
+class SlidingTileActivityController {
     /**
      * The filesystem.
      */
@@ -17,26 +17,19 @@ class SlidingTileActivityController{
      */
     private AccountManager accountManager;
 
-    /**
-     * The toast view class.
-     */
-    private DisplayToast displayToast;
-
-    SlidingTileActivityController(FileSystem fileSystem, DisplayToast displayToast){
+    SlidingTileActivityController(FileSystem fileSystem) {
         this.fileSystem = fileSystem;
-        this. displayToast = displayToast;
     }
 
-    void onCreateListener(SlidingTileActivity context){
+    SlidingTilesBoardManager onCreateListener(Context context) {
         accountManager = fileSystem.loadAccount(context);
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
         String continueOrLoad = currSavManager.getContinueOrLoad();
-        SlidingTilesBoardManager newBoardManager = ((SlidingTilesState)currSavManager.getLastState(continueOrLoad, SaveManager.slidingTilesName)).getSlidingTilesBoardManager();
-        context.setSlidingTilesBoardManager(newBoardManager);
+        return ((SlidingTilesState) currSavManager.getLastState(continueOrLoad, SaveManager.slidingTilesName)).getSlidingTilesBoardManager();
     }
 
-    void undoListener(SlidingTileActivity context){
+    boolean undoListener(Context context, SlidingTilesBoardManager slidingTilesBoardManager) {
         // load the account manager.
         accountManager = fileSystem.loadAccount(context);
 
@@ -44,22 +37,22 @@ class SlidingTileActivityController{
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
 
         boolean undone = currSavManager.undoMove("sliding tiles");
-        if (undone){
+        if (undone) {
             // update the current board manager with the new tiles.
-            context.getSlidingTilesBoardManager().getBoard().setTiles(currSavManager.getboardArrangement());
+            slidingTilesBoardManager.getBoard().setTiles(currSavManager.getboardArrangement());
             fileSystem.saveAccount(context, accountManager);
-        }else{
-            displayToast.displayToast(context, "Max moves undone");
+            return false;
         }
+        return true;
     }
 
-    void updateGameListener(SlidingTileActivity context){
+    boolean updateGameListener(Context context, SlidingTilesBoardManager boardManager) {
         accountManager = fileSystem.loadAccount(context);
 
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
 
-        currSavManager.updateState(SaveManager.slidingTilesName, (context.getSlidingTilesBoardManager()));
+        currSavManager.updateState(SaveManager.slidingTilesName, boardManager);
 
         fileSystem.saveAccount(context, accountManager);
 
@@ -79,13 +72,12 @@ class SlidingTileActivityController{
             currSavManager.wipeSave(SaveManager.perma, SaveManager.slidingTilesName);
 
             fileSystem.saveAccount(context, accountManager);
-
-            Intent tmp = new Intent(context, WinningActivity.class);
-            context.startActivity(tmp);
+            return true;
         }
+        return false;
     }
 
-    void saveListener(Context context){
+    void saveListener(Context context) {
         accountManager = fileSystem.loadAccount(context);
 
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
