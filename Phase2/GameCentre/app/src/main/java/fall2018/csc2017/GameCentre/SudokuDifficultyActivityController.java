@@ -43,7 +43,6 @@ class SudokuDifficultyActivityController {
 
         currSavManager.addState(newState, SaveManager.sudokuName);
         fileSystem.saveAccount(context, accountManager);
-        context.switchToSudoku();
     }
 
 }
