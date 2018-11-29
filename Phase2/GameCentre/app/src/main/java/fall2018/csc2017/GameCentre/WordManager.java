@@ -82,10 +82,8 @@ class WordManager extends BoardManager implements Serializable {
      * @return whether letters are all being displayed
      */
     boolean puzzleSolved() {
-
         for (int pos = 0; pos < Word.numCols; pos++) {
-
-            if(word.getLetter(0, pos).hidden){
+            if(word.getLetter(pos).hidden){
                 return false;
             }
         }
@@ -124,10 +122,9 @@ class WordManager extends BoardManager implements Serializable {
      * @param guess ascii code of letter being guessed
      */
     void keyBoard(int guess) {
-
         for (int pos = 0; pos < Word.numCols; pos++) {
 
-            if(word.getLetter(0, pos).getId() == guess){
+            if(word.getLetter(pos).getId() == guess){
                 word.updateLetter(guess);
                 return;
             }

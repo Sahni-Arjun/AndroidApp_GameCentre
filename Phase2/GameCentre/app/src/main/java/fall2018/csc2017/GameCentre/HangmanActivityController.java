@@ -2,6 +2,8 @@ package fall2018.csc2017.GameCentre;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.Context;
+
 
 public class HangmanActivityController {
 
@@ -66,14 +68,22 @@ public class HangmanActivityController {
 
             currSavManager.wipeSave(SaveManager.auto, SaveManager.hangmanName);
             currSavManager.wipeSave(SaveManager.perma, SaveManager.hangmanName);
+            Account user = accountManager.findUser(StartingLoginActivity.currentUser);
+
+            user.setLastPlayedGame(Account.hangmanName);
 
             fileSystem.saveAccount(context, accountManager);
 
             Intent win = new Intent(context, WinningActivity.class);
             context.startActivity(win);
+
         }
 
         if (WordManager.tries > 5){
+
+            Account user = accountManager.findUser(StartingLoginActivity.currentUser);
+            user.setLastPlayedGame(Account.hangmanName);
+            fileSystem.saveAccount(context, accountManager);
 
             Intent loose = new Intent(context, LoosingActivity.class);
             context.startActivity(loose);

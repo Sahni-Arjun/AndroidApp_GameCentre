@@ -48,6 +48,12 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
     private HangmanGestureDetectGridView gridView;
     private static int columnWidth, columnHeight;
 
+    AccountManager accountManager;
+
+    FileSystem fileSystem;
+
+
+
     /**
      * Set up the background image for each letter based on the master list
      * of positions, and then call the adapter to set the view.
@@ -60,7 +66,7 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FileSystem fileSystem = new FileSystem();
+        fileSystem = new FileSystem();
         DisplayToast displayToast = new DisplayToast();
         hangmanActivityController = new HangmanActivityController(fileSystem, displayToast);
         wordManager = HangmanStartingActivity.wordManager;
@@ -131,7 +137,7 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
         tileButtons = new ArrayList<>();
         for (int col = 0; col != Word.numCols; col++) {
                 Button tmp = new Button(context);
-                tmp.setBackgroundResource(word.getLetter(0, col).getBackground());
+                tmp.setBackgroundResource(word.getLetter(col).getBackground());
                 this.tileButtons.add(tmp);
         }
     }
@@ -167,13 +173,12 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
         int nextPos = 0;
 
         for (Button b : tileButtons) {
-
-            if (word.getLetter(0, nextPos).hidden){
+            if (word.getLetter(nextPos).hidden){
                 b.setBackgroundResource(R.drawable.letter_empty);
             }
             else{
 
-                int backgroundId = word.getLetter(0, nextPos).getId();
+                int backgroundId = word.getLetter(nextPos).getId();
 
                 switch (backgroundId) {
                     case 0:
@@ -433,16 +438,4 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
         }
     }
 
-    /**
-     * Switch to the winning/loosing view.
-     */
-    private void switchToWinning() {
-        Intent tmp = new Intent(this, WinningActivity.class);
-        startActivity(tmp);
-    }
-
-    private void switchToLoosing() {
-        Intent tmp = new Intent(this, LoosingActivity.class);
-        startActivity(tmp);
-    }
 }
