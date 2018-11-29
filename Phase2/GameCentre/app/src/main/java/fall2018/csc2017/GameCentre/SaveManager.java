@@ -162,7 +162,7 @@ class SaveManager implements Serializable {
         }
     }
 
-    void updateSudokuTime(long startTime){
+    void updateSudokuTime(long startTime){ // todo delete?
         SudokuState lastAutoState = (SudokuState) this.getLastState("auto", SaveManager.sudokuName);
         lastAutoState.setTime(lastAutoState.getTime() + System.currentTimeMillis() - startTime);
     }
