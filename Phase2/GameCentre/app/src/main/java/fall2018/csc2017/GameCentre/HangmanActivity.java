@@ -137,7 +137,7 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
         tileButtons = new ArrayList<>();
         for (int col = 0; col != Word.numCols; col++) {
                 Button tmp = new Button(context);
-                tmp.setBackgroundResource(word.getLetter(0, col).getBackground());
+                tmp.setBackgroundResource(word.getLetter(col).getBackground());
                 this.tileButtons.add(tmp);
         }
     }
@@ -173,13 +173,12 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
         int nextPos = 0;
 
         for (Button b : tileButtons) {
-
-            if (word.getLetter(0, nextPos).hidden){
+            if (word.getLetter(nextPos).hidden){
                 b.setBackgroundResource(R.drawable.letter_empty);
             }
             else{
 
-                int backgroundId = word.getLetter(0, nextPos).getId();
+                int backgroundId = word.getLetter(nextPos).getId();
 
                 switch (backgroundId) {
                     case 0:
