@@ -78,7 +78,7 @@ public class SlidingTileActivityControllerTest {
         boardManager.setBoard(board);
 
         SlidingTilesState slidingTilesState1 = new SlidingTilesState(boardManager, 0, 3, 3, 0, true);
-        saveManager.addState(slidingTilesState1, SaveManager.slidingTilesName);
+        saveManager.addState(slidingTilesState1);
         /*
          * 9 1 3
          * 2 7 4
@@ -153,7 +153,7 @@ public class SlidingTileActivityControllerTest {
 
         assertFalse(maxUndone);
 
-        SlidingTilesState state = (SlidingTilesState) saveManager.getLastState(SaveManager.auto, SaveManager.slidingTilesName);
+        SlidingTilesState state = (SlidingTilesState) saveManager.getLastState(SaveManager.auto);
         Tile[][] newTiles = state.getSlidingTilesBoardManager().getBoard().getTiles();
 
         for (int i = 0; i < 3; i++){
@@ -186,15 +186,15 @@ public class SlidingTileActivityControllerTest {
         Context context = new AppCompatActivity();
         SaveManager saveManager = user.getCurrentSaveManager(Account.slidingName);
 
-        assertEquals(0, saveManager.getLength(SaveManager.perma, SaveManager.slidingTilesName));
+        assertEquals(0, saveManager.getLength(SaveManager.perma));
 
         slidingTileActivityController.saveListener(context);
 
-        SlidingTilesState permaState = (SlidingTilesState) saveManager.getLastState(SaveManager.auto, SaveManager.slidingTilesName);
-        SlidingTilesState autoState = (SlidingTilesState) saveManager.getLastState(SaveManager.auto, SaveManager.slidingTilesName);
+        SlidingTilesState permaState = (SlidingTilesState) saveManager.getLastState(SaveManager.auto);
+        SlidingTilesState autoState = (SlidingTilesState) saveManager.getLastState(SaveManager.auto);
 
         assertEquals(permaState, autoState);
-        assertEquals(3, saveManager.getLength(SaveManager.perma, SaveManager.slidingTilesName));
+        assertEquals(3, saveManager.getLength(SaveManager.perma));
     }
 
     /**
@@ -216,7 +216,7 @@ public class SlidingTileActivityControllerTest {
          * 8 5 6
          */
 
-        SlidingTilesState prevAutoState = (SlidingTilesState) saveManager.getLastState(SaveManager.auto, SaveManager.slidingTilesName);
+        SlidingTilesState prevAutoState = (SlidingTilesState) saveManager.getLastState(SaveManager.auto);
         int numMoves = prevAutoState.getNumMoves();
         int complexity = prevAutoState.getComplexity();
         int numMovesUndone = prevAutoState.getNumMovesUndone();
@@ -226,7 +226,7 @@ public class SlidingTileActivityControllerTest {
 
         assertFalse(gameOver);
 
-        SlidingTilesState autoState = (SlidingTilesState) saveManager.getLastState(SaveManager.auto, SaveManager.slidingTilesName);
+        SlidingTilesState autoState = (SlidingTilesState) saveManager.getLastState(SaveManager.auto);
         int newNumMoves = autoState.getNumMoves();
         int newComplexity = autoState.getComplexity();
         int newNumMovesUndone = autoState.getNumMovesUndone();
@@ -249,7 +249,7 @@ public class SlidingTileActivityControllerTest {
         assertEquals(5, newTiles[2][1].getId());
         assertEquals(6, newTiles[2][2].getId());
 
-        assertEquals(4, saveManager.getLength(SaveManager.auto, SaveManager.slidingTilesName));
+        assertEquals(4, saveManager.getLength(SaveManager.auto));
     }
 
     /**
@@ -286,8 +286,8 @@ public class SlidingTileActivityControllerTest {
 
         assertTrue(gameOver);
 
-        int autoLength = saveManager.getLength(SaveManager.auto, SaveManager.slidingTilesName);
-        int permaLength = saveManager.getLength(SaveManager.perma, SaveManager.slidingTilesName);
+        int autoLength = saveManager.getLength(SaveManager.auto);
+        int permaLength = saveManager.getLength(SaveManager.perma);
 
         assertEquals(0, autoLength);
         assertEquals(0, permaLength);
@@ -301,7 +301,7 @@ public class SlidingTileActivityControllerTest {
         Context context = new AppCompatActivity();
         SlidingTilesBoardManager boardManager = slidingTileActivityController.onCreateListener(context);
         SaveManager saveManager = user.getCurrentSaveManager(Account.slidingName);
-        SlidingTilesState state = (SlidingTilesState) saveManager.getLastState(SaveManager.auto, SaveManager.slidingTilesName);
+        SlidingTilesState state = (SlidingTilesState) saveManager.getLastState(SaveManager.auto);
         SlidingTilesBoardManager originalBoardManager = state.getSlidingTilesBoardManager();
 
         assertEquals(originalBoardManager, boardManager);

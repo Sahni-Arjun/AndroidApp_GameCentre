@@ -206,10 +206,10 @@ public class SudokuStartingActivity  extends AppCompatActivity {
         currentAccount.setCurrentGame(gameFile);
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.sudokuName);
 
-        if (currSavManager.getLength(SaveManager.perma, SaveManager.sudokuName) != 0) {
+        if (currSavManager.getLength(SaveManager.perma) != 0) {
             currSavManager.setContinueOrLoad(SaveManager.perma);
-            currSavManager.updateSave(SaveManager.auto, SaveManager.sudokuName);
-            SudokuState prePermaState = (SudokuState) currSavManager.getLastState(SaveManager.perma, SaveManager.sudokuName);
+            currSavManager.updateSave(SaveManager.auto);
+            SudokuState prePermaState = (SudokuState) currSavManager.getLastState(SaveManager.perma);
             SudokuDifficultyActivity.difficulty = prePermaState.getDifficulty();
             Board.numRows = 9;
             Board.numCols = 9;
@@ -233,9 +233,9 @@ public class SudokuStartingActivity  extends AppCompatActivity {
         currentAccount.setCurrentGame(gameFile);
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.sudokuName);
 
-        if (currSavManager.getLength("auto", SaveManager.sudokuName) != 0) {
+        if (currSavManager.getLength("auto") != 0) {
             currSavManager.setContinueOrLoad(SaveManager.auto);
-            SudokuState lastAutoState = (SudokuState) currSavManager.getLastState(SaveManager.auto, SaveManager.sudokuName);
+            SudokuState lastAutoState = (SudokuState) currSavManager.getLastState(SaveManager.auto);
             SudokuDifficultyActivity.difficulty = lastAutoState.getDifficulty();
             Board.numRows = 9;
             Board.numCols = 9;
