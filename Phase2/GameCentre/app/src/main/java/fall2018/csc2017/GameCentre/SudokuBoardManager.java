@@ -232,7 +232,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
     }
 
 
-        void getCorrectTiles(SudokuTreeNode node) {
+        private void getCorrectTiles(SudokuTreeNode node) {
             if (!found) {
                 tiles[node.row][node.col] = new Tile(node.value - 1);
                 node.getChildren();
@@ -251,7 +251,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
 
 
 
-    ArrayList<Integer> getRowBuddies(int i, int j ) {
+    private ArrayList<Integer> getRowBuddies(int i, int j ) {
         ArrayList<Integer> rowBuddies = new ArrayList<>();
         for(int x = 0; x < 9;x++){
             if(x<j){
@@ -261,7 +261,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
         }
         return rowBuddies;
     }
-    ArrayList<Integer> getColBuddies(int i, int j ) {
+    private ArrayList<Integer> getColBuddies(int i, int j ) {
         ArrayList<Integer> colBuddies = new ArrayList<>();
         for (int x = 0; x < 9; x++) {
             if (x < i) {
@@ -272,7 +272,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
         return colBuddies;
     }
 
-    ArrayList<Integer> getSquareBuddies(int i, int j ) {
+    private ArrayList<Integer> getSquareBuddies(int i, int j ) {
         int i3 = (i/3)*3;
         int j3 = (j/3)*3;
         ArrayList<Integer> squareBuddies = new ArrayList<>();
@@ -287,7 +287,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
         return squareBuddies;
     }
 
-    ArrayList<Integer> getAllBuddies(int i, int j ) {
+    private ArrayList<Integer> getAllBuddies(int i, int j ) {
         ArrayList<Integer> allBuddies = new ArrayList<>();
         allBuddies.addAll(getRowBuddies(i,j));
         allBuddies.addAll(getColBuddies(i,j));
@@ -295,7 +295,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
         return allBuddies;
     }
 
-    ArrayList<Integer> getAvailable(int i, int j){
+    private ArrayList<Integer> getAvailable(int i, int j){
         ArrayList<Integer> digits = new ArrayList<>(Arrays.asList(1,2,3,4,5,6,7,8,9));
         ArrayList<Integer> available = new ArrayList<>();
         ArrayList<Integer> buddies = getAllBuddies(i,j);
@@ -322,7 +322,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
      * Checks if all rows correspond to a correct sudoku order
      * @return true iff all rows are correctly written
      */
-    boolean checkRows() {
+    private boolean checkRows() {
         for (int row = 0; row < 9; row ++) {
             if (!this.checkSingleRow(row)) {
                 return false;
@@ -335,7 +335,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
      * Checks if one row correspond to a correct sudoku order
      * @return true iff the row is correctly written
      */
-    boolean checkSingleRow(int row) {
+    private boolean checkSingleRow(int row) {
         List<Integer> rowTiles = new ArrayList<>();
         for (int col = 0; col < 9; col++) {
             int val = this.board.getTile(row, col).getId();
@@ -350,7 +350,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
      * Checks if all cols correspond to a correct sudoku order
      * @return true iff all cols are correctly written
      */
-    boolean checkCols() {
+    private boolean checkCols() {
         for (int col = 0; col < 9; col ++) {
             if (!this.checkSingleCol(col)) {
                 return false;
@@ -363,7 +363,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
      * Checks if one col correspond to a correct sudoku order
      * @return true iff the col is correctly written
      */
-    boolean checkSingleCol(int col) {
+    private boolean checkSingleCol(int col) {
         List<Integer> colTiles = new ArrayList<>();
         for (int row = 0; row < 9; row++) {
             int val = this.board.getTile(row, col).getId();
@@ -378,7 +378,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
      * Checks if all boxes correspond to a correct sudoku order
      * @return true iff all boxes are correctly written
      */
-    boolean checkBoxes() {
+    private boolean checkBoxes() {
         for (int ternaryCol = 0; ternaryCol < 3; ternaryCol ++) {
             for (int ternaryRow = 0; ternaryRow < 3; ternaryRow ++) {
                 if (!checkSubBox(ternaryRow, ternaryCol)) {
@@ -393,7 +393,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
      * Checks if one box correspond to a correct sudoku order
      * @return true iff the box is correctly written
      */
-    boolean checkSubBox(int ternaryRow, int ternaryCol) {
+    private boolean checkSubBox(int ternaryRow, int ternaryCol) {
         List<Integer> tiles = new ArrayList<>();
         for (int r = 0; r < 3; r ++) {
             for (int c = 0; c < 3; c ++) {
@@ -404,7 +404,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
         return checkWithChecker(tiles);
     }
 
-    boolean checkWithChecker(List<Integer> numTiles) {
+    private boolean checkWithChecker(List<Integer> numTiles) {
         if (numTiles.size() != CHECKER.length) {
             return false;
         }
@@ -466,11 +466,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
                 }
             }
         }
-
-        if (boxTiles.contains(value) || rowTiles.contains(value) || colTiles.contains(value)) {
-            return false;
-        }
-        return true;
+        return !(boxTiles.contains(value) || rowTiles.contains(value) || colTiles.contains(value));
     }
 
     /**
