@@ -19,8 +19,12 @@ public class Word extends Board{
      */
     private Letter[][] letters = new Letter[numRows][numCols];
 
-    void setLetters(Letter[][] letters) {
-        this.letters = letters;
+    /**
+     * Set the letters to the given letters.
+     * @param letters letters
+     */
+        void setLetters(Letter[][] letters) {
+            this.letters = letters;
     }
 
     Letter[][] getLetters() {
