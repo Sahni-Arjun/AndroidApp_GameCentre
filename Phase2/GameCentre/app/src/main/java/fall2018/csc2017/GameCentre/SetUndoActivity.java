@@ -1,5 +1,6 @@
 package fall2018.csc2017.GameCentre;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +13,12 @@ import android.widget.Toast;
  * The activity which allows the user to choose number of moves to undo.
  */
 public class SetUndoActivity extends AppCompatActivity {
+    AccountManager accountManager;
+
+    /**
+     * The filesystem.
+     */
+    private FileSystem fileSystem;
 
     /**
      * The number of moves allowed to undo.
@@ -28,11 +35,17 @@ public class SetUndoActivity extends AppCompatActivity {
      */
     private boolean validValue;
 
+    /**
+     * The current context for file reading/writing.
+     */
+    private Context currentContext = this;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_undo);
         addSetUndoButtonListener();
+        this.fileSystem = new FileSystem();
     }
 
     @Override
@@ -49,7 +62,28 @@ public class SetUndoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 fillInSetUndo();
                 if (validValue) {
-                    switchToChoosePicture();
+                    accountManager = fileSystem.loadAccount(currentContext);
+
+                    Board.numCols = SlidingTileComplexityActivity.complexity;
+                    Board.numRows = SlidingTileComplexityActivity.complexity;
+                    SlidingTileStartingActivity.slidingTilesBoardManager = new SlidingTilesBoardManager();
+
+                    Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
+                    SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
+                    currSavManager.wipeSave(SaveManager.auto, SaveManager.slidingTilesName);
+
+                    //Start new game with chosen number of undos
+                    SlidingTilesState newState = new
+                            SlidingTilesState(SlidingTileStartingActivity.slidingTilesBoardManager, 0);
+                    newState.setComplexity(SlidingTileComplexityActivity.complexity);
+                    if (SetUndoActivity.unlimited) {
+                        newState.setUnlimitedUndo();
+                    } else {
+                        newState.setMaxNumMovesUndone(SetUndoActivity.undo);
+                    }
+                    currSavManager.addState(newState, SaveManager.slidingTilesName);
+                    fileSystem.saveAccount(currentContext, accountManager);
+                    switchToGame();
                 }else{
                     Toast.makeText(getApplicationContext(), "Invalid value entered",
                             Toast.LENGTH_SHORT).show();
@@ -59,12 +93,46 @@ public class SetUndoActivity extends AppCompatActivity {
     }
 
     /**
-     * Switch to the SlidingTileChoosePictureActivity to specify new picture.
+     * Switch to the SlidingTileActivity to specify new picture.
      */
-    private void switchToChoosePicture() {
-        Intent tmp = new Intent(this, SlidingTileChoosePictureActivity.class);
-        startActivity(tmp);
+    private void switchToGame() {
+        Intent StartingActivity = new Intent(this, SlidingTileActivity.class);
+        startActivity(StartingActivity);
     }
+
+//    /**
+//     * Activate default tile option button.
+//     */
+//    private void addDefaultButtonListener() {
+//        Button DefaultButton = findViewById(R.id.DefaultButton);
+//        DefaultButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                accountManager = fileSystem.loadAccount(currentContext);
+//
+//                Board.numCols = SlidingTileComplexityActivity.complexity;
+//                Board.numRows = SlidingTileComplexityActivity.complexity;
+//                SlidingTileStartingActivity.slidingTilesBoardManager = new SlidingTilesBoardManager();
+//
+//                Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
+//                SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
+//                currSavManager.wipeSave(SaveManager.auto, SaveManager.slidingTilesName);
+//
+//                //Start new game with chosen number of undos
+//                SlidingTilesState newState = new
+//                        SlidingTilesState(SlidingTileStartingActivity.slidingTilesBoardManager, 0);
+//                newState.setComplexity(SlidingTileComplexityActivity.complexity);
+//                if (SetUndoActivity.unlimited) {
+//                    newState.setUnlimitedUndo();
+//                } else {
+//                    newState.setMaxNumMovesUndone(SetUndoActivity.undo);
+//                }
+//                currSavManager.addState(newState, SaveManager.slidingTilesName);
+//                fileSystem.saveAccount(currentContext, accountManager);
+//                switchToGame();
+//            }
+//        });
+//    }
 
     /**
      * Save the undo value the User specifies.
