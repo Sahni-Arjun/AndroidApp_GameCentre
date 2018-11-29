@@ -56,9 +56,8 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FileSystem fileSystem = new FileSystem();
-        DisplayToast displayToast = new DisplayToast();
         slidingTileActivityController = new SlidingTileActivityController(fileSystem);
-        slidingTilesBoardManager = slidingTileActivityController.onCreateListener((SlidingTileActivity) currentContext);
+        slidingTilesBoardManager = slidingTileActivityController.onCreateListener(currentContext);
         createTileButtons(this);
         setContentView(R.layout.activity_main);
         addSaveButtonListener();

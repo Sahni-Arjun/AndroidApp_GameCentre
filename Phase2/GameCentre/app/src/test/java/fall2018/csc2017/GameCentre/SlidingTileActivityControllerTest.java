@@ -114,7 +114,6 @@ public class SlidingTileActivityControllerTest {
     public void setUp(){
         StartingLoginActivity.currentUser = "Hello";
         setUpAccountWithGame();
-//        SlidingTileActivity.slidingTilesBoardManager = new SlidingTilesBoardManager();
         slidingTileActivityController = new SlidingTileActivityController(
                 new FileSystem() {
                     public AccountManager loadAccount(Context context) {
