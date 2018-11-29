@@ -4,7 +4,6 @@ Controller class.
 package fall2018.csc2017.GameCentre;
 
 import android.content.Context;
-import android.content.Intent;
 
 class SlidingTileActivityController {
     /**
@@ -26,7 +25,7 @@ class SlidingTileActivityController {
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
         String continueOrLoad = currSavManager.getContinueOrLoad();
-        return ((SlidingTilesState) currSavManager.getLastState(continueOrLoad, SaveManager.slidingTilesName)).getSlidingTilesBoardManager();
+        return ((SlidingTilesState) currSavManager.getLastState(continueOrLoad)).getSlidingTilesBoardManager();
     }
 
     boolean undoListener(Context context, SlidingTilesBoardManager slidingTilesBoardManager) {
@@ -56,7 +55,7 @@ class SlidingTileActivityController {
 
         fileSystem.saveAccount(context, accountManager);
 
-        SlidingTilesState prevState = (SlidingTilesState) currSavManager.getLastState(SaveManager.auto, SaveManager.slidingTilesName);
+        SlidingTilesState prevState = (SlidingTilesState) currSavManager.getLastState(SaveManager.auto);
         SlidingTilesBoardManager slidingTilesBoardManager = prevState.getSlidingTilesBoardManager();
         //Saving/Displaying the score if the game is over.
         if (slidingTilesBoardManager.puzzleSolved()) {
@@ -68,8 +67,8 @@ class SlidingTileActivityController {
             fileSystem.saveScoreBoard(context, StartingLoginActivity.SAVE_SLIDING_SCOREBOARD, scoreboard);
 
             accountManager.findUser(StartingLoginActivity.currentUser).setLastPlayedGame(Account.slidingName);
-            currSavManager.wipeSave(SaveManager.auto, SaveManager.slidingTilesName);
-            currSavManager.wipeSave(SaveManager.perma, SaveManager.slidingTilesName);
+            currSavManager.wipeSave(SaveManager.auto);
+            currSavManager.wipeSave(SaveManager.perma);
 
             fileSystem.saveAccount(context, accountManager);
             return true;
@@ -81,7 +80,7 @@ class SlidingTileActivityController {
         accountManager = fileSystem.loadAccount(context);
 
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-        currentAccount.getCurrentSaveManager(Account.slidingName).updateSave(SaveManager.perma, SaveManager.slidingTilesName);
+        currentAccount.getCurrentSaveManager(Account.slidingName).updateSave(SaveManager.perma);
 
         fileSystem.saveAccount(context, accountManager);
     }

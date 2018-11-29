@@ -2,7 +2,6 @@ package fall2018.csc2017.GameCentre;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.Context;
 
 
 public class HangmanActivityController {
@@ -54,7 +53,7 @@ public class HangmanActivityController {
 
         fileSystem.saveAccount(context, accountManager);
 
-        HangmanState prevState = (HangmanState) currSavManager.getLastState(SaveManager.auto, SaveManager.hangmanName);
+        HangmanState prevState = (HangmanState) currSavManager.getLastState(SaveManager.auto);
         WordManager wordManager = prevState.getWordManager();
         //Saving/Displaying the score if the game is over.
         if (wordManager.puzzleSolved()) {
@@ -66,8 +65,8 @@ public class HangmanActivityController {
             fileSystem.saveScoreBoard(context, StartingLoginActivity.SAVE_HANGMAN_SCOREBOARD, scoreboard);
             accountManager.findUser(StartingLoginActivity.currentUser).setLastPlayedGame(Account.hangmanName);
 
-            currSavManager.wipeSave(SaveManager.auto, SaveManager.hangmanName);
-            currSavManager.wipeSave(SaveManager.perma, SaveManager.hangmanName);
+            currSavManager.wipeSave(SaveManager.auto);
+            currSavManager.wipeSave(SaveManager.perma);
             Account user = accountManager.findUser(StartingLoginActivity.currentUser);
 
             user.setLastPlayedGame(Account.hangmanName);
@@ -95,7 +94,7 @@ public class HangmanActivityController {
         accountManager = fileSystem.loadAccount(context);
 
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-        currentAccount.getCurrentSaveManager(Account.hangmanName).updateSave(SaveManager.perma, SaveManager.hangmanName);
+        currentAccount.getCurrentSaveManager(Account.hangmanName).updateSave(SaveManager.perma);
 
         fileSystem.saveAccount(context, accountManager);
     }

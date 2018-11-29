@@ -70,7 +70,7 @@ public class SetUndoActivity extends AppCompatActivity {
 
                     Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
                     SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
-                    currSavManager.wipeSave(SaveManager.auto, SaveManager.slidingTilesName);
+                    currSavManager.wipeSave(SaveManager.auto);
 
                     //Start new game with chosen number of undos
                     SlidingTilesState newState = new
@@ -81,7 +81,7 @@ public class SetUndoActivity extends AppCompatActivity {
                     } else {
                         newState.setMaxNumMovesUndone(SetUndoActivity.undo);
                     }
-                    currSavManager.addState(newState, SaveManager.slidingTilesName);
+                    currSavManager.addState(newState);
                     fileSystem.saveAccount(currentContext, accountManager);
                     switchToGame();
                 }else{

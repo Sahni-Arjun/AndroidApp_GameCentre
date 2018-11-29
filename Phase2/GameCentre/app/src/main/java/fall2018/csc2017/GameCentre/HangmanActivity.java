@@ -52,8 +52,6 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
 
     FileSystem fileSystem;
 
-
-
     /**
      * Set up the background image for each letter based on the master list
      * of positions, and then call the adapter to set the view.

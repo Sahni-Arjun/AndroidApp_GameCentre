@@ -29,14 +29,14 @@ class SudokuActivityController {
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.sudokuName);
         String continueOrLoad = currSavManager.getContinueOrLoad();
         startTime = System.currentTimeMillis();
-        return ((SudokuState)currSavManager.getLastState(continueOrLoad, SaveManager.sudokuName)).getBoardManager();
+        return ((SudokuState)currSavManager.getLastState(continueOrLoad)).getBoardManager();
     }
 
     void onPauseListener(SudokuActivity context){
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(SaveManager.sudokuName);
-        if (currSavManager.getLength(SaveManager.auto, SaveManager.sudokuName) != 0) {
-            SudokuState lastAutoState = (SudokuState) currSavManager.getLastState("auto", SaveManager.sudokuName);
+        if (currSavManager.getLength(SaveManager.auto) != 0) {
+            SudokuState lastAutoState = (SudokuState) currSavManager.getLastState("auto");
             long lastTime = lastAutoState.getTime();
             long newTime = lastTime + System.currentTimeMillis() - startTime;
             lastAutoState.setTime(newTime);
@@ -60,7 +60,7 @@ class SudokuActivityController {
         fileSystem.saveAccount(context, accountManager);
         startTime = System.currentTimeMillis();
 
-        SudokuState prevState = (SudokuState) currSavManager.getLastState(SaveManager.auto, SaveManager.sudokuName);
+        SudokuState prevState = (SudokuState) currSavManager.getLastState(SaveManager.auto);
         SudokuBoardManager sudokuBoardManager = prevState.getBoardManager();
 
         //Saving/Displaying the score if the game is over.
@@ -70,8 +70,8 @@ class SudokuActivityController {
                     currSavManager.getFinalScore(SaveManager.sudokuName)));
             fileSystem.saveScoreBoard(context, StartingLoginActivity.SAVE_SUDOKU_SCOREBOARD, scoreBoard);
             accountManager.findUser(StartingLoginActivity.currentUser).setLastPlayedGame(Account.sudokuName);
-            currSavManager.wipeSave(SaveManager.auto, SaveManager.sudokuName);
-            currSavManager.wipeSave(SaveManager.perma, SaveManager.sudokuName);
+            currSavManager.wipeSave(SaveManager.auto);
+            currSavManager.wipeSave(SaveManager.perma);
             fileSystem.saveAccount(context, accountManager);
             return true;
         }
@@ -84,18 +84,18 @@ class SudokuActivityController {
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(SaveManager.sudokuName);
 
-        boolean canUndo = currSavManager.getLastState("auto", SaveManager.sudokuName).canUndo();
-        SudokuState currentAutoState = (SudokuState) currSavManager.getLastState("auto", SaveManager.sudokuName);
+        boolean canUndo = currSavManager.getLastState("auto").canUndo();
+        SudokuState currentAutoState = (SudokuState) currSavManager.getLastState("auto");
 
-        if ((currSavManager.getLength("auto", SaveManager.sudokuName) != 1) && canUndo) {
+        if ((currSavManager.getLength("auto") != 1) && canUndo) {
             int prevMovesUndone = currentAutoState.getNumMovesUndone();
-            currSavManager.undo(SaveManager.sudokuName);
+            currSavManager.undo();
             SudokuState prevState;
-            prevState = (SudokuState) currSavManager.getLastState("auto", SaveManager.sudokuName);
+            prevState = (SudokuState) currSavManager.getLastState("auto");
 
             Tile[][] prevTiles = prevState.getBoardManager().getBoard().getTiles();
             boardManager.getBoard().setTiles(prevTiles);
-            currSavManager.getLastState("auto", SaveManager.sudokuName).incrementNumMoves(prevMovesUndone);
+            currSavManager.getLastState("auto").incrementNumMoves(prevMovesUndone);
             fileSystem.saveAccount(context, accountManager);
             return true;
         } else {
@@ -108,7 +108,7 @@ class SudokuActivityController {
         accountManager = fileSystem.loadAccount(context);
 
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-        currentAccount.getCurrentSaveManager(SaveManager.sudokuName).updateSave("perma", SaveManager.sudokuName);
+        currentAccount.getCurrentSaveManager(SaveManager.sudokuName).updateSave("perma");
 
         fileSystem.saveAccount(context, accountManager);
     }

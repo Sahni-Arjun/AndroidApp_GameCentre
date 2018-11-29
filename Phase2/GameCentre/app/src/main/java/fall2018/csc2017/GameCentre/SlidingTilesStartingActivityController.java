@@ -43,10 +43,10 @@ class SlidingTilesStartingActivityController {
         currentAccount.setCurrentGame(gameFile);
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
 
-        if (currSavManager.getLength(SaveManager.perma, SaveManager.slidingTilesName) != 0) {
+        if (currSavManager.getLength(SaveManager.perma) != 0) {
             currSavManager.setContinueOrLoad(SaveManager.perma);
-            currSavManager.updateSave(SaveManager.auto, SaveManager.slidingTilesName);
-            SlidingTilesState prePermaState = (SlidingTilesState) currSavManager.getLastState(SaveManager.perma, SaveManager.slidingTilesName);
+            currSavManager.updateSave(SaveManager.auto);
+            SlidingTilesState prePermaState = (SlidingTilesState) currSavManager.getLastState(SaveManager.perma);
             SlidingTileComplexityActivity.complexity = prePermaState.getComplexity();
             Board.numRows = SlidingTileComplexityActivity.complexity;
             Board.numCols = SlidingTileComplexityActivity.complexity;
@@ -70,9 +70,9 @@ class SlidingTilesStartingActivityController {
         currentAccount.setCurrentGame(gameFile);
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
 
-        if (currSavManager.getLength(SaveManager.auto, SaveManager.slidingTilesName) != 0) {
+        if (currSavManager.getLength(SaveManager.auto) != 0) {
             currSavManager.setContinueOrLoad(SaveManager.auto);
-            SlidingTilesState lastAutoState = (SlidingTilesState) currSavManager.getLastState(SaveManager.auto, SaveManager.slidingTilesName);
+            SlidingTilesState lastAutoState = (SlidingTilesState) currSavManager.getLastState(SaveManager.auto);
             SlidingTileComplexityActivity.complexity = lastAutoState.getComplexity();
             Board.numRows = SlidingTileComplexityActivity.complexity;
             Board.numCols = SlidingTileComplexityActivity.complexity;
