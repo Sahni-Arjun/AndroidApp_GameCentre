@@ -131,9 +131,8 @@ class SaveManager implements Serializable {
             } else {
                 return (int) (Math.round((3000 * Math.exp(-(double) numMoves / 100))));
             }
-        }
-        else if (gameType.equals(SaveManager.sudokuName)) {
-            int difficulty = ((SudokuState) getLastState(SaveManager.auto, SaveManager.slidingTilesName)).getDifficulty();
+        } else if (gameType.equals(SaveManager.sudokuName)) {
+            int difficulty = ((SudokuState) getLastState(SaveManager.auto, SaveManager.sudokuName)).getDifficulty();
             long time = ((SudokuState) getLastState(SaveManager.auto, SaveManager.sudokuName)).getTime();
 
             if (difficulty == 1) {
@@ -146,9 +145,7 @@ class SaveManager implements Serializable {
                 // Expecting a completion time of 30 mins
                 return (int) (Math.round((3000 * Math.exp(-(double) (time/1000) / 600))));
             }
-        }
-
-        else { // gameType.equals(SaveManager.hangMan)
+        } else { // gameType.equals(SaveManager.hangMan)
             int complexity = ((HangmanState) getLastState(SaveManager.auto, SaveManager.hangmanName)).getComplexity();
             long numMoves = ((HangmanState) getLastState(SaveManager.auto, SaveManager.hangmanName)).getNumMoves();
 
@@ -193,10 +190,7 @@ class SaveManager implements Serializable {
                     HangmanComplexityActivity.complexity, SetUndoActivity.undo,
                     lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo());
             this.addState(newState, SaveManager.hangmanName);
-        }
-
-        if(gameType.equals(sudokuName)){
-        } else if(gameType.equals(sudokuName)){
+        }else if(gameType.equals(sudokuName)){
             SudokuState lastAutoState = (SudokuState) this.getLastState("auto", SaveManager.sudokuName);
             int numMoves = this.getLength("auto", SaveManager.sudokuName);
             long lastTime = lastAutoState.getTime();
