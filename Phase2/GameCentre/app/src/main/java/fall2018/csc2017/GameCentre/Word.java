@@ -1,6 +1,5 @@
 package fall2018.csc2017.GameCentre;
 
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -13,24 +12,18 @@ public class Word extends Board{
     /**
      * Number of cols
      */
-    public static int numCols; // todo update depending on Kevin's implementation
+    public static int numCols;
 
     /**
      * The letters on the Hangman Word in order
      */
     private Letter[][] letters = new Letter[numRows][numCols];
 
-    void setLetter(int row, int col, Letter letter){
-        letters[row][col] = letter;
-        setChanged();
-        notifyObservers();
-    }
-
-    public void setLetters(Letter[][] letters) {
+    void setLetters(Letter[][] letters) {
         this.letters = letters;
     }
 
-    public Letter[][] getLetters() {
+    Letter[][] getLetters() {
         return letters;
     }
 
@@ -38,37 +31,32 @@ public class Word extends Board{
      * A new word made of letters in order.
      * Precondition: len(letters) == numCols
      *
-     * @param l the letters for the word
+     * @param letters the letters for the word
      */
-    Word(List<Letter> l) {
-
+    Word(List<Letter> letters) {
         for (int i = 0; i < numCols; i++) {
-            this.letters[0][i] = l.get(i);
+            this.letters[0][i] = letters.get(i);
         }
     }
 
     /**
      * Get the letter at a particular position (col)
      */
-    public Letter getLetter(int row, int col) {
-        return this.letters[0][col];  // TODO: adapt to Hangman
+    Letter getLetter(int col) {
+        final int ROW = 0;
+        return this.letters[ROW][col];
     }
 
     /**
      * Update letters containing ASCII code letter to be shown
      */
-
     void updateLetter(int letter) {
-
         for (int pos = 0; pos < Word.numCols; pos++) {
-
             if(letters[0][pos].getId() == letter){
-
                 letters[0][pos].hidden = false;
 
             }
         }
-
         setChanged();
         notifyObservers();
     }
@@ -77,8 +65,6 @@ public class Word extends Board{
      * Update hangman doll
      */
     void updateDoll() {
-
-        // todo update doll background
         setChanged();
         notifyObservers();
     }
