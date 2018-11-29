@@ -65,7 +65,7 @@ class HangmanStartingActivityController {
             String text = new String(buffer);
             words = text.split("\\r?\\n");
             Random rand = new Random();
-            int wordNum = rand.nextInt(900);
+            int wordNum = rand.nextInt(840);
             selectedWord = words[wordNum];
             while(selectedWord.length() != (HangmanComplexityActivity.complexity + 1) ) {
                 rand = new Random();
