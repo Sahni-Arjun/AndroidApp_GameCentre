@@ -21,7 +21,7 @@ class Account implements Serializable {
     /**
      * User's save data.
      */
-    private SaveManager saveManager = new SaveManager();
+//    private SaveManager saveManager = new SaveManager();
 
     private SaveManager[] slidingSaveManager = new SaveManager[3];
     private SaveManager[] hangmanSaveManager = new SaveManager[3];
@@ -67,9 +67,9 @@ class Account implements Serializable {
      *
      * @return the user's save data
      */
-    SaveManager getSaveManager() {
-        return saveManager;
-    }
+//    SaveManager getSaveManager() {
+//        return saveManager;
+//    }
 
     SaveManager getCurrentSaveManager(String gameType){
         if (gameType.equals(Account.slidingName)){
@@ -83,7 +83,7 @@ class Account implements Serializable {
         if (gameType.equals(Account.sudokuName)){
             return sudokuSaveManager[currentGame-1];
         }
-        return saveManager;//TODO remove this.
+        return new SaveManager();//TODO remove this.
     }
 
     /**

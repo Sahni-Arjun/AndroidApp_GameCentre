@@ -63,19 +63,11 @@ class HangmanState extends GameState implements Serializable {
     }
 
     /**
-     * Calculate and return the score based on number of tries used.
+     * Getter for numMoves
      *
-     * @return score of this HangmanState.
+     * @return int numMoves
      */
-    int getScore() { // todo discuss with Kevin
-        if (complexity == 3) {
-            return (int) (Math.round((500 * Math.exp(-(double) numMoves / 35))));
-        } else if (complexity == 4) {
-            return (int) (Math.round((1000 * Math.exp(-(double) numMoves / 20))));
-        } else {
-            return (int) (Math.round((3000 * Math.exp(-(double) numMoves / 100))));
-        }
-    }
+    int getNumMoves() {return numMoves;}
 
     /**
      * Return the complexity of this HangmanState.

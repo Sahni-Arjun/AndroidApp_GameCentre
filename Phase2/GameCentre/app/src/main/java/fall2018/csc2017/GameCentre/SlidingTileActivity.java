@@ -1,3 +1,6 @@
+/*
+View class. No unittest coverage
+ */
 package fall2018.csc2017.GameCentre;
 
 import android.content.Context;
@@ -7,13 +10,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+
 /**
- * The game activity.
+ * The game activity
  */
 public class SlidingTileActivity extends AppCompatActivity implements Observer {
 
@@ -51,9 +56,8 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FileSystem fileSystem = new FileSystem();
-        DisplayToast displayToast = new DisplayToast();
-        slidingTileActivityController = new SlidingTileActivityController(fileSystem, displayToast);
-        slidingTileActivityController.onCreateListener((SlidingTileActivity) currentContext);
+        slidingTileActivityController = new SlidingTileActivityController(fileSystem);
+        slidingTilesBoardManager = slidingTileActivityController.onCreateListener(currentContext);
         createTileButtons(this);
         setContentView(R.layout.activity_main);
         addSaveButtonListener();
@@ -82,21 +86,6 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
     }
 
     /**
-     * Setter method for slidingTilesBoardManager field
-     * @param newBoardManager
-     */
-    void setSlidingTilesBoardManager(SlidingTilesBoardManager newBoardManager) {
-        this.slidingTilesBoardManager = newBoardManager;
-    }
-
-    /**
-     * Getter method for slidingTilesBoardManager field
-     */
-    public SlidingTilesBoardManager getSlidingTilesBoardManager() {
-        return this.slidingTilesBoardManager;
-    }
-
-    /**
      * Activate the save button.
      */
     private void addSaveButtonListener() {
@@ -117,8 +106,11 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
         undoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            slidingTileActivityController.undoListener((SlidingTileActivity) currentContext);
+            boolean maxMoves = slidingTileActivityController.undoListener(currentContext, slidingTilesBoardManager);
             display();
+            if (maxMoves){
+                Toast.makeText(currentContext, "Max moves undone", Toast.LENGTH_SHORT).show();
+            }
             }
         });
     }
@@ -179,8 +171,12 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        slidingTileActivityController.updateGameListener(this);
+        Boolean solved = slidingTileActivityController.updateGameListener(this, slidingTilesBoardManager);
         display();
+        if (solved){
+            Intent tmp = new Intent(this, WinningActivity.class);
+            startActivity(tmp);
+        }
     }
 
 }

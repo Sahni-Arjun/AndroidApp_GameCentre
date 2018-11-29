@@ -62,11 +62,12 @@ class SudokuActivityController {
 
         SudokuState prevState = (SudokuState) currSavManager.getLastState(SaveManager.auto, SaveManager.sudokuName);
         SudokuBoardManager sudokuBoardManager = prevState.getBoardManager();
+
         //Saving/Displaying the score if the game is over.
         if (sudokuBoardManager.puzzleSolved()) {
             Scoreboard scoreBoard = fileSystem.loadScoreboard(context,StartingLoginActivity.SAVE_SUDOKU_SCOREBOARD);
             scoreBoard.addToScoreBoard(scoreBoard.createScore(StartingLoginActivity.currentUser,
-                    prevState.getScore()));
+                    currSavManager.getFinalScore(SaveManager.sudokuName)));
             fileSystem.saveScoreBoard(context, StartingLoginActivity.SAVE_SUDOKU_SCOREBOARD, scoreBoard);
             accountManager.findUser(StartingLoginActivity.currentUser).setLastPlayedGame(Account.sudokuName);
             currSavManager.wipeSave(SaveManager.auto, SaveManager.sudokuName);

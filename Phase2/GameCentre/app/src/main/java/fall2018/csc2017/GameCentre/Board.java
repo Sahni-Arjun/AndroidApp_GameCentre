@@ -30,33 +30,37 @@ public class Board extends Observable implements Serializable, Iterable<Tile> {
 
     Board(){}
 
-    /**
-     * A new board of tiles in row-major order.
-     * Precondition: len(tiles) == numRows * numCols
-     *
-     * @param tiles the tiles for the board
-     */
-    Board(List<Tile> tiles) {
-        populateBoard(tiles);
-        while(!(this.isSolvable())){
-            populateBoard(tiles);
-        }
-    }
+//    /**
+//     * A new board of tiles in row-major order.
+//     * Precondition: len(tiles) == numRows * numCols
+//     *
+//     * @param tiles the tiles for the board
+//     */
+//    Board(List<Tile> tiles) {
+//        populateBoard(tiles);
+//        while(!(this.isSolvable())){
+//            populateBoard(tiles);
+//        }
+//    }
 
-    /**
-     * Populates the board with the given tiles.
-     *
-     * @param tiles the tiles that must be added into the board
-     */
-    private void populateBoard(List<Tile> tiles){
-        Collections.shuffle(tiles);
-        Iterator<Tile> iter = tiles.iterator();
+//    /**
+//     * Populates the board with the given tiles.
+//     *
+//     * @param tiles the tiles that must be added into the board
+//     */
+//    private void populateBoard(List<Tile> tiles){
+//        Collections.shuffle(tiles);
+//        Iterator<Tile> iter = tiles.iterator();
+//
+//        for (int row = 0; row != Board.numRows; row++) {
+//            for (int col = 0; col != Board.numCols; col++) {
+//                this.tiles[row][col] = iter.next();
+//            }
+//        }
+//    }
 
-        for (int row = 0; row != Board.numRows; row++) {
-            for (int col = 0; col != Board.numCols; col++) {
-                this.tiles[row][col] = iter.next();
-            }
-        }
+    public void setTile(int row, int col, Tile tile){
+        this.tiles[row][col] = tile;
     }
 
     public void setTiles(Tile[][] tiles) {
@@ -87,20 +91,25 @@ public class Board extends Observable implements Serializable, Iterable<Tile> {
         return tiles[row][col];
     }
 
-    /**
-     * Swap the tiles at (row1, col1) and (row2, col2)
-     *
-     * @param row1 the first tile row
-     * @param col1 the first tile col
-     * @param row2 the second tile row
-     * @param col2 the second tile col
-     */
-    void swapTiles(int row1, int col1, int row2, int col2) {
-        // Creating a temporary variable to save the value of the first Tile.
-        Tile tempTile = tiles[row1][col1];
-        tiles[row1][col1] = tiles[row2][col2];
-        tiles[row2][col2] = tempTile;
+//    /**
+//     * Swap the tiles at (row1, col1) and (row2, col2)
+//     *
+//     * @param row1 the first tile row
+//     * @param col1 the first tile col
+//     * @param row2 the second tile row
+//     * @param col2 the second tile col
+//     */
+//    void swapTiles(int row1, int col1, int row2, int col2) {
+//        // Creating a temporary variable to save the value of the first Tile.
+//        Tile tempTile = tiles[row1][col1];
+//        tiles[row1][col1] = tiles[row2][col2];
+//        tiles[row2][col2] = tempTile;
+//
+//        setChanged();
+//        notifyObservers();
+//    }
 
+    void change(){
         setChanged();
         notifyObservers();
     }
@@ -112,60 +121,60 @@ public class Board extends Observable implements Serializable, Iterable<Tile> {
                 '}';
     }
 
-    /**
-     * Return whether or not the current board is solvable.
-     * The board is said to be solvable if:
-     * 1. If the numRows is odd, then the #inversions is even.
-     * 2. If the numRows is even, and the blank is on an even row, then #inversions is odd.
-     * 3. If the numRows is even, and the blank is on an odd row, then #inversions is even.
-     * The blank row must be counted from the bottom (second-last, fourth-last etc)
-     * <p>
-     * Taken from : https://www.cs.bham.ac.uk/~mdr/teaching/modules04/java2/TilesSolvability.html
-     *
-     * @return whether or not the board is solvable
-     */
-    boolean isSolvable() {
-        int blankTileId = numRows * numCols;
-        int numInversions = 0;
-        int blankTileRow = 0;
-
-        boolean isSolvable;
-
-        // TODO Maybe find a neater way to iterate through the remaining tiles?
-        for (int row = 0; row < numRows; row++) {
-            for (int col = 0; col < numCols; col++) {
-                Tile currTile = tiles[row][col];
-                // Do not count the inversions on blank tiles
-                if (currTile.getId() != blankTileId) {
-                    // Iterate through each subsequent tiles
-                    for (int subRow = row; subRow < numRows; subRow++) {
-                        // TODO Pretty messy, probably change?
-                        // If the current row isn't the starting row, the col must start at 0
-                        int startCol = 0;
-                        if(subRow == row){
-                            startCol = col;
-                        }
-                        for (int subCol = startCol; subCol < numCols; subCol++) {
-                            Tile subTile = tiles[subRow][subCol];
-                            // Inversions are possible when the nxt tile is less than the curr tile
-                            if (currTile.getId() > subTile.getId()) {
-                                numInversions++;
-                            }
-                        }
-                    }
-                } else {
-                    // Must get the row counting from the bottom
-                    blankTileRow = numRows - row;
-                }
-            }
-        }
-
-        // Formatted version of the condition from above
-        isSolvable = ((numRows % 2 != 0 && numInversions % 2 == 0)) ||
-                (numRows % 2 == 0) && ((blankTileRow % 2 != 0) == (numInversions % 2 == 0));
-
-        return isSolvable;
-    }
+//    /**
+//     * Return whether or not the current board is solvable.
+//     * The board is said to be solvable if:
+//     * 1. If the numRows is odd, then the #inversions is even.
+//     * 2. If the numRows is even, and the blank is on an even row, then #inversions is odd.
+//     * 3. If the numRows is even, and the blank is on an odd row, then #inversions is even.
+//     * The blank row must be counted from the bottom (second-last, fourth-last etc)
+//     * <p>
+//     * Taken from : https://www.cs.bham.ac.uk/~mdr/teaching/modules04/java2/TilesSolvability.html
+//     *
+//     * @return whether or not the board is solvable
+//     */
+//    boolean isSolvable() {
+//        int blankTileId = numRows * numCols;
+//        int numInversions = 0;
+//        int blankTileRow = 0;
+//
+//        boolean isSolvable;
+//
+//        // TODO Maybe find a neater way to iterate through the remaining tiles?
+//        for (int row = 0; row < numRows; row++) {
+//            for (int col = 0; col < numCols; col++) {
+//                Tile currTile = tiles[row][col];
+//                // Do not count the inversions on blank tiles
+//                if (currTile.getId() != blankTileId) {
+//                    // Iterate through each subsequent tiles
+//                    for (int subRow = row; subRow < numRows; subRow++) {
+//                        // TODO Pretty messy, probably change?
+//                        // If the current row isn't the starting row, the col must start at 0
+//                        int startCol = 0;
+//                        if(subRow == row){
+//                            startCol = col;
+//                        }
+//                        for (int subCol = startCol; subCol < numCols; subCol++) {
+//                            Tile subTile = tiles[subRow][subCol];
+//                            // Inversions are possible when the nxt tile is less than the curr tile
+//                            if (currTile.getId() > subTile.getId()) {
+//                                numInversions++;
+//                            }
+//                        }
+//                    }
+//                } else {
+//                    // Must get the row counting from the bottom
+//                    blankTileRow = numRows - row;
+//                }
+//            }
+//        }
+//
+//        // Formatted version of the condition from above
+//        isSolvable = ((numRows % 2 != 0 && numInversions % 2 == 0)) ||
+//                (numRows % 2 == 0) && ((blankTileRow % 2 != 0) == (numInversions % 2 == 0));
+//
+//        return isSolvable;
+//    }
 
     /**
      * Return an iterator for Tiles in this Board.

@@ -1,3 +1,6 @@
+/*
+Viewer class. No unittest needed
+ */
 package fall2018.csc2017.GameCentre;
 
 import android.content.Intent;
@@ -56,6 +59,7 @@ public class SudokuDifficultyActivity extends AppCompatActivity {
             public void onClick(View v) {
                 difficulty = 1;
                 sCon.startGame(currentContext, difficulty);
+                switchToSudoku();
             }
         });
     }
