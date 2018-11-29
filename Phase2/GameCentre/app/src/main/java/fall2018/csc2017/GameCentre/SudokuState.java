@@ -77,24 +77,6 @@ class SudokuState extends GameState implements Serializable {
     }
 
     /**
-     * Calculate and return the score based on number of moves taken.
-     *
-     * @return score of this SudokuState.
-     */
-    int getScore() {
-        if (difficulty == 1) {
-            // Expecting a completion time of 2 mins
-            return (int) (Math.round((500 * Math.exp(-(double) (time/1000) / 100))));
-        } else if (difficulty == 2) {
-            // Expecting a completion time of 15 mins
-            return (int) (Math.round((1000 * Math.exp(-(double) (time/1000) / 400))));
-        } else {
-            // Expecting a completion time of 30 mins
-            return (int) (Math.round((3000 * Math.exp(-(double) (time/1000) / 600))));
-        }
-    }
-
-    /**
      * Return the difficulty of this SudokuState.
      *
      * @return the difficulty.
