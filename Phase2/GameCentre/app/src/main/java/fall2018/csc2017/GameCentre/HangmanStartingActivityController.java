@@ -81,7 +81,7 @@ class HangmanStartingActivityController {
         currentAccount.setCurrentGame(gameFile);
 
 
-        SaveManager currSavManager = currentAccount.getSaveManager();
+        SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.hangmanName);
         currSavManager.wipeSave(SaveManager.auto, SaveManager.hangmanName);
 
         //Start new game with chosen number of undoes // todo discuss with group
@@ -108,7 +108,7 @@ class HangmanStartingActivityController {
         accountManager = fileSystem.loadAccount(context);
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         currentAccount.setCurrentGame(gameFile);
-        SaveManager currSavManager = currentAccount.getSaveManager();
+        SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.hangmanName);
 
         if (currSavManager.getLength("perma", SaveManager.hangmanName) != 0) {
             HangmanStartingActivity.wordManager = ((HangmanState) currSavManager.getLastState("perma", SaveManager.hangmanName)).getWordManager();

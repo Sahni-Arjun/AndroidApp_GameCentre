@@ -67,9 +67,9 @@ class Account implements Serializable {
      *
      * @return the user's save data
      */
-    SaveManager getSaveManager() {
-        return saveManager;
-    }
+//    SaveManager getSaveManager() {
+//        return saveManager;
+//    }
 
     SaveManager getCurrentSaveManager(String gameType){
         if (gameType.equals(Account.slidingName)){
