@@ -1,3 +1,6 @@
+/*
+View class. No unittest coverage
+ */
 package fall2018.csc2017.GameCentre;
 
 import android.content.Context;
@@ -12,8 +15,9 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+
 /**
- * The game activity.
+ * The game activity
  */
 public class SlidingTileActivity extends AppCompatActivity implements Observer {
 

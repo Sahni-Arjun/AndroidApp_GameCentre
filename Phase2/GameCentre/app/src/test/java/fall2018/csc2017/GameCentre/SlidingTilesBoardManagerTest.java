@@ -90,7 +90,7 @@ public class SlidingTilesBoardManagerTest {
          * 8 5 6
          */
 
-        slidingTilesBoardManager.getBoard().swapTiles(0, 0, 0, 1);
+        slidingTilesBoardManager.swapTiles(0, 0, 0, 1);
         boardManager = new SlidingTilesBoardManager();
         board = new Board();
         board.setTiles(deepCopy(slidingTilesBoardManager.getBoard().getTiles()));
@@ -102,7 +102,7 @@ public class SlidingTilesBoardManagerTest {
          * 8 5 6
          */
 
-        slidingTilesBoardManager.getBoard().swapTiles(0, 1, 1, 1);
+        slidingTilesBoardManager.swapTiles(0, 1, 1, 1);
         boardManager = new SlidingTilesBoardManager();
         board = new Board();
         board.setTiles(deepCopy(slidingTilesBoardManager.getBoard().getTiles()));

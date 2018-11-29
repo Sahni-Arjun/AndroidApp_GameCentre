@@ -1,3 +1,6 @@
+/*
+Controller class.
+ */
 package fall2018.csc2017.GameCentre;
 
 import android.content.Context;
@@ -67,7 +70,7 @@ class SlidingTileActivityController{
             Scoreboard scoreboard = fileSystem.loadScoreboard(context, StartingLoginActivity.SAVE_SLIDING_SCOREBOARD);
 
             scoreboard.addToScoreBoard(scoreboard.createScore(StartingLoginActivity.currentUser,
-                    prevState.getScore()));
+                    currSavManager.getFinalScore(SaveManager.slidingTilesName)));
 
             fileSystem.saveScoreBoard(context, StartingLoginActivity.SAVE_SLIDING_SCOREBOARD, scoreboard);
 

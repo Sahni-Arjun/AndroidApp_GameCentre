@@ -53,10 +53,12 @@ class SlidingTilesBoardManager extends BoardManager implements Serializable {
             tiles.add(new SlidingTilesTile(tileNum));
         }
         Collections.shuffle(tiles);
-        this.board = new Board(tiles);
-        while (!this.board.isSolvable()){
+        this.board = new Board();
+        populateBoard(tiles);
+        while (!this.isSolvable()){
             Collections.shuffle(tiles);
-            this.board = new Board(tiles);
+            populateBoard(tiles);
+//            this.board = new Board(tiles);
         }
     }
 
@@ -126,7 +128,97 @@ class SlidingTilesBoardManager extends BoardManager implements Serializable {
                     }
                 }
             }
-            board.swapTiles(row, col, rowId, colId);
+            swapTiles(row, col, rowId, colId);
+        }
+    }
+
+    /**
+     * Return whether or not the current board is solvable.
+     * The board is said to be solvable if:
+     * 1. If the numRows is odd, then the #inversions is even.
+     * 2. If the numRows is even, and the blank is on an even row, then #inversions is odd.
+     * 3. If the numRows is even, and the blank is on an odd row, then #inversions is even.
+     * The blank row must be counted from the bottom (second-last, fourth-last etc)
+     * <p>
+     * Taken from : https://www.cs.bham.ac.uk/~mdr/teaching/modules04/java2/TilesSolvability.html
+     *
+     * @return whether or not the board is solvable
+     */
+    private boolean isSolvable() {
+        int blankTileId = Board.numRows * Board.numCols;
+        int numInversions = 0;
+        int blankTileRow = 0;
+
+        boolean isSolvable;
+
+        // TODO Maybe find a neater way to iterate through the remaining tiles?
+        for (int row = 0; row < Board.numRows; row++) {
+            for (int col = 0; col < Board.numCols; col++) {
+                Tile currTile = board.getTile(row, col);
+                // Do not count the inversions on blank tiles
+                if (currTile.getId() != blankTileId) {
+                    // Iterate through each subsequent tiles
+                    for (int subRow = row; subRow < Board.numRows; subRow++) {
+                        // TODO Pretty messy, probably change?
+                        // If the current row isn't the starting row, the col must start at 0
+                        int startCol = 0;
+                        if(subRow == row){
+                            startCol = col;
+                        }
+                        for (int subCol = startCol; subCol < Board.numCols; subCol++) {
+                            Tile subTile = board.getTile(subRow, subCol);
+                            // Inversions are possible when the nxt tile is less than the curr tile
+                            if (currTile.getId() > subTile.getId()) {
+                                numInversions++;
+                            }
+                        }
+                    }
+                } else {
+                    // Must get the row counting from the bottom
+                    blankTileRow = Board.numRows - row;
+                }
+            }
+        }
+
+        // Formatted version of the condition from above
+        isSolvable = ((Board.numRows % 2 != 0 && numInversions % 2 == 0)) ||
+                (Board.numRows % 2 == 0) && ((blankTileRow % 2 != 0) == (numInversions % 2 == 0));
+
+        return isSolvable;
+    }
+
+    /**
+     * Swap the tiles at (row1, col1) and (row2, col2)
+     *
+     * @param row1 the first tile row
+     * @param col1 the first tile col
+     * @param row2 the second tile row
+     * @param col2 the second tile col
+     */
+    void swapTiles(int row1, int col1, int row2, int col2) {
+        // Creating a temporary variable to save the value of the first Tile.
+        Tile[][] tiles = board.getTiles();
+        Tile tempTile = tiles[row1][col1];
+        tiles[row1][col1] = tiles[row2][col2];
+        tiles[row2][col2] = tempTile;
+
+        board.change();
+    }
+
+    /**
+     * Populates the board with the given tiles.
+     *
+     * @param tiles the tiles that must be added into the board
+     */
+    private void populateBoard(List<Tile> tiles){
+        Collections.shuffle(tiles);
+        Iterator<Tile> iter = tiles.iterator();
+
+        for (int row = 0; row != Board.numRows; row++) {
+            for (int col = 0; col != Board.numCols; col++) {
+                board.setTile(row, col, iter.next());
+//                tiles[row][col] = iter.next();
+            }
         }
     }
 }

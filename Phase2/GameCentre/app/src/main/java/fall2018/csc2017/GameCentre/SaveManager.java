@@ -114,6 +114,54 @@ class SaveManager implements Serializable {
         }
     }
 
+    /**
+     * Calculate and return the score based on number of moves taken.
+     *
+     * @return score of this SlidingTilesState.
+     */
+    int getFinalScore(String gameType) {
+        if (gameType.equals(SaveManager.slidingTilesName)) {
+            int complexity = ((SlidingTilesState) getLastState(SaveManager.auto, SaveManager.slidingTilesName)).getComplexity();
+            int numMoves = ((SlidingTilesState) getLastState(SaveManager.auto, SaveManager.slidingTilesName)).getNumMoves();
+
+            if (complexity == 3) {
+                return (int) (Math.round((500 * Math.exp(-(double) numMoves / 35))));
+            } else if (complexity == 4) {
+                return (int) (Math.round((1000 * Math.exp(-(double) numMoves / 20))));
+            } else {
+                return (int) (Math.round((3000 * Math.exp(-(double) numMoves / 100))));
+            }
+        }
+        else if (gameType.equals(SaveManager.sudokuName)) {
+            int difficulty = ((SudokuState) getLastState(SaveManager.auto, SaveManager.slidingTilesName)).getDifficulty();
+            long time = ((SudokuState) getLastState(SaveManager.auto, SaveManager.sudokuName)).getTime();
+
+            if (difficulty == 1) {
+                // Expecting a completion time of 2 mins
+                return (int) (Math.round((500 * Math.exp(-(double) (time/1000) / 100))));
+            } else if (difficulty == 2) {
+                // Expecting a completion time of 15 mins
+                return (int) (Math.round((1000 * Math.exp(-(double) (time/1000) / 400))));
+            } else {
+                // Expecting a completion time of 30 mins
+                return (int) (Math.round((3000 * Math.exp(-(double) (time/1000) / 600))));
+            }
+        }
+
+        else { // gameType.equals(SaveManager.hangMan)
+            int complexity = ((HangmanState) getLastState(SaveManager.auto, SaveManager.hangmanName)).getComplexity();
+            long numMoves = ((HangmanState) getLastState(SaveManager.auto, SaveManager.hangmanName)).getNumMoves();
+
+            if (complexity == 3) {
+                return (int) (Math.round((500 * Math.exp(-(double) numMoves / 35))));
+            } else if (complexity == 4) {
+                return (int) (Math.round((1000 * Math.exp(-(double) numMoves / 20))));
+            } else {
+                return (int) (Math.round((3000 * Math.exp(-(double) numMoves / 100))));
+            }
+        }
+    }
+
     void updateState(String gameType, BoardManager boardManager){
         if (gameType.equals(slidingTilesName)){
             SlidingTilesState lastAutoState = (SlidingTilesState) this.getLastState("auto", SaveManager.slidingTilesName);
