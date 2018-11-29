@@ -133,7 +133,7 @@ class SaveManager implements Serializable {
             }
         }
         else if (gameType.equals(SaveManager.sudokuName)) {
-            int difficulty = ((SudokuState) getLastState(SaveManager.auto, SaveManager.slidingTilesName)).getDifficulty();
+            int difficulty = ((SudokuState) getLastState(SaveManager.auto, SaveManager.sudokuName)).getDifficulty();
             long time = ((SudokuState) getLastState(SaveManager.auto, SaveManager.sudokuName)).getTime();
 
             if (difficulty == 1) {
@@ -195,8 +195,7 @@ class SaveManager implements Serializable {
             this.addState(newState, SaveManager.hangmanName);
         }
 
-        if(gameType.equals(sudokuName)){
-        } else if(gameType.equals(sudokuName)){
+        else if(gameType.equals(sudokuName)){
             SudokuState lastAutoState = (SudokuState) this.getLastState("auto", SaveManager.sudokuName);
             int numMoves = this.getLength("auto", SaveManager.sudokuName);
             long lastTime = lastAutoState.getTime();
