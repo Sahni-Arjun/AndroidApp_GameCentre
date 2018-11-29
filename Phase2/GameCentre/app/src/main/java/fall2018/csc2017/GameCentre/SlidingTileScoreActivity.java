@@ -22,7 +22,7 @@ public class SlidingTileScoreActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sliding_tile_score);
-        SlidingTileScoreActivityController controller = new SlidingTileScoreActivityController();
+        SlidingTileScoreActivityController controller = new SlidingTileScoreActivityController(new FileSystem());
         StringBuilder slidingTileScoreboard =  controller.onCreateListener(this);
         TextView slidingTileScores = findViewById(R.id.sldingTilesScores);
         slidingTileScores.setText(slidingTileScoreboard);
