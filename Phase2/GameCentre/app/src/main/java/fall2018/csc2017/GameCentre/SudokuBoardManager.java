@@ -38,7 +38,12 @@ class SudokuBoardManager extends BoardManager implements Serializable {
     public SudokuBoard getBoard() {
         return board;
     }
-
+    /**
+     * return the current tiles
+     */
+    public Tile[][] getTiles(){
+        return this.tiles;
+    }
     /**
      * Set a new board.
      *
