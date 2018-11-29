@@ -228,6 +228,9 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
             switchToWinning();
         }
     }
+    void setSudokuBoardManager(SudokuBoardManager newBoardManager) {
+        this.boardManager = newBoardManager;
+    }
 
     /**
      * Switch to the SlidingTileActivity view to play the game.

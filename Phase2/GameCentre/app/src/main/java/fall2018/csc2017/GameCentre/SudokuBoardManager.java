@@ -40,6 +40,16 @@ class SudokuBoardManager extends BoardManager implements Serializable {
     }
 
     /**
+     * set the tiles of the boardmanager
+     */
+    public void setTiles(Tile[][] tiles){ this.tiles = tiles;}
+    /**
+     * return the current tiles
+     */
+    public Tile[][] getTiles(){
+        return this.tiles;
+    }
+    /**
      * Set a new board.
      *
      * @param newBoard a new board
@@ -173,7 +183,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
 
 
 
-    private void createSolvedBoard(){
+    void createSolvedBoard(){
         ArrayList<Integer> digits = new ArrayList<>(Arrays.asList(1,2,3,4,5,6,7,8,9));
         Collections.shuffle(digits);
         int randomNumber = digits.get(0);
@@ -197,6 +207,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
 
 
         }
+
 
         void getChildren() {
             int nRow;
@@ -455,11 +466,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
                 }
             }
         }
-
-        if (boxTiles.contains(value) || rowTiles.contains(value) || colTiles.contains(value)) {
-            return false;
-        }
-        return true;
+        return !(boxTiles.contains(value) || rowTiles.contains(value) || colTiles.contains(value));
     }
 
     /**
