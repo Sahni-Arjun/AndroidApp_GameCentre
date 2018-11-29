@@ -38,6 +38,11 @@ class SudokuBoardManager extends BoardManager implements Serializable {
     public SudokuBoard getBoard() {
         return board;
     }
+
+    /**
+     * set the tiles of the boardmanager
+     */
+    public void setTiles(Tile[][] tiles){ this.tiles = tiles;}
     /**
      * return the current tiles
      */
@@ -202,6 +207,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
 
 
         }
+
 
         void getChildren() {
             int nRow;
