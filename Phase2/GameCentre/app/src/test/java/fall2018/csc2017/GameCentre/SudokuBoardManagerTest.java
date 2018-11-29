@@ -6,10 +6,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNotSame;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
@@ -155,42 +157,42 @@ public class SudokuBoardManagerTest {
         user.setCurrentGame(1);
         SaveManager saveManager = user.getCurrentSaveManager(Account.slidingName);
 
-        SudokuBoardManager boardManager = new SudokuBoardManager();
-        SudokuBoard board = new SudokuBoard();
-        board.setTiles(deepCopy(boardManager.getBoard().getTiles()));
-        boardManager.setBoard(board);
-
-        SudokuState sudokuState1 = new SudokuState(boardManager, 0, 1, 0, 0, true,0);
-        saveManager.addState(sudokuState1, SaveManager.sudokuName);
-        /**
-         * 9 1 3
-         * 2 7 4
-         * 8 5 6
-         */
-
-        boardManager.getBoard().swapTiles(0, 0, 0, 1);
-        boardManager = new SudokuBoardManager();
-        board = new SudokuBoard();
-        board.setTiles(deepCopy(boardManager.getBoard().getTiles()));
-        boardManager.setBoard(board);
-        saveManager.updateState(SaveManager.slidingTilesName, boardManager);
-        /**
-         * 1 9 3
-         * 2 7 4
-         * 8 5 6
-         */
-
-        boardManager.getBoard().swapTiles(0, 1, 1, 1);
-        boardManager = new SudokuBoardManager();
-        board = new SudokuBoard();
-        board.setTiles(deepCopy(boardManager.getBoard().getTiles()));
-        boardManager.setBoard(board);
-        saveManager.updateState(SaveManager.slidingTilesName, boardManager);
-        /**
-         * 1 7 3
-         * 2 9 4
-         * 8 5 6
-         */
+//        SudokuBoardManager boardManager = new SudokuBoardManager();
+//        SudokuBoard board = new SudokuBoard();
+//        board.setTiles(deepCopy(boardManager.getBoard().getTiles()));
+//        boardManager.setBoard(board);
+//
+//        SudokuState sudokuState1 = new SudokuState(boardManager, 0, 1, 0, 0, true,0);
+//        saveManager.addState(sudokuState1, SaveManager.sudokuName);
+//        /**
+//         * 9 1 3
+//         * 2 7 4
+//         * 8 5 6
+//         */
+//
+//        boardManager.getBoard().swapTiles(0, 0, 0, 1);
+//        boardManager = new SudokuBoardManager();
+//        board = new SudokuBoard();
+//        board.setTiles(deepCopy(boardManager.getBoard().getTiles()));
+//        boardManager.setBoard(board);
+//        saveManager.updateState(SaveManager.slidingTilesName, boardManager);
+//        /**
+//         * 1 9 3
+//         * 2 7 4
+//         * 8 5 6
+//         */
+//
+//        boardManager.getBoard().swapTiles(0, 1, 1, 1);
+//        boardManager = new SudokuBoardManager();
+//        board = new SudokuBoard();
+//        board.setTiles(deepCopy(boardManager.getBoard().getTiles()));
+//        boardManager.setBoard(board);
+//        saveManager.updateState(SaveManager.slidingTilesName, boardManager);
+//        /**
+//         * 1 7 3
+//         * 2 9 4
+//         * 8 5 6
+//         */
     }
     private int numBlankTile(Tile[][] tiles, int i, int j) {
         ArrayList<Tile> blankTile = new ArrayList<>();
@@ -281,173 +283,194 @@ public class SudokuBoardManagerTest {
             assertTrue(correct);
         }
     }
-    @Test
-    public void getRowBuddiesTest() {
-        SudokuBoardManager manager = new SudokuBoardManager();
-        Tile[][] tiles = makeTiles();
-        manager.setTiles(tiles);
-        ArrayList<Integer> values = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
-            values.add(tiles[0][i].getId());
-        }
-        boolean correct = true;
-        ArrayList<Integer> buddies = manager.getRowBuddies(0, 8);
-        for (Integer x : values) {
-            if (!buddies.contains(x)) {
-                correct = false;
-            }
-            for (Integer y : buddies) {
-                if (!values.contains(y)) {
-                    correct = false;
-                }
-            }
-        }
-        assertTrue(correct);
-    }
-
-    @Test
-    public void getColBuddiesTest(){
-        SudokuBoardManager manager = new SudokuBoardManager();
-        Tile[][] tiles = makeTiles();
-        manager.setTiles(tiles);
-        ArrayList<Integer> values = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
-            values.add(tiles[1][0].getId());
-        }
-        boolean correct = true;
-        ArrayList<Integer> buddies = manager.getColBuddies(8, 0);
-        for (Integer x : values) {
-            if (!buddies.contains(x)) {
-                correct = false;
-            }
-            for (Integer y : buddies) {
-                if (!values.contains(y)) {
-                    correct = false;
-                }
-            }
-        }
-        assertTrue(correct);
-    }
-
-    @Test
-    public void getSquareBuddiesTest() {
-        SudokuBoardManager manager = new SudokuBoardManager();
-        Tile[][] tiles = makeTiles();
-        manager.setTiles(tiles);
-        ArrayList<Integer> values = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            for(int j = 0;j<2;j++){
-                values.add(tiles[i][j].getId());
-            }
-
-        }
-        boolean correct = true;
-        ArrayList<Integer> buddies = manager.getSquareBuddies(2, 2);
-        for (Integer x : values) {
-            if (!buddies.contains(x)) {
-                correct = false;
-            }
-        }
-            for (Integer y : buddies) {
-                if (!values.contains(y)) {
-                    correct = false;
-                }
-            }
-            assertTrue(correct);
-        }
-
-
-    @Test
-    public void getAllBuddiesTest() {
-
-    }
-
-
-
-
-//    //TODO: complexity set up in setup
 //    @Test
-//    public void slidingTiles4x4BoardManagerConstructorTest() {
-//        SlidingTileComplexityActivity.complexity = 4;
-//        SlidingTilesBoardManager boardManager = new SlidingTilesBoardManager();
-//        Board board = boardManager.getBoard();
-//        // Test if the number of tiles is 9 when the complexity is 3
-//        assertEquals(String.format("Expected %d to be equal to %d", 16, board.numTiles()), 16, board.numTiles());
-//        List<Integer> tileNums = new ArrayList<>();
-//        for (Tile tile: board) {
-//            tileNums.add(tile.getId());
+//    public void getRowBuddiesTest() {
+//        SudokuBoardManager manager = new SudokuBoardManager();
+//        Tile[][] tiles = makeTiles();
+//        manager.setTiles(tiles);
+//        ArrayList<Integer> values = new ArrayList<>();
+//        for (int i = 0; i < 8; i++) {
+//            values.add(tiles[0][i].getId());
 //        }
-//        Collections.sort(tileNums);
-//        List<Integer> listOfAllNumbers = new ArrayList<>();
-//        for (int i = 1; i < 17; i++) {
-//            listOfAllNumbers.add(i);
+//        boolean correct = true;
+//        ArrayList<Integer> buddies = manager.getRowBuddies(0, 8);
+//        for (Integer x : values) {
+//            if (!buddies.contains(x)) {
+//                correct = false;
+//            }
+//            for (Integer y : buddies) {
+//                if (!values.contains(y)) {
+//                    correct = false;
+//                }
+//            }
 //        }
-//        assertEquals(String.format("Expected %s to be equal to %s", listOfAllNumbers.toString(), tileNums.toString()), tileNums, listOfAllNumbers);
+//        assertTrue(correct);
 //    }
 //
 //    @Test
-//    public void slidingTiles5x5BoardManagerConstructorTest() {
-//        SlidingTileComplexityActivity.complexity = 5;
-//        SlidingTilesBoardManager boardManager = new SlidingTilesBoardManager();
-//        Board board = boardManager.getBoard();
-//        // Test if the number of tiles is 16 when
-//        assertEquals(String.format("Expected %d to be equal to %d", 25, board.numTiles()), 25, board.numTiles());
-//        List<Integer> tileNums = new ArrayList<>();
-//        for (Tile tile: board) {
-//            tileNums.add(tile.getId());
+//    public void getColBuddiesTest(){
+//        SudokuBoardManager manager = new SudokuBoardManager();
+//        Tile[][] tiles = makeTiles();
+//        manager.setTiles(tiles);
+//        ArrayList<Integer> values = new ArrayList<>();
+//        for (int i = 0; i < 8; i++) {
+//            values.add(tiles[1][0].getId());
 //        }
-
-//        Collections.sort(tileNums);
-//        List<Integer> listOfAllNumbers = new ArrayList<>();
-//        for (int i = 1; i < 26; i++) {
-//            listOfAllNumbers.add(i);
+//        boolean correct = true;
+//        ArrayList<Integer> buddies = manager.getColBuddies(8, 0);
+//        for (Integer x : values) {
+//            if (!buddies.contains(x)) {
+//                correct = false;
+//            }
+//            for (Integer y : buddies) {
+//                if (!values.contains(y)) {
+//                    correct = false;
+//                }
+//            }
 //        }
-//        assertEquals(String.format("Expected %s to be equal to %s", listOfAllNumbers.toString(), tileNums.toString()), tileNums, listOfAllNumbers);
+//        assertTrue(correct);
+//    }
+//
+//    @Test
+//    public void getSquareBuddiesTest() {
+//        SudokuBoardManager manager = new SudokuBoardManager();
+//        Tile[][] tiles = makeTiles();
+//        manager.setTiles(tiles);
+//        ArrayList<Integer> values = new ArrayList<>();
+//        for (int i = 0; i < 3; i++) {
+//            for(int j = 0;j<2;j++){
+//                values.add(tiles[i][j].getId());
+//            }
+//
+//        }
+//        boolean correct = true;
+//        ArrayList<Integer> buddies = manager.getSquareBuddies(2, 2);
+//        for (Integer x : values) {
+//            if (!buddies.contains(x)) {
+//                correct = false;
+//            }
+//        }
+//            for (Integer y : buddies) {
+//                if (!values.contains(y)) {
+//                    correct = false;
+//                }
+//            }
+//            assertTrue(correct);
+//        }
+//
+//
+//    @Test
+//    public void getAllBuddiesTest() {
+//
 //    }
 
-
-    // is valid tap
-    // one valid tap
-    // one invalid tap
     @Test
-    public void isValidTapTrueTest() {
-        assertTrue(slidingTilesBoardManager.isValidTap(1));
-        assertTrue(slidingTilesBoardManager.isValidTap(3));
-        assertTrue(slidingTilesBoardManager.isValidTap(5));
-        assertTrue(slidingTilesBoardManager.isValidTap(7));
+    public void getAvailableBlankTest() {
+        Tile [][] tiles = makeBlankTiles();
+        final ArrayList<Integer> expected = new ArrayList<>(Arrays.asList(1,2,3,4,5,6,7,8,9));
+        SudokuBoardManager manager = new SudokuBoardManager();
+        manager.setTiles(tiles);
+        // should contain every integer as all tiles are blank, so any integer would be valid
+        ArrayList<Integer> available = manager.getAvailable(0,0);
+        assertEquals(available,expected);
     }
 
     @Test
-    public void isValidTapFalseTest() {
-        assertFalse(slidingTilesBoardManager.isValidTap(0));
-        assertFalse(slidingTilesBoardManager.isValidTap(2));
-        assertFalse(slidingTilesBoardManager.isValidTap(4));
-        assertFalse(slidingTilesBoardManager.isValidTap(6));
-        assertFalse(slidingTilesBoardManager.isValidTap(8));
+    public void getAvailableSolvedTest() {
+        Tile [][] tiles = makeTiles();
+        final ArrayList<Integer> expected = new ArrayList<>(Collections.singletonList(2));
+        SudokuBoardManager manager = new SudokuBoardManager();
+        manager.setTiles(tiles);
+        //should give an empty list as the board is solved so the only correct integer is the one
+        //already there, in this case it is
+        ArrayList<Integer> available = manager.getAvailable(0,0);
+        assertEquals(available,expected);
     }
-
-    //touchmove on valid tap
-    // touchmove on invalid tap
 
     /**
-     * 1 7 3
-     * 2 9 4
-     * 8 5 6
+     * check whether isValidTap returns true for a valid move
      */
     @Test
-    public void touchMoveTest() {
-        slidingTilesBoardManager.touchMove(1);
-        List<Integer> tileNums = new ArrayList<>();
-        for (Tile tile: slidingTilesBoardManager.getBoard()){
-            tileNums.add(tile.getId());
-        }
-        int[] tiles = {1, 9, 3, 2, 7, 4, 8, 5, 6};
-        List<Integer> correctTiles = new ArrayList<>();
-        for (int i: tiles) {
-            correctTiles.add(i);
-        }
-        assertEquals(String.format("Expected %s to be equal to %s", correctTiles.toString(), tileNums.toString()), correctTiles, tileNums);
+    public void isValidTapTrueTest() {
+        SudokuActivity.currentNumber = 7;
+        Tile [][] tiles = makeTiles();
+        tiles[0][7] = new Tile(-1);
+        SudokuBoardManager manager = new SudokuBoardManager();
+        manager.setTiles(tiles);
+        assertTrue(manager.isValidTap(7));
+    }
+
+    /**
+     * checks whether isValidTap returns false for an invalid move
+     */
+    @Test
+    public void isValidTapFalseTest() {
+        SudokuActivity.currentNumber = 3;
+        Tile [][] tiles = makeTiles();
+        tiles[0][7] = new Tile(-1);
+        SudokuBoardManager manager = new SudokuBoardManager();
+        manager.setTiles(tiles);
+        assertTrue(manager.isValidTap(7));
+    }
+
+
+    /**
+     * moves when tile to change is blank and isVsalidTap is True
+     */
+    @Test
+    public void touchMoveTrueTest() {
+        SudokuActivity.currentNumber = 7;
+        Tile [][] tiles = makeTiles();
+        tiles[0][7] = new Tile(-1);
+        Tile newTile = new Tile(SudokuActivity.currentNumber - 1);
+        SudokuBoardManager manager = new SudokuBoardManager();
+        manager.setTiles(tiles);
+        manager.touchMove(7);
+        assertEquals(manager.getTiles()[0][7],newTile);
+    }
+
+    /**
+     * does not move when tile to change is blank and isValidTap is false
+     */
+    @Test
+    public void touchMoveNotValidTest() {
+        SudokuActivity.currentNumber = 6;
+        Tile [][] tiles = makeTiles();
+        tiles[0][7] = new Tile(-1);
+        Tile newTile = new Tile(SudokuActivity.currentNumber - 1);
+        SudokuBoardManager manager = new SudokuBoardManager();
+        manager.setTiles(tiles);
+        manager.touchMove(7);
+        assertNotSame(manager.getTiles()[0][7],newTile);
+    }
+    /**
+     * does not move when tile to change is not blank and isValidTap is true
+     */
+    @Test
+    public void touchMoveNotBlankTest() {
+        SudokuActivity.currentNumber = 6;
+        Tile [][] tiles = makeBlankTiles();
+        tiles[0][7] = new Tile(-1);
+        Tile newTile = new Tile(SudokuActivity.currentNumber - 1);
+        SudokuBoardManager manager = new SudokuBoardManager();
+        manager.setTiles(tiles);
+        manager.touchMove(7);
+        assertNotSame(manager.getTiles()[0][7],newTile);
+    }
+    /**
+     * does not move when tile to change is not blank and isValidTap is false
+     */
+    @Test
+    public void touchMoveNotBlankNotValidTest() {
+        SudokuActivity.currentNumber = 6;
+        Tile [][] tiles = makeTiles();
+        tiles[0][7] = new Tile(-1);
+        Tile newTile = new Tile(SudokuActivity.currentNumber - 1);
+        SudokuBoardManager manager = new SudokuBoardManager();
+        manager.setTiles(tiles);
+        manager.touchMove(7);
+        assertNotSame(manager.getTiles()[0][7],newTile);
     }
 }
 
-}
+
