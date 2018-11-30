@@ -9,6 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+/**
+ * The view to choose difficulty.
+ */
 public class SudokuDifficultyActivity extends AppCompatActivity {
     /**
      * The difficulty of the game.
@@ -34,6 +37,9 @@ public class SudokuDifficultyActivity extends AppCompatActivity {
         addButtonProListener();
     }
 
+    /**
+     * Returns to the load game activity.
+     */
     @Override
     public void onBackPressed() {
         Intent tmp = new Intent(this, SudokuStartingActivity.class);

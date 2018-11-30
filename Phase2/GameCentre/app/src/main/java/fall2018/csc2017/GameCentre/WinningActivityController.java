@@ -5,6 +5,9 @@ package fall2018.csc2017.GameCentre;
 
 import android.content.Context;
 
+/**
+ * The controller for the activity.
+ */
 class WinningActivityController {
 
     /**
@@ -12,10 +15,19 @@ class WinningActivityController {
      */
     private FileSystem fileSystem;
 
+    /**
+     * Creates a new controller to manage the logic of the activity.
+     * @param fileSystem the file system.
+     */
     WinningActivityController(FileSystem fileSystem) {
         this.fileSystem = fileSystem;
     }
 
+    /**
+     * Find the file name of the current game.
+     * @param context the current activity.
+     * @return the serializable file of the current game.
+     */
     String findFilename(Context context) {
         AccountManager accountManager = fileSystem.loadAccount(context);
         Account user = accountManager.findUser(StartingLoginActivity.currentUser);
@@ -33,6 +45,11 @@ class WinningActivityController {
         }
     }
 
+    /**
+     * Display the scores.
+     * @param context the current activity.
+     * @return the scores.
+     */
     String onOpenListener(Context context) {
         String filename = findFilename(context);
         Scoreboard scoreBoard = fileSystem.loadScoreboard(context, filename);
