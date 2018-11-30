@@ -29,7 +29,7 @@ class HangmanStartingActivityController {
     /**
      * Constructor
      * @param fileSystem the filesystem for this controller.
-     * @param displayToast the toast displayer.
+     * @param displayToast the toast display
      */
     HangmanStartingActivityController(FileSystem fileSystem, DisplayToast displayToast) {
         this.fileSystem = fileSystem;
