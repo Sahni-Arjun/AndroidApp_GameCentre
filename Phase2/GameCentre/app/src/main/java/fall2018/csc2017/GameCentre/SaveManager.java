@@ -157,13 +157,13 @@ class SaveManager implements Serializable {
         }
     }
 
-    void updateState(String gameType, BoardManager boardManager){
+    void updateState(String gameType, GameManager gameManager){
         if (gameType.equals(slidingTilesName)){
             SlidingTilesState lastAutoState = (SlidingTilesState) this.getLastState(SaveManager.auto);
             int numMoves = this.getLength(SaveManager.auto);
 
             //Creating new game state with field values of the previous state.
-            SlidingTilesState newState = new SlidingTilesState((SlidingTilesBoardManager) boardManager, numMoves,
+            SlidingTilesState newState = new SlidingTilesState((SlidingTilesBoardManager) gameManager, numMoves,
                     SlidingTileComplexityActivity.complexity, SetUndoActivity.undo,
                     lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo());
             this.addState(newState);
@@ -173,7 +173,7 @@ class SaveManager implements Serializable {
 
             if(autoSave.size() == 0){
 
-                HangmanState newState = new HangmanState((WordManager) boardManager, 0,
+                HangmanState newState = new HangmanState((WordManager) gameManager, 0,
                         HangmanComplexityActivity.complexity, 10,
                         0, true); // todo update
                 this.addState(newState);
@@ -184,7 +184,7 @@ class SaveManager implements Serializable {
             int numMoves = this.getLength(SaveManager.auto);
 
             //Creating new game state with field values of the previous state.
-            HangmanState newState = new HangmanState((WordManager) boardManager, numMoves,
+            HangmanState newState = new HangmanState((WordManager) gameManager, numMoves,
                     HangmanComplexityActivity.complexity, SetUndoActivity.undo,
                     lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo());
             this.addState(newState);
@@ -194,7 +194,7 @@ class SaveManager implements Serializable {
             long lastTime = lastAutoState.getTime();
 
             //Creating new game state with field values of the previous state.
-            SudokuState newState = new SudokuState((SudokuBoardManager) boardManager, numMoves,
+            SudokuState newState = new SudokuState((SudokuBoardManager) gameManager, numMoves,
                     lastAutoState.getDifficulty(), SetUndoActivity.undo,
                     lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo(),
                     lastTime);

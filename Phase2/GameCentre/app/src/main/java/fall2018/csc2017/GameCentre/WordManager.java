@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Manage a word, similarly to a one-row board, including checking for a win or a loose
  */
-class WordManager extends BoardManager implements Serializable {
+class WordManager extends GameManager implements Serializable {
 
     /**
      * The word being managed.
@@ -82,8 +82,6 @@ class WordManager extends BoardManager implements Serializable {
         this.word = word;
     }
 
-
-
     /**
      * Return whether all letters have been correctly guessed.
      *
@@ -97,32 +95,6 @@ class WordManager extends BoardManager implements Serializable {
         }
         return true;
     }
-
-
-    /**
-     * Return whether the tapped position is a hidden letter.
-     *
-     * @param position to check
-     * @return whether the letter at position is hidden
-     */
-    boolean isValidTap(int position) {
-
-        // todo discuss with group if player will choose where in the word to guess
-        return true;
-    }
-
-
-    /**
-     * Process a touch at position in the word, revealing letter if appropriate.
-     *
-     * @param position the position
-     */
-    void touchMove(int position) {
-
-        // todo: discuss with group if player will be asked to specify a guessed letter's position
-    }
-
-
 
     /**
      * Process a keyboard input position if appropriate.
