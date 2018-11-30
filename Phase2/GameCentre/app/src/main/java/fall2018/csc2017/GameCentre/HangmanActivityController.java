@@ -6,8 +6,10 @@ package fall2018.csc2017.GameCentre;
 import android.content.Context;
 import android.content.Intent;
 
-
-public class HangmanActivityController {
+/**
+ * The class that controls the Hangman game screen.
+ */
+class HangmanActivityController {
 
     /**
      * The filesystem.
