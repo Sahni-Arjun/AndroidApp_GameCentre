@@ -21,6 +21,9 @@ public class WinningActivity extends AppCompatActivity {
      */
     private FileSystem fileSystem = new FileSystem();
 
+    /**
+     * The controller for the logic in the activity.
+     */
     private WinningActivityController controller;
 
     @Override
@@ -34,6 +37,9 @@ public class WinningActivity extends AppCompatActivity {
         addBackButtonListener();
     }
 
+    /**
+     * displays the scores on screen.
+     */
     @Override
     protected void onResume() {
         super.onResume();

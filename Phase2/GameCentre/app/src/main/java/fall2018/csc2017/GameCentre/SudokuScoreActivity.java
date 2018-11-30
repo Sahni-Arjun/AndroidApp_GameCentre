@@ -7,6 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+/**
+ * Displays the scores of sudoku.
+ */
 public class SudokuScoreActivity extends AppCompatActivity {
 
     /**
