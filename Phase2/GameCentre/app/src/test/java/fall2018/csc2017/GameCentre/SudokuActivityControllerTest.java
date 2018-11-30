@@ -283,7 +283,7 @@ public class SudokuActivityControllerTest {
         SudokuState currLastState = (SudokuState) currSaveManager.getLastState(SaveManager.auto);
         long startTime = currLastState.getTime();
         for (long stop=System.nanoTime()+TimeUnit.SECONDS.toNanos(1);stop>System.nanoTime(););
-        controller.onResumeListener();
+        controller.onResumeListener(context);
 
         assert(controller.getStartTime() != startTime);
     }
