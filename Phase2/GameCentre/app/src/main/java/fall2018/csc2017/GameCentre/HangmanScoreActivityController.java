@@ -7,9 +7,17 @@ import android.content.Context;
  */
 public class HangmanScoreActivityController {
 
+    /**
+     * The fileSystem used for this controller.
+     */
+    private FileSystem fileSystem;
+
+    HangmanScoreActivityController(FileSystem fileSystem){
+        this.fileSystem = fileSystem;
+    }
+
     public StringBuilder onCreateListener(Context context) {
         Scoreboard hangmanScoreboard;
-        FileSystem fileSystem = new FileSystem();
         hangmanScoreboard = fileSystem.loadScoreboard(context, StartingLoginActivity.SAVE_HANGMAN_SCOREBOARD);
         return hangmanScoreboard.createTopScoreText();
     }

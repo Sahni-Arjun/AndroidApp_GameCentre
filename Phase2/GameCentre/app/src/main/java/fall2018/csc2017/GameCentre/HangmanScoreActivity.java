@@ -22,7 +22,7 @@ public class HangmanScoreActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hangman_score);
-        HangmanScoreActivityController hangmanScoreActivityController = new HangmanScoreActivityController();
+        HangmanScoreActivityController hangmanScoreActivityController = new HangmanScoreActivityController(new FileSystem());
         StringBuilder hangmanScoreboard = hangmanScoreActivityController.onCreateListener(this);
         TextView hangmanScores = findViewById(R.id.hangmanScores);
         hangmanScores.setText(hangmanScoreboard);
