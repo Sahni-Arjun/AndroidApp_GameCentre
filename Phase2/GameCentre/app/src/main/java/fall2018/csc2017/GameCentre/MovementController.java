@@ -24,8 +24,9 @@ class MovementController {
      */
     private FileSystem fileSystem;
 
-    MovementController(FileSystem fileSystem) {
+    MovementController(FileSystem fileSystem, DisplayToast displayToast) {
         this.fileSystem = fileSystem;
+        this.displayToast = displayToast;
     }
 
     void setBoardManager(BoardManager boardManager) {
@@ -34,19 +35,13 @@ class MovementController {
 
     BoardManager getBoardManager() {return this.boardManager;}
 
-    void processTapMovement(Context context, int position) {
+    Boolean processTapMovement(Context context, int position) {
         AccountManager accountManager = fileSystem.loadAccount(context);
         Account account = accountManager.findUser(StartingLoginActivity.currentUser);
-
-
         if(!Account.hangmanName.equals(account.getLastPlayedGame())){
-
             if (boardManager.isValidTap(position)) {
                 boardManager.touchMove(position);
+                return true;
             } else {
-                displayToast.displayToast(context, "Invalid Tap");
-            }
-        }
-
-    }
-}
+                return false; } }
+        return null; }}
