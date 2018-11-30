@@ -19,6 +19,7 @@ public class ScoreBoardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score_board);
         addSlidingTileScoreButtonListener();
+        addHangmanScoreButtonListener();
         addSudokuScoreButtonListener();
     }
 
@@ -31,6 +32,16 @@ public class ScoreBoardActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 switchToSlidingTilesScore();
+            }
+        });
+    }
+
+    private void addHangmanScoreButtonListener() {
+        Button button = findViewById(R.id.buttonHangmanScore);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchToHangmanScore();
             }
         });
     }
@@ -53,6 +64,14 @@ public class ScoreBoardActivity extends AppCompatActivity {
      */
     private void switchToSlidingTilesScore() {
         Intent tmp = new Intent(this, SlidingTileScoreActivity.class);
+        startActivity(tmp);
+    }
+
+    /**
+     * Switch to hangman scoreboard.
+     */
+    private void switchToHangmanScore() {
+        Intent tmp = new Intent(this, HangmanScoreActivity.class);
         startActivity(tmp);
     }
 
