@@ -167,7 +167,7 @@ class SaveManager implements Serializable {
 
             //Creating new game state with field values of the previous state.
             SlidingTilesState newState = new SlidingTilesState((SlidingTilesBoardManager) gameManager, numMoves,
-                    SlidingTileComplexityActivity.complexity, SetUndoActivity.undo,
+                    SlidingTileComplexityActivity.complexity, SetUndoActivityController.undo,
                     lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo());
             this.addState(newState);
         }
@@ -188,7 +188,7 @@ class SaveManager implements Serializable {
 
             //Creating new game state with field values of the previous state.
             HangmanState newState = new HangmanState((WordManager) gameManager, numMoves,
-                    HangmanComplexityActivity.complexity, SetUndoActivity.undo,
+                    HangmanComplexityActivity.complexity, SetUndoActivityController.undo,
                     lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo());
             this.addState(newState);
         }else if(gameType.equals(sudokuName)){
@@ -198,7 +198,7 @@ class SaveManager implements Serializable {
 
             //Creating new game state with field values of the previous state.
             SudokuState newState = new SudokuState((SudokuBoardManager) gameManager, numMoves,
-                    lastAutoState.getDifficulty(), SetUndoActivity.undo,
+                    lastAutoState.getDifficulty(), SetUndoActivityController.undo,
                     lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo(),
                     lastTime);
             this.addState(newState);

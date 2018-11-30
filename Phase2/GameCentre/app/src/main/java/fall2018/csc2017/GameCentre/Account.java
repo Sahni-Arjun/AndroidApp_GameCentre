@@ -84,7 +84,7 @@ class Account implements Serializable {
         if (gameType.equals(Account.sudokuName)){
             return sudokuSaveManager[currentGame-1];
         }
-        return new SaveManager();//TODO remove this.
+        return new SaveManager();
     }
 
     /**
