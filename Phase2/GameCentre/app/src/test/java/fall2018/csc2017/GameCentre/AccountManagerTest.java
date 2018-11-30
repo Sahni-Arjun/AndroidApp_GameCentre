@@ -12,9 +12,10 @@ import static junit.framework.TestCase.assertTrue;
 public class AccountManagerTest {
     private AccountManager accountManager;
 
+    private List<Account> users = new ArrayList<>();
+
     @Before
     public void setUp() {
-        List<Account> users = new ArrayList<>();
         Account user1 = new Account("user1", "pwd1");
         Account user2 = new Account("user2", "pwd2");
         Account user3 = new Account("user3", "pwd3");
@@ -42,6 +43,17 @@ public class AccountManagerTest {
      */
     @Test
     public void isExistingUserFalseTest() {
-        assertFalse(String.format("Expected %b but got %b", true, false), accountManager.isExistingUser("user6"));
+        assertFalse(String.format("Expected %b but got %b", false, true), accountManager.isExistingUser("user6"));
     }
+
+    /**
+     * Test if addUser adds the user to accountManager
+     */
+    @Test
+    public void addUserTest() {
+        Account user6 = new Account("user6", "pwd6");
+        accountManager.addUser(user6);
+        assertTrue(String.format("Expected %b but got %b", true, false), accountManager.isExistingUser("user6"));
+    }
+
 }
