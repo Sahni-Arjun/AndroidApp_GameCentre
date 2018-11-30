@@ -29,7 +29,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
     /**
      * The buttons to display.
      */
-    private ArrayList<Button> tileButtons;
+    private ArrayList<Button> tileButtons = new ArrayList<>();
 
     /**
      * The filesystem.
@@ -62,17 +62,19 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
      * of positions, and then call the adapter to set the view.
      */
     public void display() {
-        updateTileButtons();
+        controller.updateTileButtons(boardManager,tileButtons);
         gridView.setAdapter(new CustomAdapter(tileButtons, columnWidth, columnHeight));
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Board.numRows = 9;
+        Board.numCols = 9;
         super.onCreate(savedInstanceState);
         controller = new SudokuActivityController(fileSystem);
         boardManager = controller.onCreateListener(currentContext);
 
-        createTileButtons(this);
+        controller.createTileButtons(this,boardManager,tileButtons);
         setContentView(R.layout.activity_sudoku);
         addSaveButtonListener();
         addUndoButtonListener();
@@ -139,36 +141,36 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
         });
     }
 
-    /**
-     * Create the buttons for displaying the tiles.
-     *
-     * @param context the context
-     */
-    private void createTileButtons(Context context) {
-        tileButtons = new ArrayList<>();
-        for (int row = 0; row != SudokuBoard.numRows; row++) {
-            for (int col = 0; col != SudokuBoard.numCols; col++) {
-                Button tmp = new Button(context);
-                tmp.setBackgroundResource(R.drawable.tile_25);
-                this.tileButtons.add(tmp);
-            }
-        }
-    }
-
-    /**
-     * Update the backgrounds on the buttons to match the tiles.
-     */
-    private void updateTileButtons() {
-        SudokuBoard board = boardManager.getBoard();
-        int nextPos = 0;
-
-        for (Button b : tileButtons) {
-            int row = nextPos / SudokuBoard.numRows;
-            int col = nextPos % SudokuBoard.numCols;
-            b.setBackgroundResource(board.getTile(row, col).getBackground());
-            nextPos++;
-        }
-    }
+//    /**
+//     * Create the buttons for displaying the tiles.
+//     *
+//     * @param context the context
+//     */
+//    private void createTileButtons(Context context) {
+//        tileButtons = new ArrayList<>();
+//        for (int row = 0; row != SudokuBoard.numRows; row++) {
+//            for (int col = 0; col != SudokuBoard.numCols; col++) {
+//                Button tmp = new Button(context);
+//                tmp.setBackgroundResource(R.drawable.tile_25);
+//                this.tileButtons.add(tmp);
+//            }
+//        }
+//    }
+//
+//    /**
+//     * Update the backgrounds on the buttons to match the tiles.
+//     */
+//    private void updateTileButtons() {
+//        SudokuBoard board = boardManager.getBoard();
+//        int nextPos = 0;
+//
+//        for (Button b : tileButtons) {
+//            int row = nextPos / SudokuBoard.numRows;
+//            int col = nextPos % SudokuBoard.numCols;
+//            b.setBackgroundResource(board.getTile(row, col).getBackground());
+//            nextPos++;
+//        }
+//    }
 
     /**
      * Dispatch onPause() to fragments.

@@ -7,6 +7,8 @@ package fall2018.csc2017.GameCentre;
  * The board manager for board based games.
  */
 abstract class BoardManager extends GameManager {
+
+    Board board;
     /**
      * Checks for a valid tap
      * @param position the location of the tap
@@ -19,4 +21,10 @@ abstract class BoardManager extends GameManager {
      * @param position the position of the move.
      */
     abstract void touchMove(int position);
+
+    Board getBoard(){
+        return this.board;
+    }
+
+
 }
