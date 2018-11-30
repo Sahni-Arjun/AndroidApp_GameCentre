@@ -4,6 +4,9 @@ Controller class.
 package fall2018.csc2017.GameCentre;
 
 import android.content.Context;
+import android.widget.Button;
+
+import java.util.ArrayList;
 
 class SlidingTileActivityController {
     /**
@@ -84,4 +87,16 @@ class SlidingTileActivityController {
 
         fileSystem.saveAccount(context, accountManager);
     }
+    void createTileButtons(Context context, SlidingTilesBoardManager manager, ArrayList<Button> buttons) {
+        Board board = manager.getBoard();
+        buttons = new ArrayList<>();
+        for (int row = 0; row != Board.numRows; row++) {
+            for (int col = 0; col != Board.numCols; col++) {
+                Button tmp = new Button(context);
+                tmp.setBackgroundResource(board.getTile(row, col).getBackground());
+                buttons.add(tmp);
+            }
+        }
+    }
+
 }
