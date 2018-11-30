@@ -26,7 +26,7 @@ public class HangmanActivityController {
         this. displayToast = displayToast;
     }
 
-    void undoListener(Context context){
+    void undoListener(Context context){   // todo DELETE IF SUDOKU HAS IT IMPLEMENTED
         // load the account manager.
         accountManager = fileSystem.loadAccount(context);
 
@@ -84,6 +84,7 @@ public class HangmanActivityController {
             user.setLastPlayedGame(Account.hangmanName);
             fileSystem.saveAccount(context, accountManager);
 
+            LoosingActivity.lost();
             Intent loose = new Intent(context, LoosingActivity.class);
             context.startActivity(loose);
         }

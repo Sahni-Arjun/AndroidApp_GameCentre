@@ -55,11 +55,7 @@ class WordManager extends BoardManager implements Serializable {
      */
     WordManager(String selectedWord){
 
-        // todo replace this block by retrieving from file according to complexity
         List<Letter> letters = new ArrayList<>();
-
-        final int numLetter = Word.numCols; // todo update according to Kevin's implementation
-        this.length = HangmanComplexityActivity.complexity + 1; // todo update according to Kevin's implementation
 
         stringWord = selectedWord;
 
@@ -73,8 +69,20 @@ class WordManager extends BoardManager implements Serializable {
 
         }
 
+        this.length = HangmanComplexityActivity.complexity + 1;
         this.word = new Word(letters);
     }
+
+
+    /**
+     * Manage a new retrieved word, support for mocking tests.
+     */
+    WordManager(Word word){
+
+        this.word = word;
+    }
+
+
 
     /**
      * Return whether all letters have been correctly guessed.

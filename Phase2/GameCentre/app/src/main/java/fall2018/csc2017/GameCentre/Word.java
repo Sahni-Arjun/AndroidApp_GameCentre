@@ -38,9 +38,40 @@ public class Word extends Board{
      * @param letters the letters for the word
      */
     Word(List<Letter> letters) {
-        for (int i = 0; i < numCols; i++) {
+        for (int i = 0; i < letters.size(); i++) {
             this.letters[0][i] = letters.get(i);
         }
+    }
+
+
+    /**
+     * A new word made of letters in order.
+     * Precondition: len(letters) == numCols
+     *
+     * @param letters the letters for the word
+     */
+    void setLetters(List<Letter> letters) {
+        for (int i = 0; i < letters.size(); i++) {
+            this.letters[0][i] = letters.get(i);
+        }
+    }
+
+
+    /**
+     * Creating an empty new word made for mocking tests.
+     *
+     *
+     */
+    Word() {super();}
+
+
+    /**
+     * Setting new word made for mocking tests.
+     *
+     * @param numLetters the number of letters for the word
+     */
+    void setWord(int numLetters) {
+        this.letters = new Letter[1][numLetters];
     }
 
     /**
