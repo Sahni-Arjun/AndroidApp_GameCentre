@@ -28,6 +28,9 @@ public class SlidingTileComplexityActivity extends AppCompatActivity {
         addButton5x5Listener();
     }
 
+    /**
+     * Does not allow the user to go back while the save manager is still being set.
+     */
     @Override
     public void onBackPressed() {
     }

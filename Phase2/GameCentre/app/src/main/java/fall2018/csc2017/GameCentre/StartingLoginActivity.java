@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-
+/**
+ * The Start screen of the app.
+ */
 public class StartingLoginActivity extends AppCompatActivity {
 
     /**
@@ -41,10 +43,16 @@ public class StartingLoginActivity extends AppCompatActivity {
         Board.numRows = 2;
     }
 
+    /**
+     * User must login to return to the game can not press back.
+     */
     @Override
     public void onBackPressed() {
     }
 
+    /**
+     * Switches to the sign in screen.
+     */
     private void addSignInButtonListener() {
         Button saveButton = findViewById(R.id.btnSignIn);
         saveButton.setOnClickListener(new View.OnClickListener() {

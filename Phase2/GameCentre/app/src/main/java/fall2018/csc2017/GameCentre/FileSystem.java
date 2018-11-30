@@ -15,8 +15,15 @@ import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
 
+/**
+ * The model class that handles file reading and writing.
+ */
 class FileSystem {
 
+    /**
+     * Check if there is an existing file already saved, and makes one if not.
+     * @param context the current activity.
+     */
     void testExistingFile(Context context) {
         try {
             context.openFileInput(StartingLoginActivity.SAVE_ACCOUNT_MANAGER);
@@ -47,8 +54,6 @@ class FileSystem {
             }
         } catch (FileNotFoundException e) {
             Log.e("login activity", "File not found: " + e.toString());
-//            saveAccount(context, new AccountManager(new ArrayList<Account>()));
-//            saveScoreBoard(context, new Scoreboard());
         } catch (IOException e) {
             Log.e("login activity", "Can not read file: " + e.toString());
         } catch (ClassNotFoundException e) {

@@ -4,9 +4,6 @@ Controller class.
 package fall2018.csc2017.GameCentre;
 
 import android.content.Context;
-import android.widget.Button;
-
-import java.util.ArrayList;
 
 class SlidingTileActivityController extends NotRobotActivityController {
     /**
@@ -19,10 +16,19 @@ class SlidingTileActivityController extends NotRobotActivityController {
      */
     private AccountManager accountManager;
 
+    /**
+     * Creates a new controller that manages the logic of the activity.
+     * @param fileSystem the file system.
+     */
     SlidingTileActivityController(FileSystem fileSystem) {
         this.fileSystem = fileSystem;
     }
 
+    /**
+     * Returns the last saved state of the game.
+     * @param context the current activity.
+     * @return the last saved state of the game.
+     */
     SlidingTilesBoardManager onCreateListener(Context context) {
         accountManager = fileSystem.loadAccount(context);
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
@@ -32,6 +38,10 @@ class SlidingTileActivityController extends NotRobotActivityController {
         return ((SlidingTilesState) currSavManager.getLastState(continueOrLoad)).getSlidingTilesBoardManager();
     }
 
+    /**
+     * Saves the current game as the most recent played game.
+     * @param context the current activity.
+     */
     void onResumeListener(Context context){
         accountManager = fileSystem.loadAccount(context);
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
@@ -39,6 +49,12 @@ class SlidingTileActivityController extends NotRobotActivityController {
         fileSystem.saveAccount(context, accountManager);
     }
 
+    /**
+     * If allowed undos the game to the previous saved state.
+     * @param context the current activity
+     * @param slidingTilesBoardManager the current board manager of the game.
+     * @return if an undo was successful.
+     */
     boolean undoListener(Context context, SlidingTilesBoardManager slidingTilesBoardManager) {
         // load the account manager.
         accountManager = fileSystem.loadAccount(context);
@@ -56,6 +72,12 @@ class SlidingTileActivityController extends NotRobotActivityController {
         return true;
     }
 
+    /**
+     * Updates the display of the screen if the board arrangement has cahnged.
+     * @param context the current activity.
+     * @param boardManager the current board manager of the game.
+     * @return whether the game has ended.
+     */
     boolean updateGameListener(Context context, SlidingTilesBoardManager boardManager) {
         accountManager = fileSystem.loadAccount(context);
 
@@ -87,6 +109,10 @@ class SlidingTileActivityController extends NotRobotActivityController {
         return false;
     }
 
+    /**
+     * Save the current instance of the game.
+     * @param context the current activity.
+     */
     void saveListener(Context context) {
         accountManager = fileSystem.loadAccount(context);
 

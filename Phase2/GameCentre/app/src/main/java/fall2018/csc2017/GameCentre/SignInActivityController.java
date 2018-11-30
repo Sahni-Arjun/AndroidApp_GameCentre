@@ -5,7 +5,13 @@ package fall2018.csc2017.GameCentre;
 
 import android.content.Context;
 
+/**
+ * Controller for the sign in procedure for the app.
+ */
 class SignInActivityController {
+    /**
+     * The file read and write object.
+     */
     private FileSystem fileSystem;
 
     /**
@@ -13,6 +19,10 @@ class SignInActivityController {
      */
     private Account signInUser;
 
+    /**
+     * Creates a new controller that manages the logic of the activity.
+     * @param fileSystem The file read and write object.
+     */
     SignInActivityController(FileSystem fileSystem){
         this.fileSystem = fileSystem;
     }

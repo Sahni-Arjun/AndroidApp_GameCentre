@@ -5,6 +5,9 @@ package fall2018.csc2017.GameCentre;
 
 import java.io.Serializable;
 
+/**
+ * Representing one saved instance of a game.
+ */
 abstract class GameState implements Serializable {
 
     static final long serialVersionUID = -3639293090177222289L;
