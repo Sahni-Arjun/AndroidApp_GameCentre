@@ -37,7 +37,7 @@ class SaveManager implements Serializable {
      */
     private ArrayList<GameState> autoSave;
 
-    SaveManager(){
+    SaveManager() {
         permaSave = new ArrayList<>();
         autoSave = new ArrayList<>();
     }
@@ -160,102 +160,104 @@ class SaveManager implements Serializable {
         }
     }
 
-    void updateState(String gameType, GameManager gameManager){
-        if (gameType.equals(slidingTilesName)){
-            SlidingTilesState lastAutoState = (SlidingTilesState) this.getLastState(SaveManager.auto);
-            int numMoves = this.getLength(SaveManager.auto);
+    void updateState(String gameType, GameManager gameManager) {
+        switch (gameType) {
+            case slidingTilesName: {
+                SlidingTilesState lastAutoState = (SlidingTilesState) this.getLastState(SaveManager.auto);
+                int numMoves = this.getLength(SaveManager.auto);
 
-            //Creating new game state with field values of the previous state.
-            SlidingTilesState newState = new SlidingTilesState((SlidingTilesBoardManager) gameManager, numMoves,
-                    SlidingTileComplexityActivity.complexity, SetUndoActivityController.undo,
-                    lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo());
-            this.addState(newState);
-        }
-
-        if (gameType.equals(hangmanName)){
-
-            if(autoSave.size() == 0){
-
-                HangmanState newState = new HangmanState((WordManager) gameManager, 0,
-                        HangmanComplexityActivity.complexity, 10,
-                        0, true); // todo update
+                //Creating new game state with field values of the previous state.
+                SlidingTilesState newState = new SlidingTilesState((SlidingTilesBoardManager) gameManager, numMoves,
+                        SlidingTileComplexityActivity.complexity, SetUndoActivityController.undo,
+                        lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo());
                 this.addState(newState);
-
+                break;
             }
+            case hangmanName: {
+                if (autoSave.size() == 0) {
 
-            HangmanState lastAutoState = (HangmanState) this.getLastState(SaveManager.auto);
-            int numMoves = this.getLength(SaveManager.auto);
+                    HangmanState newState = new HangmanState((WordManager) gameManager, 0,
+                            HangmanComplexityActivity.complexity, 10,
+                            0, true); // todo update
+                    this.addState(newState);
+                }
+                HangmanState lastAutoState = (HangmanState) this.getLastState(SaveManager.auto);
+                int numMoves = this.getLength(SaveManager.auto);
 
-            //Creating new game state with field values of the previous state.
-            HangmanState newState = new HangmanState((WordManager) gameManager, numMoves,
-                    HangmanComplexityActivity.complexity, SetUndoActivityController.undo,
-                    lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo());
-            this.addState(newState);
-        }else if(gameType.equals(sudokuName)){
-            SudokuState lastAutoState = (SudokuState) this.getLastState(SaveManager.auto);
-            int numMoves = this.getLength(SaveManager.auto);
-            long lastTime = lastAutoState.getTime();
+                //Creating new game state with field values of the previous state.
+                HangmanState newState = new HangmanState((WordManager) gameManager, numMoves,
+                        HangmanComplexityActivity.complexity, SetUndoActivityController.undo,
+                        lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo());
+                this.addState(newState);
+                break;
+            }
+            case sudokuName: {
+                SudokuState lastAutoState = (SudokuState) this.getLastState(SaveManager.auto);
+                int numMoves = this.getLength(SaveManager.auto);
+                long lastTime = lastAutoState.getTime();
 
-            //Creating new game state with field values of the previous state.
-            SudokuState newState = new SudokuState((SudokuBoardManager) gameManager, numMoves,
-                    lastAutoState.getDifficulty(), SetUndoActivityController.undo,
-                    lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo(),
-                    lastTime);
-            this.addState(newState);
+                //Creating new game state with field values of the previous state.
+                SudokuState newState = new SudokuState((SudokuBoardManager) gameManager, numMoves,
+                        lastAutoState.getDifficulty(), SetUndoActivityController.undo,
+                        lastAutoState.getNumMovesUndone(), lastAutoState.getUnlimitedUndo(),
+                        lastTime);
+                this.addState(newState);
+                break;
+            }
         }
     }
 
-    void updateSudokuTime(long startTime){ // todo delete?
+    void updateSudokuTime(long startTime) { // todo delete?
         SudokuState lastAutoState = (SudokuState) this.getLastState(SaveManager.auto);
         lastAutoState.setTime(lastAutoState.getTime() + System.currentTimeMillis() - startTime);
     }
 
     // TODO make this general for all games?
-    boolean undoMove(String gameType){
+    boolean undoMove(String gameType) {
 
-        if (gameType.equals(slidingTilesName)) {
-            boolean canUndo = getLastState(SaveManager.auto).canUndo();
-            SlidingTilesState currentAutoState = (SlidingTilesState) getLastState(SaveManager.auto);
+        switch (gameType) {
+            case slidingTilesName: {
+                boolean canUndo = getLastState(SaveManager.auto).canUndo();
+                SlidingTilesState currentAutoState = (SlidingTilesState) getLastState(SaveManager.auto);
 
-            if ((getLength(SaveManager.auto) != 1) && canUndo) {
-                int prevMovesUndone = currentAutoState.getNumMovesUndone();
-                undo();
-                getLastState(SaveManager.auto).incrementNumMoves(prevMovesUndone);
-                return true;
+                if ((getLength(SaveManager.auto) != 1) && canUndo) {
+                    int prevMovesUndone = currentAutoState.getNumMovesUndone();
+                    undo();
+                    getLastState(SaveManager.auto).incrementNumMoves(prevMovesUndone);
+                    return true;
+                }
+                return false;
             }
-            return false;
-        }
+            case hangmanName: {
+                boolean canUndo = getLastState(SaveManager.auto).canUndo();
+                HangmanState currentAutoState = (HangmanState) getLastState(SaveManager.auto);
 
-        if (gameType.equals(hangmanName)) {
-            boolean canUndo = getLastState(SaveManager.auto).canUndo();
-            HangmanState currentAutoState = (HangmanState) getLastState(SaveManager.auto);
-
-            if ((getLength(SaveManager.auto) != 1) && canUndo) {
-                int prevMovesUndone = currentAutoState.getNumMovesUndone();
-                undo();
-                getLastState(SaveManager.auto).incrementNumMoves(prevMovesUndone);
-                return true;
+                if ((getLength(SaveManager.auto) != 1) && canUndo) {
+                    int prevMovesUndone = currentAutoState.getNumMovesUndone();
+                    undo();
+                    getLastState(SaveManager.auto).incrementNumMoves(prevMovesUndone);
+                    return true;
+                }
+                return false;
             }
-            return false;
-        }
+            default: {
+                boolean canUndo = getLastState(SaveManager.auto).canUndo();
+                SudokuState currentAutoState = (SudokuState) getLastState(SaveManager.auto);
 
-        else {
-            boolean canUndo = getLastState(SaveManager.auto).canUndo();
-            SudokuState currentAutoState = (SudokuState) getLastState(SaveManager.auto);
-
-            if ((getLength(SaveManager.auto) != 1) && canUndo) {
-                int prevMovesUndone = currentAutoState.getNumMovesUndone();
-                undo();
-                getLastState(SaveManager.auto).incrementNumMoves(prevMovesUndone);
-                return true;
+                if ((getLength(SaveManager.auto) != 1) && canUndo) {
+                    int prevMovesUndone = currentAutoState.getNumMovesUndone();
+                    undo();
+                    getLastState(SaveManager.auto).incrementNumMoves(prevMovesUndone);
+                    return true;
+                }
+                return false;
             }
-            return false;
         }
 
     }
 
     // TODO make this general for all games.
-    Tile[][] getboardArrangement(){
+    Tile[][] getboardArrangement() {
         // store the previous save in a variable.
         SlidingTilesState prevState;
         prevState = (SlidingTilesState) getLastState(SaveManager.auto);
@@ -265,7 +267,7 @@ class SaveManager implements Serializable {
     }
 
 
-    Letter[][] getWordArrangement(){
+    Letter[][] getWordArrangement() {
         // store the previous save in a variable.
         HangmanState prevState;
         prevState = (HangmanState) getLastState(SaveManager.auto);
@@ -273,8 +275,6 @@ class SaveManager implements Serializable {
         // from the previous save get the word arrangement.
         return prevState.getWordManager().getWord().getLetters();
     }
-
-
 
 
 }
