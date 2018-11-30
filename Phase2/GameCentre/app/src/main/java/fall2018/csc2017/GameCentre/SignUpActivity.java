@@ -22,21 +22,15 @@ public class SignUpActivity extends AppCompatActivity {
      */
     private FileSystem fileSystem = new FileSystem();
 
-    private DisplayToast displayToast = new DisplayToast();
-
+    /**
+     * The current activity.
+     */
     private Context currentContext = this;
 
+    /**
+     * The controller that manages the logic in this class.
+     */
     private SignUpActivityController controller;
-
-    /**
-     * A blank account for a new user.
-     */
-    private Account newUser = new Account("", "");
-
-    /**
-     * Account manager for the sign-up activity.
-     */
-    private AccountManager accountManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

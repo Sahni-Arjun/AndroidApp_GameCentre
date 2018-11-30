@@ -25,14 +25,6 @@ class SudokuBoardManager extends BoardManager implements Serializable {
 
 
 
-    /**
-     * Manage a board that has been pre-populated.
-     *
-     * @param board the board
-     */
-    SudokuBoardManager(SudokuBoard board) {
-        this.board = board;
-    }
 
     /**
      * Return the current board.
@@ -48,6 +40,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
      */
     public void setTiles(Tile[][] tiles) {
         this.tiles = tiles;
+        this.board.setTiles(tiles);
     }
 
     /**
@@ -184,7 +177,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
 //        }
 
 
-    void createSolvedBoard() {
+    private void createSolvedBoard() {
         ArrayList<Integer> digits = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
         Collections.shuffle(digits);
         int randomNumber = digits.get(0);
@@ -341,7 +334,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
     private boolean checkSingleRow(int row) {
         List<Integer> rowTiles = new ArrayList<>();
         for (int col = 0; col < 9; col++) {
-            int val = this.board.getTile(row, col).getId();
+            int val = this.tiles[row][col].getId();
             if (val != 0) {
                 rowTiles.add(val);
             }
@@ -371,7 +364,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
     private boolean checkSingleCol(int col) {
         List<Integer> colTiles = new ArrayList<>();
         for (int row = 0; row < 9; row++) {
-            int val = this.board.getTile(row, col).getId();
+            int val = this.tiles[row][col].getId();
             if (val != 0) {
                 colTiles.add(val);
             }
@@ -404,7 +397,7 @@ class SudokuBoardManager extends BoardManager implements Serializable {
         List<Integer> tiles = new ArrayList<>();
         for (int r = 0; r < 3; r++) {
             for (int c = 0; c < 3; c++) {
-                tiles.add(this.board.getTile(3 * ternaryRow + r, 3 * ternaryCol + c).getId());
+                tiles.add(this.tiles[3*ternaryRow + r][3*ternaryCol + c].getId());
             }
         }
 

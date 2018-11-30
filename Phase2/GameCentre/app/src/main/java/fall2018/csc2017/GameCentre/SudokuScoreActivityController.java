@@ -5,9 +5,19 @@ package fall2018.csc2017.GameCentre;
 
 import android.content.Context;
 
+/**
+ * The controller for the activity.
+ */
 public class SudokuScoreActivityController {
+    /**
+     * The file system.
+     */
     private FileSystem fileSystem;
 
+    /**
+     * Creates a new controller for the logic in the activity.
+     * @param fileSystem the file system.
+     */
     SudokuScoreActivityController(FileSystem fileSystem) {
         this.fileSystem = fileSystem;
     }

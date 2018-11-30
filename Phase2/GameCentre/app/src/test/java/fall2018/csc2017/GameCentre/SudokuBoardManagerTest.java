@@ -50,7 +50,7 @@ public class SudokuBoardManagerTest {
         tiles[1][3] = new Tile(8);
         tiles[1][4] = new Tile(6);
         tiles[1][5] = new Tile(1);
-        tiles[1][6] = new Tile(6);
+        tiles[1][6] = new Tile(5);
         tiles[1][7] = new Tile(0);
         tiles[1][8] = new Tile(2);
         tiles[2][0] = new Tile(6);
@@ -128,12 +128,12 @@ public class SudokuBoardManagerTest {
         Tile[][] tiles = makeTiles();
         sudokuBoardManager = new SudokuBoardManager();
         sudokuBoardManager.setTiles(tiles);
+
     }
 
     private void blankBoard() {
         SudokuBoard board = new SudokuBoard();
         sudokuBoardManager = new SudokuBoardManager();
-        sudokuBoardManager.setBoard(board);
         sudokuBoardManager.setTiles(board.getTiles());
     }
     /**
@@ -164,12 +164,37 @@ public class SudokuBoardManagerTest {
     public void puzzleSolvedFalseTest() {
         solvedBoard();
         Tile[][] tiles = sudokuBoardManager.getTiles();
+        SudokuBoard board = new SudokuBoard();
         // by changing the value of any tile the sudoku rules are violated
         tiles[0][0] = new Tile(6);
+        board.setTiles(tiles);
+        sudokuBoardManager.setTiles(tiles);
+        sudokuBoardManager.setBoard(board);
+        assertFalse(sudokuBoardManager.puzzleSolved());
+    }
+
+    @Test
+    public void puzzleSolvedFalse2Test() {
+        solvedBoard();
+        Tile[][] tiles = sudokuBoardManager.getTiles();
+        // by changing the value of any tile the sudoku rules are violated
+        tiles[0][0] = new Tile(-1);
         sudokuBoardManager.setTiles(tiles);
         assertFalse(sudokuBoardManager.puzzleSolved());
     }
 
+    @Test
+    public void puzzleSolvedFalse3Test() {
+        solvedBoard();
+        Tile[][] tiles = sudokuBoardManager.getTiles();
+        // by changing the value of any tile the sudoku rules are violated
+        tiles[0][0] = new Tile(4);
+        tiles[1][0] = new Tile(1);
+        tiles[0][6] = new Tile(1);
+        tiles[2][6] = new Tile(4);
+        sudokuBoardManager.setTiles(tiles);
+        assertFalse(sudokuBoardManager.puzzleSolved());
+    }
     @Test
     public void puzzleSolvedTrueTest() {
         solvedBoard();
@@ -182,8 +207,8 @@ public class SudokuBoardManagerTest {
      */
     @Test
     public void sudokuCreateSolvedBoardTest() {
+        SudokuDifficultyActivity.difficulty = 0;
         sudokuBoardManager = new SudokuBoardManager();
-        sudokuBoardManager.createSolvedBoard();
         assertTrue(sudokuBoardManager.puzzleSolved());
 
 
@@ -221,10 +246,10 @@ public class SudokuBoardManagerTest {
     @Test
     public void getAvailableSolvedTest() {
         solvedBoard();
-        final ArrayList<Integer> expected = new ArrayList<>(Collections.singletonList(2));
+        final ArrayList<Integer> expected = new ArrayList<>(Collections.singletonList(5));
         //should give an empty list as the board is solved so the only correct integer is the one
         //already there, in this case it is
-        ArrayList<Integer> available = sudokuBoardManager.getAvailable(0,0);
+        ArrayList<Integer> available = sudokuBoardManager.getAvailable(8,8);
         assertEquals(expected,available);
     }
 

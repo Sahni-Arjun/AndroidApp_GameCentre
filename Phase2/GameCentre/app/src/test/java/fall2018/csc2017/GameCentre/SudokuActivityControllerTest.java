@@ -226,11 +226,7 @@ public class SudokuActivityControllerTest {
                     }
 
                     public void saveScoreBoard(Context context, String filename, Scoreboard scoreboard) { }
-                }, new DisplayToast(){
-            public void displayToast(Context Context, String message){
-                System.out.println(message);
-            }
-            }
+                }
         );
     }
 

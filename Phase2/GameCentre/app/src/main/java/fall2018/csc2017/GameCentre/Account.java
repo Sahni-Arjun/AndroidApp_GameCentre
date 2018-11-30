@@ -28,16 +28,30 @@ class Account implements Serializable {
     private SaveManager[] hangmanSaveManager = new SaveManager[3];
     private SaveManager[] sudokuSaveManager = new SaveManager[3];
 
+    /**
+     * Setting the current save file to look at.
+     * @param currentGame the current save file.
+     */
     void setCurrentGame(int currentGame) {
         this.currentGame = currentGame;
     }
 
+    /**
+     * The current save file. (Ranging from 1 to 3 for all games)
+     */
     private int currentGame;
 
+    /**
+     * Setting the most recent played game.
+     * @param lastPlayedGame the most recent played game.
+     */
     void setLastPlayedGame(String lastPlayedGame) {
         this.lastPlayedGame = lastPlayedGame;
     }
 
+    /**
+     * The most recent played game.
+     */
     private String lastPlayedGame;
 
     /**
@@ -62,15 +76,6 @@ class Account implements Serializable {
         sudokuSaveManager[1] = new SaveManager();
         sudokuSaveManager[2] = new SaveManager();
     }
-
-    /**
-     * Return the user's save data.
-     *
-     * @return the user's save data
-     */
-//    SaveManager getSaveManager() {
-//        return saveManager;
-//    }
 
     SaveManager getCurrentSaveManager(String gameType){
         if (gameType.equals(Account.slidingName)){
@@ -123,6 +128,10 @@ class Account implements Serializable {
         this.password = password;
     }
 
+    /**
+     * Return the most recent played game.
+     * @return the most recent played game.
+     */
     String getLastPlayedGame() {
         return lastPlayedGame;
     }

@@ -22,10 +22,14 @@ public class SignInActivity extends AppCompatActivity {
      */
     private FileSystem fileSystem = new FileSystem();
 
-    private DisplayToast displayToast = new DisplayToast();
-
+    /**
+     * The controller that manages the logic in this View.
+     */
     private SignInActivityController controller;
 
+    /**
+     * The current activity.
+     */
     private Context currentContext = this;
 
     @Override

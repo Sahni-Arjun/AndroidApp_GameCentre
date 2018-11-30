@@ -6,25 +6,45 @@ package fall2018.csc2017.GameCentre;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * A save manager that modifies game states.
+ */
 class SaveManager implements Serializable {
 
     static final long serialVersionUID = 5971302647072124829L;
 
+    /**
+     * The name of each game.
+     */
     static final String slidingTilesName = "sliding tiles";
     static final String sudokuName = "sudoku";
     static final String hangmanName = "hangman";
 
+    /**
+     * The two saving types of each game.
+     */
     static final String auto = "auto";
     static final String perma = "perma";
 
+    /**
+     * Returning the user's most recent button press.
+     * @return whether to load save or continue the auto save.
+     */
     String getContinueOrLoad() {
         return continueOrLoad;
     }
 
+    /**
+     * Setting whether the user would like to load a save or continue.
+     * @param continueOrLoad whether to load save or continue the auto save.
+     */
     void setContinueOrLoad(String continueOrLoad) {
         this.continueOrLoad = continueOrLoad;
     }
 
+    /**
+     * Represents the user's choice of whether to load save or continue the auto save.
+     */
     private String continueOrLoad = "auto";
 
     /**
@@ -37,13 +57,16 @@ class SaveManager implements Serializable {
      */
     private ArrayList<GameState> autoSave;
 
+    /**
+     * Creates a new Savemanager with no saves.
+     */
     SaveManager() {
         permaSave = new ArrayList<>();
         autoSave = new ArrayList<>();
     }
 
     /**
-     * Return the most recent saved game of SlidingTiles.
+     * Return the most recent saved game.
      *
      * @param saveType whether retrieving from auto or perma save
      * @return most recent saved game
@@ -70,7 +93,7 @@ class SaveManager implements Serializable {
     /**
      * Erase the perma or auto save.
      *
-     * @param saveType whether erasing the perma or auto save
+     * @param saveType whether updating the perma or auto save
      */
     void updateSave(String saveType) {
         if (saveType.equals(auto)) {
@@ -82,6 +105,10 @@ class SaveManager implements Serializable {
         }
     }
 
+    /**
+     * Wiping every saved state of the game. (Either perma or auto)
+     * @param saveType whether wiping perma or auto save.
+     */
     void wipeSave(String saveType) {
         if (saveType.equals(auto)) {
             autoSave = new ArrayList<>();
@@ -160,6 +187,11 @@ class SaveManager implements Serializable {
         }
     }
 
+    /**
+     * Updating the most recent move made by the player
+     * @param gameType the game played
+     * @param gameManager the state of the game
+     */
     void updateState(String gameType, GameManager gameManager) {
         switch (gameType) {
             case slidingTilesName: {
@@ -207,12 +239,21 @@ class SaveManager implements Serializable {
         }
     }
 
-    void updateSudokuTime(long startTime) { // todo delete?
+    /**
+     * Setting the amount of time that has passed in a sudoku game.
+     * @param startTime the time of the last save.
+     */
+    void updateSudokuTime(long startTime) {
         SudokuState lastAutoState = (SudokuState) this.getLastState(SaveManager.auto);
         lastAutoState.setTime(lastAutoState.getTime() + System.currentTimeMillis() - startTime);
     }
 
-    // TODO make this general for all games?
+    /**
+     * Going back to a previous saved game state.
+     *
+     * @param gameType the game in question.
+     * @return whether an undo was sucessfully made.
+     */
     boolean undoMove(String gameType) {
 
         switch (gameType) {
@@ -256,7 +297,10 @@ class SaveManager implements Serializable {
 
     }
 
-    // TODO make this general for all games.
+    /**
+     * Return the tile arrangement of SlidingTiles.
+     * @return the tile arrangement
+     */
     Tile[][] getboardArrangement() {
         // store the previous save in a variable.
         SlidingTilesState prevState;
@@ -267,6 +311,10 @@ class SaveManager implements Serializable {
     }
 
 
+    /**
+     * Return the letter arangement of Hangman
+     * @return the letter arrangement.
+     */
     Letter[][] getWordArrangement() {
         // store the previous save in a variable.
         HangmanState prevState;

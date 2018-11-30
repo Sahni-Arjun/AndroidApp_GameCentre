@@ -17,7 +17,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 /**
- * The game activity.
+ * The game activity for sudoku.
  */
 public class SudokuActivity extends AppCompatActivity implements Observer {
 
@@ -68,11 +68,13 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Board.numRows = 9;
+        Board.numCols = 9;
         super.onCreate(savedInstanceState);
-        controller = new SudokuActivityController(fileSystem, displayToast);
-        boardManager = controller.onCreateListener((SudokuActivity) currentContext);
+        controller = new SudokuActivityController(fileSystem);
+        boardManager = controller.onCreateListener(currentContext);
 
-        createTileButtons(this);
+        createTileButtons(currentContext);
         setContentView(R.layout.activity_sudoku);
         addSaveButtonListener();
         addUndoButtonListener();
@@ -116,13 +118,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                accountManager = fileSystem.loadAccount(currentContext);
-//
-//                Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-//                currentAccount.getCurrentSaveManager(SaveManager.sudokuName).updateSave("perma", SaveManager.sudokuName);
-//
-//                fileSystem.saveAccount(currentContext, accountManager);
-                controller.saveListener((SudokuActivity) currentContext);
+                controller.saveListener(currentContext);
             }
         });
     }
@@ -135,33 +131,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
         undoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                accountManager = fileSystem.loadAccount(currentContext);
-//
-//                Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-//                SaveManager currSavManager = currentAccount.getCurrentSaveManager(SaveManager.sudokuName);
-//
-//                boolean canUndo = currSavManager.getLastState("auto", SaveManager.sudokuName).canUndo();
-//                SudokuState currentAutoState = (SudokuState) currSavManager.getLastState("auto", SaveManager.sudokuName);
-//
-//                if ((currSavManager.getLength("auto", SaveManager.sudokuName) != 1) && canUndo) {
-//                    int prevMovesUndone = currentAutoState.getNumMovesUndone();
-//                    currSavManager.undo(SaveManager.sudokuName);
-//                    SudokuState prevState;
-//                    prevState = (SudokuState) currSavManager.getLastState("auto", SaveManager.sudokuName);
-//
-//                    Tile[][] prevTiles = prevState.getBoardManager().getBoard().getTiles();
-//                    boardManager.getBoard().setTiles(prevTiles);
-//                    Toast.makeText(getApplicationContext(), "" + currSavManager.getLength("auto", SaveManager.sudokuName), Toast.LENGTH_SHORT).show();
-//                    gridView.setBoardManager(boardManager);
-//                    currSavManager.getLastState("auto", SaveManager.sudokuName).incrementNumMoves(prevMovesUndone);
-//                    fileSystem.saveAccount(currentContext, accountManager);
-//                    display();
-//
-//                } else {
-//                    Toast.makeText(getApplicationContext(), "Max moves undone" +
-//                            "", Toast.LENGTH_SHORT).show();
-//                }
-                Boolean undone = controller.undoListener((SudokuActivity) currentContext, boardManager);
+                Boolean undone = controller.undoListener(currentContext, boardManager);
                 if (undone){
                     display();
                 } else {
@@ -208,7 +178,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onPause() {
         super.onPause();
-        controller.onPauseListener((SudokuActivity) currentContext);
+        controller.onPauseListener(currentContext);
     }
 
     /**
@@ -233,9 +203,6 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
         if (gameOver){
             switchToWinning();
         }
-    }
-    void setSudokuBoardManager(SudokuBoardManager newBoardManager) {
-        this.boardManager = newBoardManager;
     }
 
     /**

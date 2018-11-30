@@ -19,13 +19,25 @@ public class SetUndoActivityController {
      */
     private boolean validValue;
 
-
+    /**
+     * The model that file reads and writes.
+     */
     private FileSystem fileSystem;
 
+    /**
+     * Creates a new controller for the SetUndoActivity.
+     * @param fileSystem the model that file reads and writes.
+     */
     SetUndoActivityController(FileSystem fileSystem){
         this.fileSystem = fileSystem;
     }
 
+    /**
+     * Sets a valid undo value for the sliding tile game.
+     * @param currentContext the current activity.
+     * @param undoNumber the desired number of undos.
+     * @return whether a game was sucessfully saved.
+     */
     boolean setUndoListener(Context currentContext, String undoNumber){
         fillInSetUndo(undoNumber);
         if (validValue) {

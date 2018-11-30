@@ -47,23 +47,6 @@ public class SudokuBoard extends Board{
         return tiles;
     }
 
-//    /**
-//     * A new board of tiles in row-major order.
-//     * Precondition: len(tiles) == numRows * numCols
-//     *
-//     * @param t the tiles for the board
-//     */
-//    SudokuBoard(List<Tile> t) {
-//        super(t);
-//        Iterator<Tile> iter = t.iterator();
-//
-//        for (int i = 0; i < 9; i++) {
-//            for (int j = 0; j < 9; j++) {
-//                this.tiles[i][j] = iter.next();
-//            }
-//        }
-//    }
-
     /**
      * A new board of all tiles with backgound id 0
      */

@@ -3,6 +3,9 @@ Controller
  */
 package fall2018.csc2017.GameCentre;
 
+/**
+ * The controller for the activity.
+ */
 class SudokuDifficultyActivityController {
     /**
      * The account manager.
@@ -20,6 +23,9 @@ class SudokuDifficultyActivityController {
     private FileSystem fileSystem;
 
 
+    /**
+     * Creates a new controller that manages the logic in the activity.
+     */
     SudokuDifficultyActivityController(){
         this.fileSystem = new FileSystem();
     }
