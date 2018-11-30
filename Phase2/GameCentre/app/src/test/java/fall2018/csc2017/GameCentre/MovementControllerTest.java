@@ -1,6 +1,7 @@
 package fall2018.csc2017.GameCentre;
 
 import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -8,6 +9,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 public class MovementControllerTest {
@@ -21,23 +24,12 @@ public class MovementControllerTest {
      */
     private Account user;
 
+    private Account user2;
+
     /**
      * A BoardManager object
      */
     private SudokuBoardManager boardManager;
-
-    /**
-     * Mocking a FileSystem class
-     */
-    class FileSystem{
-        public AccountManager loadAccount(Context context) {
-            List<Account> emptyAccounts = new ArrayList<>();
-            AccountManager accountManager = new AccountManager(emptyAccounts);
-            accountManager.addUser(user);
-            return accountManager;
-        }
-    }
-
 
     /**
      * Make a set of tiles:
@@ -172,8 +164,11 @@ public class MovementControllerTest {
         setUpBoardManager();
         // Set up the account
         user = new Account("Hello", "World");
+        user2 = new Account("user", "pwrd");
         // Set current game as Sudoku
         user.setCurrentGame(3);
+        user2.setCurrentGame(2);
+        user2.setLastPlayedGame(Account.hangmanName);
         // Get the Sudoku saveManager under the account
         SaveManager saveManager = user.getCurrentSaveManager(Account.sudokuName);
 
@@ -188,7 +183,19 @@ public class MovementControllerTest {
         //Add the initial state to the saveManager
         saveManager.addState(sudokuState1);
 
-        movementController = new MovementController();
+        movementController = new MovementController(
+                new FileSystem(){
+                    public AccountManager loadAccount(Context context){
+                        List<Account> emptyAccounts = new ArrayList<>();
+                        AccountManager accountManager = new AccountManager(emptyAccounts);
+                        accountManager.addUser(user);
+                        accountManager.addUser(user2);
+                        return accountManager;
+                    }
+        }, new DisplayToast(){
+        public void displayToast(Context Context, String message){
+            System.out.println(message);
+        }});
     }
 
     /**
@@ -213,9 +220,48 @@ public class MovementControllerTest {
         }
     }
 
+    /**
+     * Test if processTapMovement process the movement if the movement is valid
+     */
     @Test
-    public void processTapMovementTest() {
-
+    public void processTapMovementValidMovementTest() {
+        SudokuBoardManager manager = new SudokuBoardManager();
+        SudokuBoard board = new SudokuBoard();
+        board.setTiles(deepcopy(boardManager.getBoard().getTiles()));
+        manager.setBoard(board);
+        movementController.setBoardManager(manager);
+        SudokuActivity.currentNumber = 5;
+        Context context = new AppCompatActivity();
+        movementController.processTapMovement(context, 43);
+        Boolean b = movementController.processTapMovement(context, 43);
+        System.out.println(b);
+        assertTrue(b);
+        assertEquals(5, ((SudokuBoardManager) movementController.getBoardManager()).getBoard().getTile(4, 7).getId());
     }
 
+    /**
+     * Test if processTapMovement process the movement if the movement is not valid
+     */
+    @Test
+    public void processTapMovementNotValidMovementTest() {
+        SudokuBoardManager manager = new SudokuBoardManager();
+        SudokuBoard board = new SudokuBoard();
+        board.setTiles(deepcopy(boardManager.getBoard().getTiles()));
+        manager.setBoard(board);
+        movementController.setBoardManager(manager);
+        SudokuActivity.currentNumber = 2;
+        Context context = new AppCompatActivity();
+
+        assertFalse(movementController.processTapMovement(context, 0));
+    }
+
+    /**
+     * Test if processTapMovement process the movement if the movement is not valid
+     */
+    @Test
+    public void processTapMovementHangManGameTest() {
+        StartingLoginActivity.currentUser = "user";
+        Context context = new AppCompatActivity();
+        assertEquals(null, movementController.processTapMovement(context, 0));
+    }
 }
