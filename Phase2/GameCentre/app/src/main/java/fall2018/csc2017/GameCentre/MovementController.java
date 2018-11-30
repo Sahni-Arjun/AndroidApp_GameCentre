@@ -15,10 +15,20 @@ class MovementController {
     }
 
     void processTapMovement(Context context, int position) {
-        if (boardManager.isValidTap(position)) {
-            boardManager.touchMove(position);
-        } else {
-            Toast.makeText(context, "Invalid Tap", Toast.LENGTH_SHORT).show();
+
+        FileSystem fileSystem = new FileSystem();
+        AccountManager accountManager = fileSystem.loadAccount(context);
+        Account account = accountManager.findUser(StartingLoginActivity.currentUser);
+
+
+        if(!Account.hangmanName.equals(account.getLastPlayedGame())){
+
+            if (boardManager.isValidTap(position)) {
+                boardManager.touchMove(position);
+            } else {
+                Toast.makeText(context, "Invalid Tap", Toast.LENGTH_SHORT).show();
+            }
         }
+
     }
 }
