@@ -22,6 +22,10 @@ import java.util.Observer;
 public class NotRobotActivity extends AppCompatActivity implements Observer {
 
     /**
+     * the controller for this activity
+     */
+    private NotRobotActivityController controller;
+    /**
      * The board manager.
      */
     private SlidingTilesBoardManager slidingTilesBoardManager = new SlidingTilesBoardManager();
@@ -30,7 +34,7 @@ public class NotRobotActivity extends AppCompatActivity implements Observer {
     /**
      * The buttons to display.
      */
-    private ArrayList<Button> tileButtons;
+    private ArrayList<Button> tileButtons = new ArrayList<>();
 
     /**
      *  Grid View and calculated column height and width based on device size
@@ -43,23 +47,23 @@ public class NotRobotActivity extends AppCompatActivity implements Observer {
      * of positions, and then call the adapter to set the view.
      */
     public void display() {
-        updateTileButtons();
+        controller.updateTileButtons(slidingTilesBoardManager,tileButtons);
         gridView.setAdapter(new CustomAdapter(tileButtons, columnWidth, columnHeight));
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-
-
-        createTileButtons(this);
+        controller = new NotRobotActivityController();
+        Board.numRows = 2;
+        Board.numCols = 2;
+        controller.createTileButtons(this,slidingTilesBoardManager,tileButtons);
         setContentView(R.layout.not_robot);
         addNewGameButtonListener();
 
         // Add View to activity
         gridView = findViewById(R.id.grid);
-        gridView.setNumColumns(Board.numCols);
+        gridView.setNumColumns(2);
         gridView.setBoardManager(slidingTilesBoardManager);
         slidingTilesBoardManager.getBoard().addObserver(this);
         // Observer sets up desired dimensions as well as calls our display function
@@ -85,20 +89,20 @@ public class NotRobotActivity extends AppCompatActivity implements Observer {
      *
      * @param context the context
      */
-    private void createTileButtons(Context context) {
-
-        Board board = slidingTilesBoardManager.getBoard();
-        tileButtons = new ArrayList<>();
-
-        for (int row = 0; row != Board.numRows; row++) {
-            for (int col = 0; col != Board.numCols; col++) {
-                Button tmp = new Button(context);
-                tmp.setBackgroundResource(board.getTile(row, col).getBackground());
-
-                this.tileButtons.add(tmp);
-            }
-        }
-    }
+//    private void createTileButtons(Context context) {
+//
+//        Board board = slidingTilesBoardManager.getBoard();
+//        tileButtons = new ArrayList<>();
+//
+//        for (int row = 0; row != Board.numRows; row++) {
+//            for (int col = 0; col != Board.numCols; col++) {
+//                Button tmp = new Button(context);
+//                tmp.setBackgroundResource(board.getTile(row, col).getBackground());
+//
+//                this.tileButtons.add(tmp);
+//            }
+//        }
+//    }
 
     /**
      * Activates button for new board.
@@ -124,17 +128,17 @@ public class NotRobotActivity extends AppCompatActivity implements Observer {
     /**
      * Update the backgrounds on the buttons to match the tiles.
      */
-    private void updateTileButtons() {
-        Board board = slidingTilesBoardManager.getBoard();
-        int nextPos = 0;
-
-        for (Button b : tileButtons) {
-            int row = nextPos / 2;
-            int col = nextPos % 2;
-            b.setBackgroundResource(board.getTile(row, col).getBackground());
-            nextPos++;
-        }
-    }
+//    private void updateTileButtons() {
+//        Board board = slidingTilesBoardManager.getBoard();
+//        int nextPos = 0;
+//
+//        for (Button b : tileButtons) {
+//            int row = nextPos / 2;
+//            int col = nextPos % 2;
+//            b.setBackgroundResource(board.getTile(row, col).getBackground());
+//            nextPos++;
+//        }
+//    }
 
     /**
      * Switch to new the main menu after the puzzle is solved.
