@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNull;
 import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 public class AccountManagerTest {
     private AccountManager accountManager;
@@ -80,7 +82,7 @@ public class AccountManagerTest {
      */
     @Test
     public void findUserTest(){
-        assertTrue(String.format("Expected %b but got %b", true, false), accountManager.findUser("user1") == this.users.get(0));
+        assertEquals(String.format("Expected %b but got %b", true, false), accountManager.findUser("user1"), this.users.get(0));
     }
 
     /**
@@ -88,6 +90,6 @@ public class AccountManagerTest {
      */
     @Test
     public void findUserNullTest() {
-        assertTrue(String.format("Expected %b but got %b", null, false), accountManager.findUser("user6") == null);
+        assertNull(String.format("Expected %b but got %b", null, false), accountManager.findUser("user6"));
     }
 }

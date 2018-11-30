@@ -8,8 +8,6 @@ import static junit.framework.Assert.assertTrue;
 
 public class WordTest {
 
-    private WordManager wordManager;
-
     private Word currWord;
 
     @Before
@@ -18,7 +16,7 @@ public class WordTest {
         HangmanComplexityActivity.complexity = 3;
         Word.numCols = HangmanComplexityActivity.complexity + 1;
         Word.numRows = 1;
-        wordManager = new WordManager("Test");
+        WordManager wordManager = new WordManager("Test");
         currWord = wordManager.getWord();
     }
 

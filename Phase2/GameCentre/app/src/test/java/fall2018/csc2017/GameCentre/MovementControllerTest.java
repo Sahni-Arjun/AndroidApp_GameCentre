@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNull;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
@@ -137,7 +138,7 @@ public class MovementControllerTest {
         return tiles;
     }
 
-    public void setUpBoardManager() {
+    private void setUpBoardManager() {
         Tile[][] tiles = makeTiles(); // Made tiles for the sudoku board
         boardManager = new SudokuBoardManager();
         SudokuBoard sudokuBoard = new SudokuBoard();
@@ -233,7 +234,6 @@ public class MovementControllerTest {
         Boolean b = movementController.processTapMovement(context, 43);
         System.out.println(b);
         assertTrue(b);
-        //assertEquals(5, ((SudokuBoardManager) movementController.getBoardManager()).getBoard().getTile(4, 7).getId());
     }
 
     /**
@@ -259,6 +259,6 @@ public class MovementControllerTest {
     public void processTapMovementHangManGameTest() {
         StartingLoginActivity.currentUser = "user";
         Context context = new AppCompatActivity();
-        assertEquals(null, movementController.processTapMovement(context, 0));
+        assertNull(movementController.processTapMovement(context, 0));
     }
 }

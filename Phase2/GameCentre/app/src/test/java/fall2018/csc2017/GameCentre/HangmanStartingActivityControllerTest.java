@@ -18,8 +18,6 @@ public class HangmanStartingActivityControllerTest {
      */
     private HangmanStartingActivityController hangmanStartingActivityController;
 
-    private WordManager wordManager;
-
     private Account user;
 
     /**
@@ -34,7 +32,7 @@ public class HangmanStartingActivityControllerTest {
         HangmanComplexityActivity.complexity = 3;
         Word.numCols = HangmanComplexityActivity.complexity + 1;
         Word.numRows = 1;
-        wordManager = new WordManager("Test");
+        WordManager wordManager = new WordManager("Test");
         HangmanState hangmanState1 = new HangmanState(wordManager, 0, 3, 3, 0, false);
         saveManager.addState(hangmanState1);
         Word currWord = wordManager.getWord();

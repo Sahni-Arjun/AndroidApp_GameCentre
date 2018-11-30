@@ -26,8 +26,7 @@ public class ScoreboardTest {
 
     @Test
     public void testCreateTopScoreText() {
-        StringBuilder topScoreString = new StringBuilder("10 A\n8 B\n8 C\n0 D\n");
-        String topScore = topScoreString.toString();
+        String topScore = "10 A\n8 B\n8 C\n0 D\n";
         String retTopScore = arbitraryScoreboard.createTopScoreText().toString();
         assertEquals(retTopScore, topScore);
     }

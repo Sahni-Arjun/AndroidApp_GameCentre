@@ -1,14 +1,11 @@
 package fall2018.csc2017.GameCentre;
 
-import android.content.Context;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Collections;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Arrays;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.TestCase.assertTrue;
@@ -19,11 +16,7 @@ public class SlidingTilesBoardManagerTest {
      * The slidingTileActivityController to test.
      */
 
-    private SlidingTileActivityController slidingTileActivityController;
-
     private SlidingTilesBoardManager slidingTilesBoardManager;
-
-    private Account user;
 
     /**
      * Make a set of tiles:
@@ -73,7 +66,7 @@ public class SlidingTilesBoardManagerTest {
      */
     private void setUpAccountWithGame() {
         setUpStartingBoard();
-        user = new Account("Hello", "World");
+        Account user = new Account("Hello", "World");
         user.setCurrentGame(1);
         SaveManager saveManager = user.getCurrentSaveManager(Account.slidingName);
 
@@ -84,7 +77,7 @@ public class SlidingTilesBoardManagerTest {
 
         SlidingTilesState slidingTilesState1 = new SlidingTilesState(boardManager, 0, 3, 3, 0, true);
         saveManager.addState(slidingTilesState1);
-        /**
+        /*
          * 9 1 3
          * 2 7 4
          * 8 5 6
@@ -96,7 +89,7 @@ public class SlidingTilesBoardManagerTest {
         board.setTiles(deepCopy(slidingTilesBoardManager.getBoard().getTiles()));
         boardManager.setBoard(board);
         saveManager.updateState(SaveManager.slidingTilesName, boardManager);
-        /**
+        /*
          * 1 9 3
          * 2 7 4
          * 8 5 6
@@ -108,7 +101,7 @@ public class SlidingTilesBoardManagerTest {
         board.setTiles(deepCopy(slidingTilesBoardManager.getBoard().getTiles()));
         boardManager.setBoard(board);
         saveManager.updateState(SaveManager.slidingTilesName, boardManager);
-        /**
+        /*
          * 1 7 3
          * 2 9 4
          * 8 5 6
@@ -119,20 +112,6 @@ public class SlidingTilesBoardManagerTest {
     public void setUp(){
         StartingLoginActivity.currentUser = "Hello";
         setUpAccountWithGame();
-        slidingTileActivityController = new SlidingTileActivityController(
-                new FileSystem(){
-                    public AccountManager loadAccount(Context context){
-                        List<Account> emptyAccounts = new ArrayList<>();
-                        AccountManager accountManager = new AccountManager(emptyAccounts);
-                        accountManager.addUser(user);
-                        return accountManager;
-                    }
-
-                    public void saveAccount(Context context, AccountManager accountManager){
-                        user = accountManager.findUser("Hello");
-                    }
-                }
-        );
     }
 
     // Constructor test

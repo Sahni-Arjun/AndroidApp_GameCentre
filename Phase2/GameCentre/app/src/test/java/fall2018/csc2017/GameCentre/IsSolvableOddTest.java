@@ -9,16 +9,6 @@ import static org.junit.Assert.assertTrue;
 public class IsSolvableOddTest {
 
     /**
-     * Board for this test.
-     */
-    Board board;
-
-    /**
-     * The board manager.
-     */
-    SlidingTilesBoardManager boardManager;
-
-    /**
      * Create an odd sized board which is solvable.
      */
     private Board solvableOddBoard() {
@@ -88,6 +78,8 @@ public class IsSolvableOddTest {
      */
     @Test
     public void testIsSolvableOddSizedBoard(){
+        Board board;
+        SlidingTilesBoardManager boardManager;
         boardManager = new SlidingTilesBoardManager();
 
         board = solvableOddBoard();

@@ -1,14 +1,11 @@
 package fall2018.csc2017.GameCentre;
 
-import android.content.Context;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotSame;
@@ -154,7 +151,6 @@ public class SudokuBoardManagerTest {
 
     @Before
     public void setUp(){
-        SudokuActivity act = new SudokuActivity();
         SlidingTileComplexityActivity.complexity = 9;
         SudokuDifficultyActivity.difficulty = 1;
         }

@@ -127,7 +127,7 @@ public class SudokuActivityControllerTest {
         return tiles;
     }
 
-    public void setUpBoardManager() {
+    private void setUpBoardManager() {
         Tile[][] tiles = makeTiles(); // Made tiles for the sudoku board
         boardManager = new SudokuBoardManager();
         SudokuBoard sudokuBoard = new SudokuBoard();
@@ -172,7 +172,7 @@ public class SudokuActivityControllerTest {
         board.setTiles(deepcopy(boardManager.getBoard().getTiles()));
         manager.setBoard(board);
         saveManager.updateState(SaveManager.sudokuName, manager);
-        /**
+        /*
          * 2 9 6 3 1 8 5 7 4
          * 5 8 4 9 7 2 6 1 3
          * 7 1 3 6 4 5 2 8 9
@@ -191,7 +191,7 @@ public class SudokuActivityControllerTest {
         board.setTiles(deepcopy(boardManager.getBoard().getTiles()));
         manager.setBoard(board);
         saveManager.updateState(SaveManager.sudokuName, manager);
-        /**
+        /*
          * 2 9 6 3 1 8 5 7 4
          * 5 8 4 9 7 2 6 1 3
          * 7 1 3 6 4 5 2 8 9
@@ -262,7 +262,6 @@ public class SudokuActivityControllerTest {
 
         SaveManager currSaveManager = user.getCurrentSaveManager(SaveManager.sudokuName);
         SudokuState currLastState = (SudokuState) currSaveManager.getLastState(SaveManager.auto);
-//        long time = currLastState.getTime();
         assert(currLastState.getTime() != 0);
     }
 

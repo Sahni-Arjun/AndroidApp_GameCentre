@@ -16,18 +16,9 @@ public class NotRobotActivityControllerTest {
     private NotRobotActivity act;
     private NotRobotActivityController controller;
 
-    private Board sampleBoard(){
-        Tile[][] tiles = new Tile[2][2];
-        tiles[0][0] = new Tile(0);
-        tiles[0][1] = new Tile(1);
-        tiles[1][0] = new Tile(2);
-        tiles[1][1] = new Tile(0);
-        Board board = new Board();
-        board.setTiles(tiles);
-        return board;
-    }
     @Before
     public void setUp(){
+        SlidingTileComplexityActivity.complexity = 2;
         Board.numRows = 2;
         Board.numCols = 2;
         controller = new NotRobotActivityController();
@@ -41,7 +32,5 @@ public class NotRobotActivityControllerTest {
         controller.createTileButtons(act, manager, tileButtons);
         assertEquals(4, tileButtons.size());
     }
-
-
 }
 

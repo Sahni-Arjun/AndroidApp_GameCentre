@@ -8,16 +8,6 @@ import static org.junit.Assert.*;
 public class IsSolvableEvenTest {
 
     /**
-     * The board used for this test.
-     */
-    Board board;
-
-    /**
-     * The board manager.
-     */
-    SlidingTilesBoardManager boardManager;
-
-    /**
      * Create the even board where the blank is on the even row and has odd number of inversions.
      * This board is solvable.b
      */
@@ -104,6 +94,8 @@ public class IsSolvableEvenTest {
      */
     @Test
     public void testIsSolvableEvenSizedBoard() {
+        Board board;
+        SlidingTilesBoardManager boardManager;
         boardManager = new SlidingTilesBoardManager();
 
         board = solvableEvenBoardBlankOnEven();
