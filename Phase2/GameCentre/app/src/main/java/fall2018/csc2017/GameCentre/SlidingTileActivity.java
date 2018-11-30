@@ -58,7 +58,7 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
         FileSystem fileSystem = new FileSystem();
         slidingTileActivityController = new SlidingTileActivityController(fileSystem);
         slidingTilesBoardManager = slidingTileActivityController.onCreateListener(currentContext);
-        createTileButtons(this);
+        slidingTileActivityController.createTileButtons(this,slidingTilesBoardManager,tileButtons);
         setContentView(R.layout.activity_main);
         addSaveButtonListener();
         addUndoButtonListener();
@@ -120,17 +120,17 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
      *
      * @param context the context
      */
-    private void createTileButtons(Context context) {
-        Board board = slidingTilesBoardManager.getBoard();
-        tileButtons = new ArrayList<>();
-        for (int row = 0; row != Board.numRows; row++) {
-            for (int col = 0; col != Board.numCols; col++) {
-                Button tmp = new Button(context);
-                tmp.setBackgroundResource(board.getTile(row, col).getBackground());
-                this.tileButtons.add(tmp);
-            }
-        }
-    }
+//    private void createTileButtons(Context context) {
+//        Board board = slidingTilesBoardManager.getBoard();
+//        tileButtons = new ArrayList<>();
+//        for (int row = 0; row != Board.numRows; row++) {
+//            for (int col = 0; col != Board.numCols; col++) {
+//                Button tmp = new Button(context);
+//                tmp.setBackgroundResource(board.getTile(row, col).getBackground());
+//                this.tileButtons.add(tmp);
+//            }
+//        }
+//    }
 
     /**
      * Update the backgrounds on the buttons to match the tiles.
