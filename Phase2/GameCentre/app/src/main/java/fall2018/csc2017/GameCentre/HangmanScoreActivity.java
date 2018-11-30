@@ -18,38 +18,13 @@ import java.io.ObjectInputStream;
  */
 public class HangmanScoreActivity extends AppCompatActivity {
 
-    /**
-     * The scoreboard for the Hangman game.
-     */
-    Scoreboard hangmanScoreboard;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hangman_score);
-        loadFromFile();
+        HangmanScoreActivityController hangmanScoreActivityController = new HangmanScoreActivityController();
+        StringBuilder hangmanScoreboard = hangmanScoreActivityController.onCreateListener(this);
         TextView hangmanScores = findViewById(R.id.hangmanScores);
-        hangmanScores.setText(hangmanScoreboard.createTopScoreText());
-    }
-
-    /**
-     * Load the word manager from fileName.
-     */
-    private void loadFromFile() {
-
-        try {
-            InputStream inputStream = this.openFileInput(StartingLoginActivity.SAVE_HANGMAN_SCOREBOARD);
-            if (inputStream != null) {
-                ObjectInputStream input = new ObjectInputStream(inputStream);
-                hangmanScoreboard = (Scoreboard) input.readObject();
-                inputStream.close();
-            }
-        } catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
-        } catch (IOException e) {
-            Log.e("login activity", "Can not read file: " + e.toString());
-        } catch (ClassNotFoundException e) {
-            Log.e("login activity", "File contained unexpected data type: " + e.toString());
-        }
+        hangmanScores.setText(hangmanScoreboard);
     }
 }
