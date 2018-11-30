@@ -23,11 +23,9 @@ public class SudokuBoard extends Board{
      * @param tile replaces the previous Tile at the indicated position
      */
     public void setTile(int row, int col, Tile tile){
-        if(tiles[row][col].getId()==0){
-            tiles[row][col] = tile;
-            setChanged();
-            notifyObservers();
-        }
+        tiles[row][col] = tile;
+        setChanged();
+        notifyObservers();
     }
 
     /**

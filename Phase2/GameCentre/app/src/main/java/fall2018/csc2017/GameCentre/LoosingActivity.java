@@ -13,10 +13,7 @@ import android.widget.TextView;
  */
 public class LoosingActivity extends AppCompatActivity {
 
-    /**
-     * The scoreboard for the given game.
-     */
-    private Scoreboard scoreBoard;
+
 
     /**
      * The file system.
@@ -25,6 +22,9 @@ public class LoosingActivity extends AppCompatActivity {
 
     private String filename;
 
+    public static String scoreMessage = "";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -32,13 +32,11 @@ public class LoosingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loosing);
         findFilename();
-        scoreBoard = fileSystem.loadScoreboard(this, filename);
-        int score = scoreBoard.getLatestScore();
         TextView scoreTxt = findViewById(R.id.scoreTextA);
         TextView wordMissed = findViewById(R.id.word);
 
 
-        String scoreMessage = "Your Score: " + String.valueOf(score);
+        scoreMessage = getScoreMessage();
         String wordMessage = "The word was: " + WordManager.stringWord.toUpperCase() + " !";
         scoreTxt.setText(scoreMessage);
         wordMissed.setText(wordMessage);
@@ -67,15 +65,27 @@ public class LoosingActivity extends AppCompatActivity {
         }
     }
 
+
+    public static String getScoreMessage(){
+
+        return scoreMessage;
+    }
+
+
+    public static void lost(){
+
+        scoreMessage = "Your score is 0 !";
+    }
+
+
+
     @Override
     protected void onResume() {
 
         super.onResume();
         findFilename();
-        scoreBoard = fileSystem.loadScoreboard(this, filename);
-        int score = scoreBoard.getLatestScore();
         TextView scoreTxt = findViewById(R.id.scoreTextA);
-        String scoreMessage = "Your Score: " + String.valueOf(score);
+        String scoreMessage = getScoreMessage();
         scoreTxt.setText(scoreMessage);
     }
 
