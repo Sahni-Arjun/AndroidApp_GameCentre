@@ -1,8 +1,8 @@
 package fall2018.csc2017.GameCentre;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
+
 
 import org.junit.Before;
 import org.junit.Test;
@@ -24,15 +24,19 @@ public class HangmanActivityControllerTest {
 
     private WordManager wordManager;
 
-    List<Letter> lettersMock = new ArrayList<>();
-
-    public Word word = new Word(lettersMock);
-
     private Account user;
 
     private AccountManager accountManager;
 
+    private SaveManager saveManager;
+
     private int gameFile = 1;
+
+    public FileSystem fileSystem;
+
+    public DisplayToast displayToast;
+
+    public Context context = hangmanActivity;
 
 
     /**
@@ -40,27 +44,7 @@ public class HangmanActivityControllerTest {
      */
     private void setUpStartingWord() {
 
-        HangmanComplexityActivity.complexity = 4;
-        FileSystem fileSystem = new FileSystem();
-        DisplayToast displayToast = new DisplayToast();
-        hangmanActivity = new HangmanActivity();
-        hangmanStartingActivityController = new HangmanStartingActivityController(fileSystem, displayToast);
 
-        List<Letter> letters = setUpLetters("seven");
-        word.setWord(5);
-        word.setLetters(letters);
-        wordManager = new WordManager(word);
-
-        Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-        currentAccount.setCurrentGame(gameFile);
-        SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.hangmanName);
-        currSavManager.wipeSave(SaveManager.auto);
-        HangmanState newState = new
-                HangmanState(HangmanStartingActivity.wordManager, 0);
-        newState.setComplexity(HangmanComplexityActivity.complexity);
-        newState.setUnlimitedUndo();
-        currSavManager.addState(newState);
-        fileSystem.saveAccount(hangmanStartingActivity, accountManager);
     }
 
 
@@ -98,49 +82,133 @@ public class HangmanActivityControllerTest {
      * Set account for mocking
      */
     private void setUpAccountWithGame() {
-        user = new Account("user", "Password");
-        user.setCurrentGame(1);
-        SaveManager saveManager = user.getCurrentSaveManager(Account.hangmanName);
-        HangmanState hangmanState1 = new HangmanState(wordManager, 0, 4, 3, 0, true);
-        saveManager.addState(hangmanState1);
+
+
     }
 
+    @Before
     public void setUp(){
-        StartingLoginActivity.currentUser = "Hello";
-        setUpAccountWithGame();
-//        SlidingTileActivity.slidingTilesBoardManager = new SlidingTilesBoardManager();
+//        fileSystem = new FileSystem();
+//        displayToast = new DisplayToast();
+//
+//        fileSystem = new FileSystem();
+
+
+//        hangmanActivity = new HangmanActivity();
+//        context = hangmanStartingActivity;
+//        hangmanActivityController = new HangmanActivityController(fileSystem, displayToast);
+//        hangmanStartingActivity = new HangmanStartingActivity();
+//        hangmanStartingActivityController = new HangmanStartingActivityController(fileSystem, displayToast);
+
+        HangmanComplexityActivity.complexity = 4;
+        SlidingTileComplexityActivity.complexity = 4;
+
+
+        List<Letter> letters = setUpLetters("seven");
+
+        Word word = new Word();
+        Word.numRows = 1;
+        Word.numCols = 5;
+        word.setWord(5);
+        word.setLetters(letters);
+        wordManager = new WordManager(word);
+        HangmanActivity.wordManager = wordManager;
+
+        StartingLoginActivity.currentUser = "Hello";                                                                                              
+        user = new Account("Hello", "Password");
+        user.setCurrentGame(1);                                                                                                                   
+        saveManager = user.getCurrentSaveManager(Account.hangmanName);                                                                            
+        HangmanState hangmanState1 = new HangmanState(wordManager, 0, 4, 3, 0, true);
+        saveManager.addState(hangmanState1);
+
+
         hangmanActivityController = new HangmanActivityController(
-                new FileSystem(){
-                    public AccountManager loadAccount(Context context){
+                new FileSystem() {
+                    public AccountManager loadAccount(Context context) {
                         List<Account> emptyAccounts = new ArrayList<>();
                         AccountManager accountManager = new AccountManager(emptyAccounts);
                         accountManager.addUser(user);
                         return accountManager;
                     }
 
-                    public void saveAccount(Context context, AccountManager accountManager){
+                    public void saveAccount(Context context, AccountManager accountManager) {
                         user = accountManager.findUser("Hello");
                     }
+
+                    public Scoreboard loadScoreboard(Context context, String filename) {
+                        return new Scoreboard();
+                    }
+
+                    void saveScoreBoard(Context context, String filename, Scoreboard scrboard) {
+                    }
                 }, new DisplayToast(){
-            public void displayToast(Context Context, String message){
-                System.out.println(message);
-            }
-        }
+                    @Override
+                    public void displayToast(Context context, String text) { }
+                }
         );
+
+
+
+
+//        accountManager = new AccountManager(new ArrayList<Account>());
+//        fileSystem.saveAccount(context, accountManager);
+//        hangmanActivityController = new HangmanActivityController(fileSystem, displayToast);
+
+
+
+
+
     }
 
 
     @Test
     public void testUpdateGameListener(){
 
-        setUpAccountWithGame();
-        setUpStartingWord();
+        setUp();
         sixGuesses();
-        hangmanActivityController.updateGameListener(hangmanActivity);
+        saveManager = user.getCurrentSaveManager(Account.hangmanName);
+        Context thisContext = new AppCompatActivity();
+        hangmanActivityController.updateGameListener(thisContext);
         assertEquals("Your score is 0 !", LoosingActivity.getScoreMessage());
 
+    }
+
+
+    @Test
+    public void testSaveListener(){
+
+        setUp();
+        sixGuesses();
+        hangmanActivity = new HangmanActivity();
+        fileSystem = new FileSystem();
+        saveManager = user.getCurrentSaveManager(Account.hangmanName);
+        Account user1 = new Account("hello", "parrot");
+        Account user2 = new Account("hi", "macaw");
+        List<Account> users = new ArrayList<>();
+        users.add(user1);
+        users.add(user2);
+        hangmanActivityController.accountManager.addUser(user1);
+        hangmanActivityController.accountManager.addUser(user2);
+
+        hangmanActivityController.saveListener(hangmanActivity);
+
+        accountManager = hangmanActivityController.fileSystem.loadAccount(hangmanActivity);
+
+        assertEquals(hangmanActivityController.accountManager, accountManager);
+
+
+//        setUp();
+//        sixGuesses();
+//        saveManager = user.getCurrentSaveManager(Account.hangmanName);
+//        Context thisContext = new AppCompatActivity();
+//        hangmanActivityController.saveListener(hangmanActivity);
+//        FileSystem fileSystem = new FileSystem();
+//        fileSystem.saveAccount(thisContext, accountManager);
+//        accountManager = fileSystem.loadAccount(hangmanActivity);
+        //assertEquals(saveManager, accountManager);
 
     }
+
 
 
     /**

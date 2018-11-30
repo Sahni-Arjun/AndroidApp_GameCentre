@@ -274,6 +274,8 @@ public class SlidingTileActivityControllerTest {
 
         SlidingTilesBoardManager boardManager = new SlidingTilesBoardManager();
         Board board = new Board();
+        Board.numCols = 3;
+        Board.numRows = 3;
         board.setTiles(tiles);
         boardManager.setBoard(board);
         /*

@@ -4,8 +4,11 @@ Controller class.
 package fall2018.csc2017.GameCentre;
 
 import android.content.Context;
+import android.widget.Button;
 
-class SlidingTileActivityController {
+import java.util.ArrayList;
+
+class SlidingTileActivityController extends NotRobotActivityController {
     /**
      * The filesystem.
      */
@@ -24,8 +27,16 @@ class SlidingTileActivityController {
         accountManager = fileSystem.loadAccount(context);
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
+        currentAccount.setLastPlayedGame(Account.slidingName);
         String continueOrLoad = currSavManager.getContinueOrLoad();
         return ((SlidingTilesState) currSavManager.getLastState(continueOrLoad)).getSlidingTilesBoardManager();
+    }
+
+    void onResumeListener(Context context){
+        accountManager = fileSystem.loadAccount(context);
+        Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
+        currentAccount.setLastPlayedGame(Account.slidingName);
+        fileSystem.saveAccount(context, accountManager);
     }
 
     boolean undoListener(Context context, SlidingTilesBoardManager slidingTilesBoardManager) {
@@ -84,4 +95,6 @@ class SlidingTileActivityController {
 
         fileSystem.saveAccount(context, accountManager);
     }
+
+
 }

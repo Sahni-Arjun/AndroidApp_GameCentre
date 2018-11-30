@@ -37,7 +37,7 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
     /**
      * The buttons to display.
      */
-    private ArrayList<Button> tileButtons;
+    private ArrayList<Button> tileButtons = new ArrayList<>();
 
     // Grid View and calculated column height and width based on device size
     private GestureDetectGridView gridView;
@@ -48,7 +48,7 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
      * of positions, and then call the adapter to set the view.
      */
     public void display() {
-        updateTileButtons();
+        slidingTileActivityController.updateTileButtons(slidingTilesBoardManager,tileButtons);
         gridView.setAdapter(new CustomAdapter(tileButtons, columnWidth, columnHeight));
     }
 
@@ -58,7 +58,7 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
         FileSystem fileSystem = new FileSystem();
         slidingTileActivityController = new SlidingTileActivityController(fileSystem);
         slidingTilesBoardManager = slidingTileActivityController.onCreateListener(currentContext);
-        createTileButtons(this);
+        slidingTileActivityController.createTileButtons(this,slidingTilesBoardManager,this.tileButtons);
         setContentView(R.layout.activity_main);
         addSaveButtonListener();
         addUndoButtonListener();
@@ -120,32 +120,32 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
      *
      * @param context the context
      */
-    private void createTileButtons(Context context) {
-        Board board = slidingTilesBoardManager.getBoard();
-        tileButtons = new ArrayList<>();
-        for (int row = 0; row != Board.numRows; row++) {
-            for (int col = 0; col != Board.numCols; col++) {
-                Button tmp = new Button(context);
-                tmp.setBackgroundResource(board.getTile(row, col).getBackground());
-                this.tileButtons.add(tmp);
-            }
-        }
-    }
+//    private void createTileButtons(Context context) {
+//        Board board = slidingTilesBoardManager.getBoard();
+//        tileButtons = new ArrayList<>();
+//        for (int row = 0; row != Board.numRows; row++) {
+//            for (int col = 0; col != Board.numCols; col++) {
+//                Button tmp = new Button(context);
+//                tmp.setBackgroundResource(board.getTile(row, col).getBackground());
+//                this.tileButtons.add(tmp);
+//            }
+//        }
+//    }
 
     /**
      * Update the backgrounds on the buttons to match the tiles.
      */
-    private void updateTileButtons() {
-        Board board = slidingTilesBoardManager.getBoard();
-        int nextPos = 0;
-
-        for (Button b : tileButtons) {
-            int row = nextPos / Board.numRows;
-            int col = nextPos % Board.numCols;
-            b.setBackgroundResource(board.getTile(row, col).getBackground());
-            nextPos++;
-        }
-    }
+//    private void updateTileButtons() {
+//        Board board = slidingTilesBoardManager.getBoard();
+//        int nextPos = 0;
+//
+//        for (Button b : tileButtons) {
+//            int row = nextPos / Board.numRows;
+//            int col = nextPos % Board.numCols;
+//            b.setBackgroundResource(board.getTile(row, col).getBackground());
+//            nextPos++;
+//        }
+//    }
 
     /**
      * Dispatch onPause() to fragments.
@@ -161,6 +161,7 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onResume() {
         super.onResume();
+        slidingTileActivityController.onResumeListener(this);
     }
 
     @Override

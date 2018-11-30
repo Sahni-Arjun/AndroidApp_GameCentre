@@ -34,7 +34,7 @@
             tools:ignore="RelativeOverlap" />
     </RelativeLayout>
 
-    <fall2018.csc2017.GameCentre.GestureDetectGridView
+    <fall2018.csc2017.GameCentre.HangmanGestureDetectGridView
         android:id="@+id/grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

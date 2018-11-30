@@ -89,9 +89,4 @@ public class HangmanGestureDetectGridView extends GestureDetectGridView {
     public boolean onTouchEvent(MotionEvent ev) {
         return gDetector.onTouchEvent(ev);
     }
-
-
-    public void setWordManager(WordManager wordManager) {
-        mController.setWordManager(wordManager);
-    }
 }

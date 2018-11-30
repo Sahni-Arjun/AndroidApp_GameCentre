@@ -58,8 +58,12 @@ class SudokuActivityController {
         }
     }
 
-    void onResumeListener(){
+    void onResumeListener(Context context){
         startTime = System.currentTimeMillis();
+        accountManager = fileSystem.loadAccount(context);
+        Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
+        currentAccount.setLastPlayedGame(Account.sudokuName);
+        fileSystem.saveAccount(context, accountManager);
     }
 
     boolean updateListener(Context context, SudokuBoardManager boardManager){

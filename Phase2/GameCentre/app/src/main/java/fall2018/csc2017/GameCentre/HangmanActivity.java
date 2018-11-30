@@ -79,7 +79,6 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
         doll.setBackgroundResource(R.drawable.hangman_head);
         gridView = findViewById(R.id.HangmanGrid);
         gridView.setNumColumns(Word.numCols);
-        gridView.setWordManager(wordManager);
         wordManager.getWord().addObserver(this);
         // Observer sets up desired dimensions as well as calls our display function
         gridView.getViewTreeObserver().addOnGlobalLayoutListener(
@@ -296,7 +295,11 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
     @Override
     public void update(Observable o, Object arg) {
 
-        hangmanActivityController.updateGameListener(this);
+        String result = hangmanActivityController.updateGameListener(this);
+        if (result.equals("loose")){
+            Intent loose = new Intent(this, LoosingActivity.class);
+            this.startActivity(loose);
+        }
         display();
     }
 
