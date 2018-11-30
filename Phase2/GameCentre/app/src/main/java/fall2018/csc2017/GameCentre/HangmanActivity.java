@@ -293,7 +293,11 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
     @Override
     public void update(Observable o, Object arg) {
 
-        hangmanActivityController.updateGameListener(this);
+        String result = hangmanActivityController.updateGameListener(this);
+        if (result.equals("loose")){
+            Intent loose = new Intent(this, LoosingActivity.class);
+            this.startActivity(loose);
+        }
         display();
     }
 
