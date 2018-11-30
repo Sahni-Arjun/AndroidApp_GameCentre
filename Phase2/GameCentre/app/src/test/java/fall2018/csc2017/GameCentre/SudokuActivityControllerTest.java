@@ -299,5 +299,28 @@ public class SudokuActivityControllerTest {
         assertFalse("Expected False but returned True", controller.updateListener(context, manager));
     }
 
+    /**
+     * Test if updateListener returns True with an unfinished game
+     */
+    @Test
+    public void updateListenerTrueTest() {
+        Context context = new AppCompatActivity();
+        SudokuBoardManager manager = controller.onCreateListener(context);
+
+        manager.getBoard().setTile(7, 1, new Tile(4));
+        assertTrue("Expected updateListener() return True but returned False", controller.updateListener(context, manager));
+    }
+
+    /**
+     * Test if undoListener returns True if there is a state to undo
+     */
+    @Test
+    public void undoListenerTrueTest() {
+        Context context = new AppCompatActivity();
+        SudokuBoardManager manager = controller.onCreateListener(context);
+
+        assertTrue(controller.undoListener(context, manager));
+    }
+
 
 }
