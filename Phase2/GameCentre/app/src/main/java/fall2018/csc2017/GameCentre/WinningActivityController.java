@@ -2,49 +2,38 @@ package fall2018.csc2017.GameCentre;
 
 import android.content.Context;
 
-public class WinningActivityController {
-    /**
-     * The scoreboard for the given game.
-     */
-    private Scoreboard scoreBoard;
+class WinningActivityController {
 
     /**
      * The file system.
      */
-    private FileSystem fileSystem = new FileSystem();
-
-    private String filename;
+    private FileSystem fileSystem;
 
     WinningActivityController(FileSystem fileSystem) {
         this.fileSystem = fileSystem;
     }
 
-    private void findFilename(Context context){
+    String findFilename(Context context) {
         AccountManager accountManager = fileSystem.loadAccount(context);
         Account user = accountManager.findUser(StartingLoginActivity.currentUser);
         String lastPlayedGame = user.getLastPlayedGame();
 
         switch (lastPlayedGame) {
             case Account.slidingName:
-                filename = StartingLoginActivity.SAVE_SLIDING_SCOREBOARD;
-                break;
+                return StartingLoginActivity.SAVE_SLIDING_SCOREBOARD;
             case Account.hangmanName:
-                filename = StartingLoginActivity.SAVE_HANGMAN_SCOREBOARD;
-                break;
+                return StartingLoginActivity.SAVE_HANGMAN_SCOREBOARD;
             case Account.sudokuName:
-                filename = StartingLoginActivity.SAVE_SUDOKU_SCOREBOARD;
-                break;
+                return StartingLoginActivity.SAVE_SUDOKU_SCOREBOARD;
             default:
-                filename = StartingLoginActivity.SAVE_SUDOKU_SCOREBOARD;
+                return StartingLoginActivity.SAVE_SUDOKU_SCOREBOARD;
         }
     }
 
-    public String onOpenListener(Context context) {
-        findFilename(context);
-        scoreBoard = fileSystem.loadScoreboard(context, filename);
+    String onOpenListener(Context context) {
+        String filename = findFilename(context);
+        Scoreboard scoreBoard = fileSystem.loadScoreboard(context, filename);
         int score = scoreBoard.getLatestScore();
-        String scoreMessage = "Your Score: " + String.valueOf(score);
-        return scoreMessage;
+        return "Your Score: " + String.valueOf(score);
     }
-
 }

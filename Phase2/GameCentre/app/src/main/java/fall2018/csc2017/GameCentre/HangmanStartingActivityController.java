@@ -80,18 +80,23 @@ class HangmanStartingActivityController {
 
         currentAccount.setCurrentGame(gameFile);
 
+        currentAccount.setLastPlayedGame(Account.hangmanName);
+
 
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.hangmanName);
-        currSavManager.wipeSave(SaveManager.auto, SaveManager.hangmanName);
+        currSavManager.wipeSave(SaveManager.auto);
 
         //Start new game with chosen number of undoes // todo discuss with group
         HangmanState newState = new
                 HangmanState(HangmanStartingActivity.wordManager, 0);
         newState.setComplexity(HangmanComplexityActivity.complexity);
         newState.setUnlimitedUndo(); // todo discuss with group
-        currSavManager.addState(newState, SaveManager.hangmanName);
+        currSavManager.addState(newState);
 
         fileSystem.saveAccount(context, accountManager);
+
+
+
 
         ((HangmanStartingActivity) context).switchToHangman();
 
@@ -110,10 +115,10 @@ class HangmanStartingActivityController {
         currentAccount.setCurrentGame(gameFile);
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.hangmanName);
 
-        if (currSavManager.getLength("perma", SaveManager.hangmanName) != 0) {
-            HangmanStartingActivity.wordManager = ((HangmanState) currSavManager.getLastState("perma", SaveManager.hangmanName)).getWordManager();
-            currSavManager.updateSave("auto", SaveManager.hangmanName);
-            HangmanState prePermaState = (HangmanState) currSavManager.getLastState("perma", SaveManager.hangmanName);
+        if (currSavManager.getLength("perma") != 0) {
+            HangmanStartingActivity.wordManager = ((HangmanState) currSavManager.getLastState("perma")).getWordManager();
+            currSavManager.updateSave("auto");
+            HangmanState prePermaState = (HangmanState) currSavManager.getLastState("perma");
             HangmanComplexityActivity.complexity = prePermaState.getComplexity();
             displayToast.displayToast(context, "Loaded Game");
             fileSystem.saveAccount(context, accountManager);
@@ -136,9 +141,9 @@ class HangmanStartingActivityController {
         currentAccount.setCurrentGame(gameFile);
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.hangmanName);
 
-        if (currSavManager.getLength(SaveManager.auto, SaveManager.hangmanName) != 0) {
+        if (currSavManager.getLength(SaveManager.auto) != 0) {
             currSavManager.setContinueOrLoad(SaveManager.auto);
-            HangmanState lastAutoState = (HangmanState) currSavManager.getLastState(SaveManager.auto, SaveManager.hangmanName);
+            HangmanState lastAutoState = (HangmanState) currSavManager.getLastState(SaveManager.auto);
             HangmanComplexityActivity.complexity = lastAutoState.getComplexity();
             Board.numRows = HangmanComplexityActivity.complexity;
             Board.numCols = HangmanComplexityActivity.complexity;

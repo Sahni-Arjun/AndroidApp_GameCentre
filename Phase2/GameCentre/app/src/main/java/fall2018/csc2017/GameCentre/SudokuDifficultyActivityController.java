@@ -31,7 +31,7 @@ class SudokuDifficultyActivityController {
         accountManager = fileSystem.loadAccount(context);
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(SaveManager.sudokuName);
-        currSavManager.wipeSave(SaveManager.auto, SaveManager.sudokuName);
+        currSavManager.wipeSave(SaveManager.auto);
         boardManager = new SudokuBoardManager();
         //Start new game with chosen number of undos
         SudokuState newState = new
@@ -41,7 +41,7 @@ class SudokuDifficultyActivityController {
 
         newState.setUnlimitedUndo();
 
-        currSavManager.addState(newState, SaveManager.sudokuName);
+        currSavManager.addState(newState);
         fileSystem.saveAccount(context, accountManager);
     }
 

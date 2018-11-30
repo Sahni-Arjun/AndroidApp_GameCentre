@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Manage a word, similarly to a one-row board, including checking for a win or a loose
  */
-class WordManager extends BoardManager implements Serializable {
+class WordManager extends GameManager implements Serializable {
 
     /**
      * The word being managed.
@@ -55,11 +55,7 @@ class WordManager extends BoardManager implements Serializable {
      */
     WordManager(String selectedWord){
 
-        // todo replace this block by retrieving from file according to complexity
         List<Letter> letters = new ArrayList<>();
-
-        final int numLetter = Word.numCols; // todo update according to Kevin's implementation
-        this.length = HangmanComplexityActivity.complexity + 1; // todo update according to Kevin's implementation
 
         stringWord = selectedWord;
 
@@ -73,7 +69,17 @@ class WordManager extends BoardManager implements Serializable {
 
         }
 
+        this.length = HangmanComplexityActivity.complexity + 1;
         this.word = new Word(letters);
+    }
+
+
+    /**
+     * Manage a new retrieved word, support for mocking tests.
+     */
+    WordManager(Word word){
+
+        this.word = word;
     }
 
     /**
@@ -89,32 +95,6 @@ class WordManager extends BoardManager implements Serializable {
         }
         return true;
     }
-
-
-    /**
-     * Return whether the tapped position is a hidden letter.
-     *
-     * @param position to check
-     * @return whether the letter at position is hidden
-     */
-    boolean isValidTap(int position) {
-
-        // todo discuss with group if player will choose where in the word to guess
-        return true;
-    }
-
-
-    /**
-     * Process a touch at position in the word, revealing letter if appropriate.
-     *
-     * @param position the position
-     */
-    void touchMove(int position) {
-
-        // todo: discuss with group if player will be asked to specify a guessed letter's position
-    }
-
-
 
     /**
      * Process a keyboard input position if appropriate.

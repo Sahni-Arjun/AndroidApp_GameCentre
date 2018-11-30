@@ -18,7 +18,6 @@ import java.util.Observer;
  */
 public class HangmanActivity extends AppCompatActivity implements Observer, KeyEvent.Callback {
 
-
     /**
      * The controller for this activity.
      */
@@ -51,8 +50,6 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
     AccountManager accountManager;
 
     FileSystem fileSystem;
-
-
 
     /**
      * Set up the background image for each letter based on the master list
