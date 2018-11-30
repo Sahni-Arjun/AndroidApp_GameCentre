@@ -3,8 +3,6 @@ View
  */
 package fall2018.csc2017.GameCentre;
 
-import android.content.Context;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -85,26 +83,6 @@ public class NotRobotActivity extends AppCompatActivity implements Observer {
     }
 
     /**
-     * Create the buttons for displaying the tiles.
-     *
-     * @param context the context
-     */
-//    private void createTileButtons(Context context) {
-//
-//        Board board = slidingTilesBoardManager.getBoard();
-//        tileButtons = new ArrayList<>();
-//
-//        for (int row = 0; row != Board.numRows; row++) {
-//            for (int col = 0; col != Board.numCols; col++) {
-//                Button tmp = new Button(context);
-//                tmp.setBackgroundResource(board.getTile(row, col).getBackground());
-//
-//                this.tileButtons.add(tmp);
-//            }
-//        }
-//    }
-
-    /**
      * Activates button for new board.
      */
     private void addNewGameButtonListener() {
@@ -124,21 +102,6 @@ public class NotRobotActivity extends AppCompatActivity implements Observer {
         Intent tmp = new Intent(this, NotRobotActivity.class);
         startActivity(tmp);
     }
-
-    /**
-     * Update the backgrounds on the buttons to match the tiles.
-     */
-//    private void updateTileButtons() {
-//        Board board = slidingTilesBoardManager.getBoard();
-//        int nextPos = 0;
-//
-//        for (Button b : tileButtons) {
-//            int row = nextPos / 2;
-//            int col = nextPos % 2;
-//            b.setBackgroundResource(board.getTile(row, col).getBackground());
-//            nextPos++;
-//        }
-//    }
 
     /**
      * Switch to new the main menu after the puzzle is solved.

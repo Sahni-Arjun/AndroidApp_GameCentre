@@ -5,7 +5,7 @@ import android.widget.Button;
 
 import java.util.ArrayList;
 
-public class NotRobotActivityController {
+class NotRobotActivityController {
     NotRobotActivityController(){}
     /**
      * Create the buttons for displaying the tiles.
