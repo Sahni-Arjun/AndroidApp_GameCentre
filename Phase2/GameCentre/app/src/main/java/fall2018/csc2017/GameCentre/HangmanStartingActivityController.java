@@ -36,22 +36,7 @@ class HangmanStartingActivityController {
         this.displayToast = displayToast;
     }
 
-
-    /**
-     * The logic that must be processed before the new game is created.
-     *
-     * @param context the context for the activity
-     * @param gameFile the location of the new game
-     *
-     */
-    void newGame(int gameFile, Context context) {
-
-        accountManager = fileSystem.loadAccount(context);
-
-        Word.numCols = HangmanComplexityActivity.complexity + 1;
-        // numRows must remain 1 or made deprecated:
-        Word.numRows = 1;
-
+    private String selectWordFromFile(Context context) {
         String[] words;
         String selectedWord ="";
 
@@ -74,7 +59,24 @@ class HangmanStartingActivityController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        HangmanStartingActivity.wordManager = new WordManager(selectedWord);
+        return selectedWord;
+    }
+
+    /**
+     * The logic that must be processed before the new game is created.
+     *
+     * @param context the context for the activity
+     * @param gameFile the location of the new game
+     *
+     */
+    void newGame(int gameFile, Context context) {
+
+        accountManager = fileSystem.loadAccount(context);
+
+        Word.numCols = HangmanComplexityActivity.complexity + 1;
+        Word.numRows = 1;
+
+        HangmanStartingActivity.wordManager = new WordManager(this.selectWordFromFile(context));
 
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
 
@@ -86,23 +88,16 @@ class HangmanStartingActivityController {
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.hangmanName);
         currSavManager.wipeSave(SaveManager.auto);
 
-        //Start new game with chosen number of undoes // todo discuss with group
+        //Start new game with chosen number of undoes
         HangmanState newState = new
                 HangmanState(HangmanStartingActivity.wordManager, 0);
         newState.setComplexity(HangmanComplexityActivity.complexity);
-        newState.setUnlimitedUndo(); // todo discuss with group
+        newState.setUnlimitedUndo();
         currSavManager.addState(newState);
 
         fileSystem.saveAccount(context, accountManager);
-
-
-
-
         ((HangmanStartingActivity) context).switchToHangman();
-
     }
-
-
 
      /**
      * The method that loads saved files and logic that must be processed before the game is loaded.
@@ -129,7 +124,6 @@ class HangmanStartingActivityController {
         }
     }
 
-
     /**
      * Load the continue
      * @param gameFile the number of the game file the user would like to open
@@ -154,17 +148,4 @@ class HangmanStartingActivityController {
                     "that hasn't started!");
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-    
 }
