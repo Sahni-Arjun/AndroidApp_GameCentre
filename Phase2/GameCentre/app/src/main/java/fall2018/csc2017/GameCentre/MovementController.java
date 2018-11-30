@@ -6,32 +6,42 @@ package fall2018.csc2017.GameCentre;
 import android.content.Context;
 import android.widget.Toast;
 
-class MovementController {
+import java.io.File;
 
+class MovementController {
+    /**
+     * BoardManager object
+     */
     private BoardManager boardManager = null;
 
-    MovementController() {
+    /**
+     * DisplayToast object
+     */
+    private DisplayToast displayToast;
+
+    /**
+     * FileSystem object
+     */
+    private FileSystem fileSystem;
+
+    MovementController(FileSystem fileSystem, DisplayToast displayToast) {
+        this.fileSystem = fileSystem;
+        this.displayToast = displayToast;
     }
 
     void setBoardManager(BoardManager boardManager) {
         this.boardManager = boardManager;
     }
 
-    void processTapMovement(Context context, int position) {
+    BoardManager getBoardManager() {return this.boardManager;}
 
-        FileSystem fileSystem = new FileSystem();
+    Boolean processTapMovement(Context context, int position) {
         AccountManager accountManager = fileSystem.loadAccount(context);
         Account account = accountManager.findUser(StartingLoginActivity.currentUser);
-
-
         if(!Account.hangmanName.equals(account.getLastPlayedGame())){
-
             if (boardManager.isValidTap(position)) {
                 boardManager.touchMove(position);
+                return true;
             } else {
-                Toast.makeText(context, "Invalid Tap", Toast.LENGTH_SHORT).show();
-            }
-        }
-
-    }
-}
+                return false; } }
+        return null; }}

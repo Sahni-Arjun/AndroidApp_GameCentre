@@ -24,31 +24,18 @@ public class SetUndoActivity extends AppCompatActivity {
     private FileSystem fileSystem;
 
     /**
-     * The number of moves allowed to undo.
-     */
-    public static int undo;
-
-    /**
-     * If unlimited moves is allowed.
-     */
-    public static boolean unlimited = false;
-
-    /**
-     * If a valid number or the string "unlimited" was entered.
-     */
-    private boolean validValue;
-
-    /**
      * The current context for file reading/writing.
      */
     private Context currentContext = this;
 
+    private SetUndoActivityController controller;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        controller = new SetUndoActivityController(new FileSystem());
         setContentView(R.layout.activity_set_undo);
         addSetUndoButtonListener();
-        this.fileSystem = new FileSystem();
     }
 
     @Override
@@ -63,34 +50,44 @@ public class SetUndoActivity extends AppCompatActivity {
         buttonSetUndo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fillInSetUndo();
-                if (validValue) {
-                    accountManager = fileSystem.loadAccount(currentContext);
-
-                    Board.numCols = SlidingTileComplexityActivity.complexity;
-                    Board.numRows = SlidingTileComplexityActivity.complexity;
-                    SlidingTileStartingActivity.slidingTilesBoardManager = new SlidingTilesBoardManager();
-
-                    Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
-                    SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
-                    currSavManager.wipeSave(SaveManager.auto);
-
-                    //Start new game with chosen number of undos
-                    SlidingTilesState newState = new
-                            SlidingTilesState(SlidingTileStartingActivity.slidingTilesBoardManager, 0);
-                    newState.setComplexity(SlidingTileComplexityActivity.complexity);
-                    if (SetUndoActivity.unlimited) {
-                        newState.setUnlimitedUndo();
-                    } else {
-                        newState.setMaxNumMovesUndone(SetUndoActivity.undo);
-                    }
-                    currSavManager.addState(newState);
-                    fileSystem.saveAccount(currentContext, accountManager);
+                EditText txtSetUndo = findViewById(R.id.txtSetUndo);
+                String setUndo = txtSetUndo.getText().toString().trim();
+                Boolean validUndoValue = controller.setUndoListener(currentContext, setUndo);
+                if (validUndoValue){
                     switchToGame();
                 }else{
                     Toast.makeText(getApplicationContext(), "Invalid value entered",
                             Toast.LENGTH_SHORT).show();
                 }
+
+//                fillInSetUndo();
+//                if (validValue) {
+//                    accountManager = fileSystem.loadAccount(currentContext);
+//
+//                    Board.numCols = SlidingTileComplexityActivity.complexity;
+//                    Board.numRows = SlidingTileComplexityActivity.complexity;
+//                    SlidingTileStartingActivity.slidingTilesBoardManager = new SlidingTilesBoardManager();
+//
+//                    Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
+//                    SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
+//                    currSavManager.wipeSave(SaveManager.auto);
+//
+//                    //Start new game with chosen number of undos
+//                    SlidingTilesState newState = new
+//                            SlidingTilesState(SlidingTileStartingActivity.slidingTilesBoardManager, 0);
+//                    newState.setComplexity(SlidingTileComplexityActivity.complexity);
+//                    if (SetUndoActivityController.unlimited) {
+//                        newState.setUnlimitedUndo();
+//                    } else {
+//                        newState.setMaxNumMovesUndone(SetUndoActivityController.undo);
+//                    }
+//                    currSavManager.addState(newState);
+//                    fileSystem.saveAccount(currentContext, accountManager);
+//                    switchToGame();
+//                }else{
+//                    Toast.makeText(getApplicationContext(), "Invalid value entered",
+//                            Toast.LENGTH_SHORT).show();
+//                }
             }
         });
     }
@@ -137,27 +134,4 @@ public class SetUndoActivity extends AppCompatActivity {
 //        });
 //    }
 
-    /**
-     * Save the undo value the User specifies.
-     */
-    private void fillInSetUndo(){
-        EditText txtSetUndo = findViewById(R.id.txtSetUndo);
-        String setUndo = txtSetUndo.getText().toString().trim();
-        validValue = true;
-        try {
-            switch (setUndo) {
-                case "unlimited":
-                    unlimited = true;
-                    break;
-                case "":
-                    undo = 0;
-                    break;
-                default:
-                    undo = Integer.parseInt(setUndo);
-                    break;
-            }
-        }catch (NumberFormatException e){
-            validValue = false;
-        }
-    }
 }

@@ -41,7 +41,9 @@ public class GestureDetectGridView extends GridView {
     }
 
     private void init(final Context context) {
-        mController = new MovementController();
+        FileSystem fileSystem = new FileSystem();
+        final DisplayToast displayToast = new DisplayToast();
+        mController = new MovementController(fileSystem, displayToast);
         gDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
 
             @Override
@@ -49,7 +51,12 @@ public class GestureDetectGridView extends GridView {
                 int position = GestureDetectGridView.this.pointToPosition
                         (Math.round(event.getX()), Math.round(event.getY()));
 
-                mController.processTapMovement(context, position);
+                Boolean canProcess = mController.processTapMovement(context, position);
+                if (canProcess != null) {
+                    if (!canProcess){
+                        displayToast.displayToast(context, "Invalid Tap");
+                    }
+                }
                 return true;
             }
 

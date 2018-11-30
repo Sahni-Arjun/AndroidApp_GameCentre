@@ -60,10 +60,9 @@ class SlidingTilesBoardManager extends BoardManager implements Serializable {
         populateBoard(tiles);
         while (!this.isSolvable()){
             Collections.shuffle(tiles);
-            populateBoard(tiles);
+            populateBoard(tiles);}}
 //            this.board = new Board(tiles);
-        }
-    }
+
 
     /**
      * Return whether the tiles are in row-major order.
@@ -80,11 +79,9 @@ class SlidingTilesBoardManager extends BoardManager implements Serializable {
             if (prev_Tile.getId() > current_Tile.getId()) {
                 return false;
             }
-            prev_Tile = current_Tile;
-        }
+            prev_Tile = current_Tile; }
         // If the end of the while loop is reached then all Tiles are in correct order.
-        return true;
-    }
+        return true; }
 
     /**
      * Return whether any of the four surrounding tiles is the blank tile.
@@ -105,8 +102,7 @@ class SlidingTilesBoardManager extends BoardManager implements Serializable {
         return (below != null && below.getId() == blankId)
                 || (above != null && above.getId() == blankId)
                 || (left != null && left.getId() == blankId)
-                || (right != null && right.getId() == blankId);
-    }
+                || (right != null && right.getId() == blankId); }
 
     /**
      * Process a touch at position in the board, swapping tiles as appropriate.
@@ -122,21 +118,16 @@ class SlidingTilesBoardManager extends BoardManager implements Serializable {
 
         // Only process touch if current tile is beside a blank one.
         if (isValidTap(position)) {
-            // Iterate through the board to find the tile at current position
             for (int c = 0; c < Board.numCols; c++) {
                 for (int r = 0; r < Board.numRows; r++) {
                     if (board.getTile(r, c).getId() == blankId) {
                         rowId = r;
-                        colId = c;
-                    }
+                        colId = c; }
                 }
             }
-            swapTiles(row, col, rowId, colId);
-        }
-    }
+            swapTiles(row, col, rowId, colId); } }
 
     /**
-     * Return whether or not the current board is solvable.
      * The board is said to be solvable if:
      * 1. If the numRows is odd, then the #inversions is even.
      * 2. If the numRows is even, and the blank is on an even row, then #inversions is odd.
@@ -176,7 +167,8 @@ class SlidingTilesBoardManager extends BoardManager implements Serializable {
                             }
                         }
                     }
-                } else {
+                }
+                else {
                     // Must get the row counting from the bottom
                     blankTileRow = Board.numRows - row;
                 }
@@ -187,8 +179,7 @@ class SlidingTilesBoardManager extends BoardManager implements Serializable {
         isSolvable = ((Board.numRows % 2 != 0 && numInversions % 2 == 0)) ||
                 (Board.numRows % 2 == 0) && ((blankTileRow % 2 != 0) == (numInversions % 2 == 0));
 
-        return isSolvable;
-    }
+        return isSolvable; }
 
     /**
      * Swap the tiles at (row1, col1) and (row2, col2)
@@ -205,8 +196,7 @@ class SlidingTilesBoardManager extends BoardManager implements Serializable {
         tiles[row1][col1] = tiles[row2][col2];
         tiles[row2][col2] = tempTile;
 
-        board.change();
-    }
+        board.change(); }
 
     /**
      * Populates the board with the given tiles.
@@ -219,9 +209,6 @@ class SlidingTilesBoardManager extends BoardManager implements Serializable {
 
         for (int row = 0; row != Board.numRows; row++) {
             for (int col = 0; col != Board.numCols; col++) {
-                board.setTile(row, col, iter.next());
-//                tiles[row][col] = iter.next();
-            }
-        }
-    }
-}
+                board.setTile(row, col, iter.next());}}}}
+//                tiles[row][col] = iter.next();}
+
