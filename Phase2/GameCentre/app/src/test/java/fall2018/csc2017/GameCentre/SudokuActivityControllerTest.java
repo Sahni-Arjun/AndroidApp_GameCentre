@@ -270,5 +270,34 @@ public class SudokuActivityControllerTest {
         assert(currLastState.getTime() != 0);
     }
 
+    /**
+     * Test if onResumeListener changes the startTime of the resumed game
+     */
+    @Test
+    public void onResumeListenerTest() {
+        Context context = new AppCompatActivity();
+        controller.onCreateListener(context);
+        controller.onPauseListener(context);
+
+        SaveManager currSaveManager = user.getCurrentSaveManager(SaveManager.sudokuName);
+        SudokuState currLastState = (SudokuState) currSaveManager.getLastState(SaveManager.auto, SaveManager.sudokuName);
+        long startTime = currLastState.getTime();
+        for (long stop=System.nanoTime()+TimeUnit.SECONDS.toNanos(1);stop>System.nanoTime(););
+        controller.onResumeListener();
+
+        assert(controller.getStartTime() != startTime);
+    }
+
+    /**
+     * Test if updateListener returns False with an unfinished game
+     */
+    @Test
+    public void updateListenerFalseTest() {
+        Context context = new AppCompatActivity();
+        SudokuBoardManager manager = controller.onCreateListener(context);
+
+        assertFalse("Expected False but returned True", controller.updateListener(context, manager));
+    }
+
 
 }
