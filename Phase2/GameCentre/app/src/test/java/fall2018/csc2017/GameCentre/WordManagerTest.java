@@ -6,8 +6,7 @@ import org.junit.Test;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 
-public class WordTest {
-
+public class WordManagerTest {
     private WordManager wordManager;
 
     private Word currWord;
@@ -23,13 +22,12 @@ public class WordTest {
     }
 
     @Test
-    public void testUpdateLetter() {
+    public void testPuzzleSolved() {
         currWord.updateLetter(84);
         currWord.updateLetter(1);
-        Letter[][] arrayLetter = currWord.getLetters();
-        assertFalse(arrayLetter[0][0].hidden);
-        assertTrue(arrayLetter[0][1].hidden);
-        assertTrue(arrayLetter[0][2].hidden);
-        assertFalse(arrayLetter[0][3].hidden);
+        assertFalse(wordManager.puzzleSolved());
+        currWord.updateLetter(69);
+        currWord.updateLetter(83);
+        assertTrue(wordManager.puzzleSolved());
     }
 }
