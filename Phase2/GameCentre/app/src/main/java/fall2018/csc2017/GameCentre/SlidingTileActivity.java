@@ -37,7 +37,7 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
     /**
      * The buttons to display.
      */
-    private ArrayList<Button> tileButtons;
+    private ArrayList<Button> tileButtons = new ArrayList<>();
 
     // Grid View and calculated column height and width based on device size
     private GestureDetectGridView gridView;
@@ -48,7 +48,7 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
      * of positions, and then call the adapter to set the view.
      */
     public void display() {
-        updateTileButtons();
+        slidingTileActivityController.updateTileButtons(slidingTilesBoardManager,tileButtons);
         gridView.setAdapter(new CustomAdapter(tileButtons, columnWidth, columnHeight));
     }
 
@@ -58,7 +58,7 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
         FileSystem fileSystem = new FileSystem();
         slidingTileActivityController = new SlidingTileActivityController(fileSystem);
         slidingTilesBoardManager = slidingTileActivityController.onCreateListener(currentContext);
-        slidingTileActivityController.createTileButtons(this,slidingTilesBoardManager,tileButtons);
+        slidingTileActivityController.createTileButtons(this,slidingTilesBoardManager,this.tileButtons);
         setContentView(R.layout.activity_main);
         addSaveButtonListener();
         addUndoButtonListener();
@@ -135,17 +135,17 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
     /**
      * Update the backgrounds on the buttons to match the tiles.
      */
-    private void updateTileButtons() {
-        Board board = slidingTilesBoardManager.getBoard();
-        int nextPos = 0;
-
-        for (Button b : tileButtons) {
-            int row = nextPos / Board.numRows;
-            int col = nextPos % Board.numCols;
-            b.setBackgroundResource(board.getTile(row, col).getBackground());
-            nextPos++;
-        }
-    }
+//    private void updateTileButtons() {
+//        Board board = slidingTilesBoardManager.getBoard();
+//        int nextPos = 0;
+//
+//        for (Button b : tileButtons) {
+//            int row = nextPos / Board.numRows;
+//            int col = nextPos % Board.numCols;
+//            b.setBackgroundResource(board.getTile(row, col).getBackground());
+//            nextPos++;
+//        }
+//    }
 
     /**
      * Dispatch onPause() to fragments.
