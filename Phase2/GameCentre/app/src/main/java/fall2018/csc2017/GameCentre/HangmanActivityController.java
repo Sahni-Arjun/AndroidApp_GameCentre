@@ -70,6 +70,7 @@ public class HangmanActivityController {
             Account user = accountManager.findUser(StartingLoginActivity.currentUser);
 
             user.setLastPlayedGame(Account.hangmanName);
+            WordManager.tries = 0;
 
             fileSystem.saveAccount(context, accountManager);
 
@@ -79,11 +80,21 @@ public class HangmanActivityController {
         }
 
         if (WordManager.tries > 5){
+            Scoreboard scoreboard = fileSystem.loadScoreboard(context, StartingLoginActivity.SAVE_HANGMAN_SCOREBOARD);
 
+            scoreboard.addToScoreBoard(scoreboard.createScore(StartingLoginActivity.currentUser,
+                    currSavManager.getFinalScore(SaveManager.hangmanName)));
+
+            fileSystem.saveScoreBoard(context, StartingLoginActivity.SAVE_HANGMAN_SCOREBOARD, scoreboard);
+            accountManager.findUser(StartingLoginActivity.currentUser).setLastPlayedGame(Account.hangmanName);
+
+            currSavManager.wipeSave(SaveManager.auto);
+            currSavManager.wipeSave(SaveManager.perma);
             Account user = accountManager.findUser(StartingLoginActivity.currentUser);
-            user.setLastPlayedGame(Account.hangmanName);
-            fileSystem.saveAccount(context, accountManager);
 
+            user.setLastPlayedGame(Account.hangmanName);
+            WordManager.tries = 0;
+            fileSystem.saveAccount(context, accountManager);
             Intent loose = new Intent(context, LoosingActivity.class);
             context.startActivity(loose);
         }

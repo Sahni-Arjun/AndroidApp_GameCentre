@@ -21,8 +21,6 @@ class Account implements Serializable {
     /**
      * User's save data.
      */
-//    private SaveManager saveManager = new SaveManager();
-
     private SaveManager[] slidingSaveManager = new SaveManager[3];
     private SaveManager[] hangmanSaveManager = new SaveManager[3];
     private SaveManager[] sudokuSaveManager = new SaveManager[3];

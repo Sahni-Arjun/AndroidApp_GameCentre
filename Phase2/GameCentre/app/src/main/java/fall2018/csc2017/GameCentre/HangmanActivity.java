@@ -18,7 +18,6 @@ import java.util.Observer;
  */
 public class HangmanActivity extends AppCompatActivity implements Observer, KeyEvent.Callback {
 
-
     /**
      * The controller for this activity.
      */
