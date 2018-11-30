@@ -138,7 +138,7 @@ class SlidingTilesBoardManager extends BoardManager implements Serializable {
      *
      * @return whether or not the board is solvable
      */
-    private boolean isSolvable() {
+     boolean isSolvable() {
         int blankTileId = Board.numRows * Board.numCols;
         int numInversions = 0;
         int blankTileRow = 0;
