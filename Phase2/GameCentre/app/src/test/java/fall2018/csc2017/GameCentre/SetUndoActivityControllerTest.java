@@ -45,6 +45,9 @@ public class SetUndoActivityControllerTest {
 
         SaveManager saveManager = user.getCurrentSaveManager(Account.slidingName);
         SlidingTilesState state = (SlidingTilesState) saveManager.getLastState(SaveManager.auto);
+        assertEquals(3, state.getComplexity());
+        assertEquals(0, state.getNumMoves());
+        assertFalse(state.getUnlimitedUndo());
     }
 
     @Test
@@ -59,6 +62,11 @@ public class SetUndoActivityControllerTest {
         Context context = new AppCompatActivity();
         Boolean validUndo = controller.setUndoListener(context, "unlimited");
         assertTrue(validUndo);
+        SaveManager saveManager = user.getCurrentSaveManager(Account.slidingName);
+        SlidingTilesState state = (SlidingTilesState) saveManager.getLastState(SaveManager.auto);
+        assertEquals(3, state.getComplexity());
+        assertEquals(0, state.getNumMoves());
+        assertTrue(state.getUnlimitedUndo());
     }
 
     @Test
