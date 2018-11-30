@@ -15,6 +15,9 @@ public class IsSolvableEvenTest {
      */
     Board board;
 
+    /**
+     * The board manager.
+     */
     SlidingTilesBoardManager boardManager;
 
     /**
