@@ -43,10 +43,7 @@ public class HangmanGestureDetectGridView extends GestureDetectGridView {
 
             @Override
             public boolean onSingleTapConfirmed(MotionEvent event) {
-                int position = HangmanGestureDetectGridView.this.pointToPosition
-                        (Math.round(event.getX()), Math.round(event.getY()));
-
-                mController.processTapMovement(context, position);
+                mController.processTapMovement(context);
                 return true;
             }
 

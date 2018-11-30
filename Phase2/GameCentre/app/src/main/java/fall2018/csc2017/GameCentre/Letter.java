@@ -22,7 +22,7 @@ public class Letter implements Comparable<Letter>, Serializable {
     /**
      * Whether this letter's current background should be shown.
      */
-    public boolean hidden;
+    boolean hidden;
 
     /**
      * Return the background id.
@@ -43,23 +43,6 @@ public class Letter implements Comparable<Letter>, Serializable {
     }
 
     /**
-     * A Letter with id and background. The background may not have a corresponding image.
-     *
-     * @param id         the id
-     * @param background the background
-     */
-    Letter(int id, int background) {
-        this.id = id;
-        this.background = background;
-        this.hidden = true;
-    }
-
-    @Override
-    public int compareTo(@NonNull Letter o) {
-        return o.id - this.id;
-    }
-
-    /**
      * A letter with a background id; look up and set the id.
      *
      * @param backgroundId backgroundID of the tile.
@@ -68,5 +51,10 @@ public class Letter implements Comparable<Letter>, Serializable {
         id = backgroundId;
         background = R.drawable.letter_empty;
         hidden = true;
+    }
+
+    @Override
+    public int compareTo(@NonNull Letter o) {
+        return o.id - this.id;
     }
 }
