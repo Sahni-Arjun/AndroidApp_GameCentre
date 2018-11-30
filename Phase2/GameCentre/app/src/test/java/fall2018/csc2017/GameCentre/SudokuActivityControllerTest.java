@@ -322,5 +322,34 @@ public class SudokuActivityControllerTest {
         assertTrue(controller.undoListener(context, manager));
     }
 
+    /**
+     * Test if undoListener returns False if there isn't a state undo
+     */
+    @Test
+    public void undoListenerFalseTest() {
+        Context context = new AppCompatActivity();
+        SudokuBoardManager manager = controller.onCreateListener(context);
+
+        SaveManager currSaveManager = user.getCurrentSaveManager(SaveManager.sudokuName);
+
+        currSaveManager.undo(SaveManager.sudokuName);
+        currSaveManager.undo(SaveManager.sudokuName);
+
+        assertFalse(controller.undoListener(context, manager));
+    }
+
+    /**
+     * Test if saveListener saves all states up to recent
+     */
+    @Test
+    public void saveListenerTest() {
+        Context context = new AppCompatActivity();
+        controller.onCreateListener(context);
+
+        SaveManager currSavManager = user.getCurrentSaveManager(SaveManager.sudokuName);
+        assertEquals(0, currSavManager.getLength("perma", SaveManager.sudokuName));
+        controller.saveListener(context);
+        assertEquals(3, currSavManager.getLength("perma", SaveManager.sudokuName));
+    }
 
 }
