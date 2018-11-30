@@ -5,7 +5,13 @@ package fall2018.csc2017.GameCentre;
 
 import android.content.Context;
 
+/**
+ * Controller for the sign up procedure for the app.
+ */
 class SignUpActivityController {
+    /**
+     * The filesystem
+     */
     private FileSystem fileSystem;
 
     /**
@@ -13,10 +19,22 @@ class SignUpActivityController {
      */
     private Account newUser = new Account("", "");
 
+    /**
+     * Creates a new controller for the activity.
+     * @param fileSystem the file system.
+     */
     SignUpActivityController(FileSystem fileSystem){
         this.fileSystem = fileSystem;
     }
 
+    /**
+     * Waits for the user to press enter and creates a new account for the user if input fields are
+     * valid.
+     * @param currentContext the current activity.
+     * @param username the desired username.
+     * @param password the desired password.
+     * @return toast message if the account was made.
+     */
     String enterButtonListener(Context currentContext, String username, String password){
         String message = addSignUpFillIn(username, password);
         if (newUser != null) {

@@ -18,10 +18,13 @@ import java.util.Observer;
 
 
 /**
- * The game activity
+ * The game activity for sliding tiles.
  */
 public class SlidingTileActivity extends AppCompatActivity implements Observer {
 
+    /**
+     * The controller that manages the logic for this activity.
+     */
     private SlidingTileActivityController slidingTileActivityController;
 
     /**
@@ -116,38 +119,6 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
     }
 
     /**
-     * Create the buttons for displaying the tiles.
-     *
-     * @param context the context
-     */
-//    private void createTileButtons(Context context) {
-//        Board board = slidingTilesBoardManager.getBoard();
-//        tileButtons = new ArrayList<>();
-//        for (int row = 0; row != Board.numRows; row++) {
-//            for (int col = 0; col != Board.numCols; col++) {
-//                Button tmp = new Button(context);
-//                tmp.setBackgroundResource(board.getTile(row, col).getBackground());
-//                this.tileButtons.add(tmp);
-//            }
-//        }
-//    }
-
-    /**
-     * Update the backgrounds on the buttons to match the tiles.
-     */
-//    private void updateTileButtons() {
-//        Board board = slidingTilesBoardManager.getBoard();
-//        int nextPos = 0;
-//
-//        for (Button b : tileButtons) {
-//            int row = nextPos / Board.numRows;
-//            int col = nextPos % Board.numCols;
-//            b.setBackgroundResource(board.getTile(row, col).getBackground());
-//            nextPos++;
-//        }
-//    }
-
-    /**
      * Dispatch onPause() to fragments.
      */
     @Override
@@ -164,6 +135,9 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
         slidingTileActivityController.onResumeListener(this);
     }
 
+    /**
+     * Goes back to the load game screen.
+     */
     @Override
     public void onBackPressed() {
         Intent tmp = new Intent(this, SlidingTileStartingActivity.class);

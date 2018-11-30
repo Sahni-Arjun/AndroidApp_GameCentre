@@ -6,8 +6,15 @@ package fall2018.csc2017.GameCentre;
 import android.content.Context;
 
 class SlidingTileScoreActivityController {
+    /**
+     * The file system.
+     */
     private FileSystem fileSystem;
 
+    /**
+     * Creates a new controller for the activity.
+     * @param fileSystem the file system.
+     */
     SlidingTileScoreActivityController(FileSystem fileSystem) {
         this.fileSystem = fileSystem;
     }

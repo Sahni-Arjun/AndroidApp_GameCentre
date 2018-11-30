@@ -5,6 +5,9 @@ package fall2018.csc2017.GameCentre;
 
 import android.content.Context;
 
+/**
+ * The controller for the Sudoku game.
+ */
 class SudokuActivityController {
     /**
      * The filesystem.
@@ -17,19 +20,20 @@ class SudokuActivityController {
     private AccountManager accountManager;
 
     /**
-     * The toast view class.
+     * Returns the time of the last save.
+     * @return the time of the last save.
      */
-    private DisplayToast displayToast;
-
-    public long getStartTime() {
+    long getStartTime() {
         return startTime;
     }
 
+    /**
+     * The time of the last save.
+     */
     private long startTime;
 
-    SudokuActivityController(FileSystem fileSystem, DisplayToast displayToast){
+    SudokuActivityController(FileSystem fileSystem){
         this.fileSystem = fileSystem;
-        this. displayToast = displayToast;
     }
 
     /**
@@ -46,6 +50,10 @@ class SudokuActivityController {
         return ((SudokuState)currSavManager.getLastState(continueOrLoad)).getBoardManager();
     }
 
+    /**
+     * Auto saves when the game is paused.
+     * @param context the current activity.
+     */
     void onPauseListener(Context context){
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(SaveManager.sudokuName);
@@ -58,6 +66,10 @@ class SudokuActivityController {
         }
     }
 
+    /**
+     * Loads save when the game is resumed.
+     * @param context the current activity.
+     */
     void onResumeListener(Context context){
         startTime = System.currentTimeMillis();
         accountManager = fileSystem.loadAccount(context);
@@ -66,6 +78,12 @@ class SudokuActivityController {
         fileSystem.saveAccount(context, accountManager);
     }
 
+    /**
+     * Saves the most recent move.
+     * @param context the current activity.
+     * @param boardManager the current board manager.
+     * @return if the game has ended.
+     */
     boolean updateListener(Context context, SudokuBoardManager boardManager){
         accountManager = fileSystem.loadAccount(context);
 
@@ -96,6 +114,12 @@ class SudokuActivityController {
         return false;
     }
 
+    /**
+     * listens for an undo, and returns to the last state if allowed.
+     * @param context the current context.
+     * @param boardManager the current board manager.
+     * @return whether game was sucessfully undoed.
+     */
     boolean undoListener(Context context, SudokuBoardManager boardManager){
         accountManager = fileSystem.loadAccount(context);
 
@@ -121,6 +145,10 @@ class SudokuActivityController {
         }
     }
 
+    /**
+     * Save the game.
+     * @param context the current activity.
+     */
     void saveListener(Context context){
         accountManager = fileSystem.loadAccount(context);
 
