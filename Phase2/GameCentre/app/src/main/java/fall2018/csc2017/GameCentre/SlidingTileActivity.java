@@ -161,6 +161,7 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onResume() {
         super.onResume();
+        slidingTileActivityController.onResumeListener(this);
     }
 
     @Override

@@ -27,8 +27,16 @@ class SlidingTileActivityController {
         accountManager = fileSystem.loadAccount(context);
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.slidingName);
+        currentAccount.setLastPlayedGame(Account.slidingName);
         String continueOrLoad = currSavManager.getContinueOrLoad();
         return ((SlidingTilesState) currSavManager.getLastState(continueOrLoad)).getSlidingTilesBoardManager();
+    }
+
+    void onResumeListener(Context context){
+        accountManager = fileSystem.loadAccount(context);
+        Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
+        currentAccount.setLastPlayedGame(Account.slidingName);
+        fileSystem.saveAccount(context, accountManager);
     }
 
     boolean undoListener(Context context, SlidingTilesBoardManager slidingTilesBoardManager) {
