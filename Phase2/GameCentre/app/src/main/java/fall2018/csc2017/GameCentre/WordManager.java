@@ -1,3 +1,6 @@
+/*
+Controller
+ */
 package fall2018.csc2017.GameCentre;
 
 
@@ -11,26 +14,19 @@ import java.util.List;
 class WordManager extends GameManager implements Serializable {
 
     /**
-     * The word being managed.
-     */
-    private Word word;
-
-
-    /**
      * A string representing the word being managed.
      */
-    public static String stringWord;
-
-    /**
-     * The length of the word being managed.
-     */
-    public static int length;
-
+    static String stringWord;
 
     /**
      * The number of guessed already made.
      */
-    public static int tries = 0;
+    static int tries = 0;
+
+    /**
+     * The word being managed.
+     */
+    private Word word;
 
     /**
      * Return the current word.
@@ -53,32 +49,22 @@ class WordManager extends GameManager implements Serializable {
     /**
      * Manage a new retrieved word.
      */
-    WordManager(String selectedWord){
-
+    WordManager(String selectedWord) {
         List<Letter> letters = new ArrayList<>();
-
         stringWord = selectedWord;
-
         char[] splittedWord = selectedWord.toCharArray();
 
-        for(int count=0; count<splittedWord.length; count++){
-
-            char curChar = Character.toUpperCase(splittedWord[count]);
-            int letterNum = curChar;
+        for (char splitChar : splittedWord) {
+            int letterNum = Character.toUpperCase(splitChar);
             letters.add(new Letter(letterNum));
-
         }
-
-        this.length = HangmanComplexityActivity.complexity + 1;
         this.word = new Word(letters);
     }
-
 
     /**
      * Manage a new retrieved word, support for mocking tests.
      */
-    WordManager(Word word){
-
+    WordManager(Word word) {
         this.word = word;
     }
 
@@ -89,7 +75,7 @@ class WordManager extends GameManager implements Serializable {
      */
     boolean puzzleSolved() {
         for (int pos = 0; pos < Word.numCols; pos++) {
-            if(word.getLetter(pos).hidden){
+            if (word.getLetter(pos).hidden) {
                 return false;
             }
         }
@@ -103,14 +89,12 @@ class WordManager extends GameManager implements Serializable {
      */
     void keyBoard(int guess) {
         for (int pos = 0; pos < Word.numCols; pos++) {
-
-            if(word.getLetter(pos).getId() == guess){
+            if (word.getLetter(pos).getId() == guess) {
                 word.updateLetter(guess);
                 return;
             }
         }
         tries++;
         word.updateDoll();
-
     }
 }

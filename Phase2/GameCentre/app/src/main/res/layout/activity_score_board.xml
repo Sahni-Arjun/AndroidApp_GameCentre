@@ -9,8 +9,9 @@
         android:id="@+id/buttonSlidingTileScore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_marginTop="153dp"
         android:text="@string/sliding_tile_score" />
 
     <Button
@@ -21,4 +22,13 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="176dp"
         android:text="SUDOKU SCORE" />
+
+    <Button
+        android:id="@+id/buttonHangmanScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="245dp"
+        android:text="HANGMAN SCORE" />
 </RelativeLayout>

@@ -1,3 +1,6 @@
+/*
+Controller
+ */
 package fall2018.csc2017.GameCentre;
 
 import android.content.Context;
@@ -5,52 +8,47 @@ import android.content.Context;
 class SignUpActivityController {
     private FileSystem fileSystem;
 
-    private DisplayToast displayToast;
-
     /**
      * The account for the user that is signing in.
      */
     private Account newUser = new Account("", "");
 
-    SignUpActivityController(FileSystem fileSystem, DisplayToast displayToast){
+    SignUpActivityController(FileSystem fileSystem){
         this.fileSystem = fileSystem;
-        this.displayToast = displayToast;
     }
 
-    boolean enterButtonListener(Context currentContext, String username, String password){
-        addSignUpFillIn(currentContext, username, password);
+    String enterButtonListener(Context currentContext, String username, String password){
+        String message = addSignUpFillIn(username, password);
         if (newUser != null) {
             if (!(newUser.getUsername().isEmpty() || newUser.getPassword().isEmpty())) {
                 fileSystem.testExistingFile(currentContext);
                 AccountManager accountManager = fileSystem.loadAccount(currentContext);
                 if (!accountManager.isExistingUser(newUser.getUsername())) {
-                    displayToast.displayToast(currentContext, "Loading...");
                     accountManager.addUser(newUser);
                     fileSystem.saveAccount(currentContext, accountManager);
                     StartingLoginActivity.currentUser = newUser.getUsername();
-                    return true;
+                    return "Loading...";
                 } else {
-                    displayToast.displayToast(currentContext, "Username exists. " +
-                            "Please choose a different one");
-                    return false;
+                    return "Username exists. " +
+                            "Please choose a different one";
                 }
             }
         }
-        return false;
+        return message;
     }
 
     /**
      * Add new user's information provided
      */
-    private void addSignUpFillIn(Context context, String username, String password) {
+    private String addSignUpFillIn(String username, String password) {
         String wrongUsername = this.inputLimits(username, "Username");
         String wrongPassword = this.inputLimits(password, "Password");
 
         if (!wrongUsername.equals("Success!")) {
-            displayToast.displayToast(context, "Please choose a different one");
-        } else if (wrongUsername.equals("Success!")) {
+            return wrongUsername;
+        }else{
             this.newUser.setUsername(username);
-            addSignUpFillInPassword(wrongPassword, password, context);
+            return addSignUpFillInPassword(wrongPassword, password);
         }
     }
 
@@ -60,11 +58,12 @@ class SignUpActivityController {
      * @param wrongPassword a flag for if the password is correct
      * @param password      the user's password
      */
-    private void addSignUpFillInPassword(String wrongPassword, String password, Context context) {
+    private String addSignUpFillInPassword(String wrongPassword, String password) {
         if (!wrongPassword.equals("Success!")) {
-            displayToast.displayToast(context, "Please choose a different one");
+            return "Please choose a different one";
         } else {
             this.newUser.setPassword(password);
+            return "";
         }
     }
 

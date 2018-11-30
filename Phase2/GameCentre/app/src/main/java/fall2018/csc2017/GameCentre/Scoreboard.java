@@ -1,3 +1,6 @@
+/*
+Controller
+ */
 package fall2018.csc2017.GameCentre;
 
 import java.io.Serializable;

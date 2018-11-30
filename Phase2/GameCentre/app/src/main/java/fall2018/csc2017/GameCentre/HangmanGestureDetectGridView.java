@@ -1,5 +1,7 @@
 package fall2018.csc2017.GameCentre;
-
+/*
+Model
+ */
 /*
 Adapted from:
 https://github.com/DaveNOTDavid/sample-puzzle/blob/master/app/src/main/java/com/davenotdavid/samplepuzzle/GestureDetectGridView.java
@@ -43,10 +45,7 @@ public class HangmanGestureDetectGridView extends GestureDetectGridView {
 
             @Override
             public boolean onSingleTapConfirmed(MotionEvent event) {
-                int position = HangmanGestureDetectGridView.this.pointToPosition
-                        (Math.round(event.getX()), Math.round(event.getY()));
-
-                mController.processTapMovement(context, position);
+                mController.processTapMovement(context);
                 return true;
             }
 
@@ -89,10 +88,5 @@ public class HangmanGestureDetectGridView extends GestureDetectGridView {
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         return gDetector.onTouchEvent(ev);
-    }
-
-
-    public void setWordManager(WordManager wordManager) {
-        mController.setWordManager(wordManager);
     }
 }

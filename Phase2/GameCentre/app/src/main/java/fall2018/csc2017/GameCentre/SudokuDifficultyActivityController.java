@@ -1,3 +1,6 @@
+/*
+Controller
+ */
 package fall2018.csc2017.GameCentre;
 
 class SudokuDifficultyActivityController {
@@ -24,7 +27,7 @@ class SudokuDifficultyActivityController {
 
     /**
      * starts the sudoku game
-     * @param context
+     * @param context SudokuDifficultyActivity
      */
     void startGame(SudokuDifficultyActivity context, int difficulty) {
 

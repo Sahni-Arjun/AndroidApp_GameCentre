@@ -1,4 +1,9 @@
+/*
+Controller
+ */
 package fall2018.csc2017.GameCentre;
+
+import android.content.Context;
 
 class SudokuActivityController {
     /**
@@ -16,6 +21,10 @@ class SudokuActivityController {
      */
     private DisplayToast displayToast;
 
+    public long getStartTime() {
+        return startTime;
+    }
+
     private long startTime;
 
     SudokuActivityController(FileSystem fileSystem, DisplayToast displayToast){
@@ -23,16 +32,21 @@ class SudokuActivityController {
         this. displayToast = displayToast;
     }
 
-    SudokuBoardManager onCreateListener(SudokuActivity context){
+    /**
+     * Get the last auto save state
+     * @param context Context
+     * @return SudokuBoardManager
+     */
+    SudokuBoardManager onCreateListener(Context context){
         accountManager = fileSystem.loadAccount(context);
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.sudokuName);
-        String continueOrLoad = currSavManager.getContinueOrLoad();
+        String continueOrLoad = currSavManager.getContinueOrLoad(); //"auto"
         startTime = System.currentTimeMillis();
         return ((SudokuState)currSavManager.getLastState(continueOrLoad)).getBoardManager();
     }
 
-    void onPauseListener(SudokuActivity context){
+    void onPauseListener(Context context){
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(SaveManager.sudokuName);
         if (currSavManager.getLength(SaveManager.auto) != 0) {
@@ -48,7 +62,7 @@ class SudokuActivityController {
         startTime = System.currentTimeMillis();
     }
 
-    boolean updateListener(SudokuActivity context, SudokuBoardManager boardManager){
+    boolean updateListener(Context context, SudokuBoardManager boardManager){
         accountManager = fileSystem.loadAccount(context);
 
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
@@ -78,7 +92,7 @@ class SudokuActivityController {
         return false;
     }
 
-    boolean undoListener(SudokuActivity context, SudokuBoardManager boardManager){
+    boolean undoListener(Context context, SudokuBoardManager boardManager){
         accountManager = fileSystem.loadAccount(context);
 
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
@@ -99,12 +113,11 @@ class SudokuActivityController {
             fileSystem.saveAccount(context, accountManager);
             return true;
         } else {
-            displayToast.displayToast(context,"Max moves undone");
             return false;
         }
     }
 
-    void saveListener(SudokuActivity context){
+    void saveListener(Context context){
         accountManager = fileSystem.loadAccount(context);
 
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);

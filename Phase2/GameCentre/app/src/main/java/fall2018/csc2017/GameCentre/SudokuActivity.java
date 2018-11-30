@@ -1,3 +1,6 @@
+/*
+View
+ */
 package fall2018.csc2017.GameCentre;
 
 import android.content.Context;
@@ -7,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Observable;
@@ -160,6 +164,8 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
                 Boolean undone = controller.undoListener((SudokuActivity) currentContext, boardManager);
                 if (undone){
                     display();
+                } else {
+                    Toast.makeText(currentContext, "Max moves undone", Toast.LENGTH_SHORT).show();
                 }
             }
         });

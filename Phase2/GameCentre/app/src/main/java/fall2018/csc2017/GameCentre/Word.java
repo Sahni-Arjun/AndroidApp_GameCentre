@@ -1,3 +1,6 @@
+/*
+Model
+ */
 package fall2018.csc2017.GameCentre;
 
 import java.util.List;
@@ -23,7 +26,7 @@ public class Word extends Board{
      * Set the letters to the given letters.
      * @param letters letters
      */
-        void setLetters(Letter[][] letters) {
+    void setLetters(Letter[][] letters) {
             this.letters = letters;
     }
 
@@ -43,7 +46,6 @@ public class Word extends Board{
         }
     }
 
-
     /**
      * A new word made of letters in order.
      * Precondition: len(letters) == numCols
@@ -56,14 +58,12 @@ public class Word extends Board{
         }
     }
 
-
     /**
      * Creating an empty new word made for mocking tests.
      *
      *
      */
     Word() {super();}
-
 
     /**
      * Setting new word made for mocking tests.

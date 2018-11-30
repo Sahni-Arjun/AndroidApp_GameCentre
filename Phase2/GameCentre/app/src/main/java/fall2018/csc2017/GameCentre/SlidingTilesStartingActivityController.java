@@ -1,3 +1,6 @@
+/*
+Controller
+ */
 package fall2018.csc2017.GameCentre;
 
 import android.content.Context;
@@ -61,8 +64,8 @@ class SlidingTilesStartingActivityController {
 
     /**
      * Load the continue
-     * @param gameFile
-     * @param currentContext
+     * @param gameFile the game file
+     * @param currentContext the context, viewer
      */
     void continueSave(int gameFile, Context currentContext){
         accountManager = fileSystem.loadAccount(currentContext);
@@ -88,8 +91,8 @@ class SlidingTilesStartingActivityController {
 
     /**
      * Load new game
-     * @param gameFile
-     * @param currentContext
+     * @param gameFile the game file
+     * @param currentContext the context
      */
     void newGame(int gameFile, Context currentContext){
         accountManager = fileSystem.loadAccount(currentContext);

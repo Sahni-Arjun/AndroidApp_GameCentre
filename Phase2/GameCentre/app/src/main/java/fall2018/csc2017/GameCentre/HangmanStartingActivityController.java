@@ -1,3 +1,6 @@
+/*
+Controller
+ */
 package fall2018.csc2017.GameCentre;
 
 import android.content.Context;
@@ -28,81 +31,90 @@ class HangmanStartingActivityController {
 
     /**
      * Constructor
-     * @param fileSystem the filesystem for this controller.
-     * @param displayToast the toast displayer.
+     *
+     * @param fileSystem   the filesystem for this controller.
+     * @param displayToast the toast display
      */
     HangmanStartingActivityController(FileSystem fileSystem, DisplayToast displayToast) {
         this.fileSystem = fileSystem;
         this.displayToast = displayToast;
     }
 
+    /**
+     * Select a word from a text file for the given context.
+     *
+     * @param context the context
+     * @return a randomly selected word
+     */
+    private String selectWordFromFile(Context context) {
+        String[] words;
+        String selectedWord = "";
+        final String TEXT_FILE = "words.txt";
+
+        try {
+            InputStream is = context.getAssets().open(TEXT_FILE);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            if (is.read(buffer) != -1) {
+                is.close();
+                String text = new String(buffer);
+                words = text.split("\\r?\\n");
+                Random rand = new Random();
+                int wordNum = rand.nextInt(840);
+                selectedWord = words[wordNum];
+                while (selectedWord.length() != (HangmanComplexityActivity.complexity + 1)) {
+                    rand = new Random();
+                    wordNum = rand.nextInt(800);
+                    selectedWord = words[wordNum];
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return selectedWord;
+    }
 
     /**
      * The logic that must be processed before the new game is created.
      *
-     * @param context the context for the activity
+     * @param context  the context for the activity
      * @param gameFile the location of the new game
-     *
      */
     void newGame(int gameFile, Context context) {
 
         accountManager = fileSystem.loadAccount(context);
 
         Word.numCols = HangmanComplexityActivity.complexity + 1;
-        // numRows must remain 1 or made deprecated:
         Word.numRows = 1;
 
-        String[] words;
-        String selectedWord ="";
-
-        try {
-            InputStream is = context.getAssets().open("words.txt");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            String text = new String(buffer);
-            words = text.split("\\r?\\n");
-            Random rand = new Random();
-            int wordNum = rand.nextInt(840);
-            selectedWord = words[wordNum];
-            while(selectedWord.length() != (HangmanComplexityActivity.complexity + 1) ) {
-                rand = new Random();
-                wordNum = rand.nextInt(800);
-                selectedWord = words[wordNum];
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        HangmanStartingActivity.wordManager = new WordManager(selectedWord);
+        HangmanStartingActivity.wordManager = new WordManager(this.selectWordFromFile(context));
 
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
 
         currentAccount.setCurrentGame(gameFile);
 
+        currentAccount.setLastPlayedGame(Account.hangmanName);
+
 
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.hangmanName);
         currSavManager.wipeSave(SaveManager.auto);
 
-        //Start new game with chosen number of undoes // todo discuss with group
+        //Start new game with chosen number of undoes
         HangmanState newState = new
                 HangmanState(HangmanStartingActivity.wordManager, 0);
         newState.setComplexity(HangmanComplexityActivity.complexity);
-        newState.setUnlimitedUndo(); // todo discuss with group
+        newState.setUnlimitedUndo();
         currSavManager.addState(newState);
 
         fileSystem.saveAccount(context, accountManager);
-
         ((HangmanStartingActivity) context).switchToHangman();
-
     }
 
-
-
-     /**
+    /**
      * The method that loads saved files and logic that must be processed before the game is loaded.
+     *
      * @param gameFile the number of the game file the user would like to open
-     * @param context the current HangmanStartingActivity
+     * @param context  the current HangmanStartingActivity
      */
     void loadSave(int gameFile, Context context) { // adapt
         accountManager = fileSystem.loadAccount(context);
@@ -119,18 +131,18 @@ class HangmanStartingActivityController {
             fileSystem.saveAccount(context, accountManager);
             ((HangmanStartingActivity) context).switchToHangman();
         } else {
-            displayToast.displayToast(context.getApplicationContext(),"you can't continue a game " +
+            displayToast.displayToast(context.getApplicationContext(), "you can't continue a game " +
                     "that hasn't started!");
         }
     }
 
-
     /**
      * Load the continue
-     * @param gameFile the number of the game file the user would like to open
+     *
+     * @param gameFile       the number of the game file the user would like to open
      * @param currentContext the current HangmanStartingActivity
      */
-    void continueSave(int gameFile, Context currentContext){
+    void continueSave(int gameFile, Context currentContext) {
         accountManager = fileSystem.loadAccount(currentContext);
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         currentAccount.setCurrentGame(gameFile);
@@ -149,17 +161,4 @@ class HangmanStartingActivityController {
                     "that hasn't started!");
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-    
 }
