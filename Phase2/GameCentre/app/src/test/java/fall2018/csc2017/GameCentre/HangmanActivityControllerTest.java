@@ -164,7 +164,7 @@ public class HangmanActivityControllerTest {
     @Test
     public void testUpdateGameListener(){
 
-//        setUp();
+        setUp();
         sixGuesses();
         saveManager = user.getCurrentSaveManager(Account.hangmanName);
         Context thisContext = new AppCompatActivity();
@@ -177,11 +177,35 @@ public class HangmanActivityControllerTest {
     @Test
     public void testSaveListener(){
 
+        setUp();
         sixGuesses();
+        hangmanActivity = new HangmanActivity();
+        fileSystem = new FileSystem();
         saveManager = user.getCurrentSaveManager(Account.hangmanName);
-        Context thisContext = new AppCompatActivity();
-        hangmanActivityController.updateGameListener(thisContext);
-        assertEquals(fileSystem.loadAccount(thisContext), accountManager);
+        Account user1 = new Account("hello", "parrot");
+        Account user2 = new Account("hi", "macaw");
+        List<Account> users = new ArrayList<>();
+        users.add(user1);
+        users.add(user2);
+        hangmanActivityController.accountManager.addUser(user1);
+        hangmanActivityController.accountManager.addUser(user2);
+
+        hangmanActivityController.saveListener(hangmanActivity);
+
+        accountManager = hangmanActivityController.fileSystem.loadAccount(hangmanActivity);
+
+        assertEquals(hangmanActivityController.accountManager, accountManager);
+
+
+//        setUp();
+//        sixGuesses();
+//        saveManager = user.getCurrentSaveManager(Account.hangmanName);
+//        Context thisContext = new AppCompatActivity();
+//        hangmanActivityController.saveListener(hangmanActivity);
+//        FileSystem fileSystem = new FileSystem();
+//        fileSystem.saveAccount(thisContext, accountManager);
+//        accountManager = fileSystem.loadAccount(hangmanActivity);
+        //assertEquals(saveManager, accountManager);
 
     }
 
