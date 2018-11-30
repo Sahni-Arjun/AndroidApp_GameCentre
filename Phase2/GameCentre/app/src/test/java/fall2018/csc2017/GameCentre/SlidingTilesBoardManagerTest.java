@@ -156,46 +156,6 @@ public class SlidingTilesBoardManagerTest {
         assertEquals(String.format("Expected %s to be equal to %s", listOfAllNumbers.toString(), tileNums.toString()), tileNums, listOfAllNumbers);
     }
 
-//    //TODO: complexity set up in setup
-//    @Test
-//    public void slidingTiles4x4BoardManagerConstructorTest() {
-//        SlidingTileComplexityActivity.complexity = 4;
-//        SlidingTilesBoardManager boardManager = new SlidingTilesBoardManager();
-//        Board board = boardManager.getBoard();
-//        // Test if the number of tiles is 9 when the complexity is 3
-//        assertEquals(String.format("Expected %d to be equal to %d", 16, board.numTiles()), 16, board.numTiles());
-//        List<Integer> tileNums = new ArrayList<>();
-//        for (Tile tile: board) {
-//            tileNums.add(tile.getId());
-//        }
-//        Collections.sort(tileNums);
-//        List<Integer> listOfAllNumbers = new ArrayList<>();
-//        for (int i = 1; i < 17; i++) {
-//            listOfAllNumbers.add(i);
-//        }
-//        assertEquals(String.format("Expected %s to be equal to %s", listOfAllNumbers.toString(), tileNums.toString()), tileNums, listOfAllNumbers);
-//    }
-//
-//    @Test
-//    public void slidingTiles5x5BoardManagerConstructorTest() {
-//        SlidingTileComplexityActivity.complexity = 5;
-//        SlidingTilesBoardManager boardManager = new SlidingTilesBoardManager();
-//        Board board = boardManager.getBoard();
-//        // Test if the number of tiles is 9 when the complexity is 3
-//        assertEquals(String.format("Expected %d to be equal to %d", 25, board.numTiles()), 25, board.numTiles());
-//        List<Integer> tileNums = new ArrayList<>();
-//        for (Tile tile: board) {
-//            tileNums.add(tile.getId());
-//        }
-//        Collections.sort(tileNums);
-//        List<Integer> listOfAllNumbers = new ArrayList<>();
-//        for (int i = 1; i < 26; i++) {
-//            listOfAllNumbers.add(i);
-//        }
-//        assertEquals(String.format("Expected %s to be equal to %s", listOfAllNumbers.toString(), tileNums.toString()), tileNums, listOfAllNumbers);
-//    }
-
-    //puzzleSolved
     @Test
     public void puzzleSolvedTrueTest() {
         SlidingTileComplexityActivity.complexity = 3;
@@ -213,7 +173,7 @@ public class SlidingTilesBoardManagerTest {
         Board solvedBoard = new Board();
         solvedBoard.setTiles(tiles);
 
-        slidingTilesBoardManager = new SlidingTilesBoardManager(); //TODO: Can I initiate the testing object here?
+        slidingTilesBoardManager = new SlidingTilesBoardManager();
         slidingTilesBoardManager.setBoard(solvedBoard);
         assertTrue(slidingTilesBoardManager.puzzleSolved());
     }
@@ -235,7 +195,7 @@ public class SlidingTilesBoardManagerTest {
         Board solvedBoard = new Board();
         solvedBoard.setTiles(tiles);
 
-        slidingTilesBoardManager = new SlidingTilesBoardManager(); //TODO: Can I initiate the testing object here?
+        slidingTilesBoardManager = new SlidingTilesBoardManager();
         slidingTilesBoardManager.setBoard(solvedBoard);
         assertFalse(slidingTilesBoardManager.puzzleSolved());
     }

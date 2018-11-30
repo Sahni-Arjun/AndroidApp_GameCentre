@@ -65,7 +65,7 @@ public class HangmanStartingActivityControllerTest {
 
                     void saveScoreBoard(Context context, String filename, Scoreboard scrboard) {
                     }
-                }, new DisplayToast());
+                });
     }
 
     @Test

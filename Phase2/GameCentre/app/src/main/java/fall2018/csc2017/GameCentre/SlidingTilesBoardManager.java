@@ -145,7 +145,6 @@ class SlidingTilesBoardManager extends BoardManager implements Serializable {
 
         boolean isSolvable;
 
-        // TODO Maybe find a neater way to iterate through the remaining tiles?
         for (int row = 0; row < Board.numRows; row++) {
             for (int col = 0; col < Board.numCols; col++) {
                 Tile currTile = board.getTile(row, col);
@@ -153,7 +152,6 @@ class SlidingTilesBoardManager extends BoardManager implements Serializable {
                 if (currTile.getId() != blankTileId) {
                     // Iterate through each subsequent tiles
                     for (int subRow = row; subRow < Board.numRows; subRow++) {
-                        // TODO Pretty messy, probably change?
                         // If the current row isn't the starting row, the col must start at 0
                         int startCol = 0;
                         if(subRow == row){

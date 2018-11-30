@@ -4,9 +4,6 @@ Controller
 package fall2018.csc2017.GameCentre;
 
 import android.content.Context;
-import android.widget.Toast;
-
-import java.io.File;
 
 class MovementController {
     /**
@@ -15,18 +12,12 @@ class MovementController {
     private BoardManager boardManager = null;
 
     /**
-     * DisplayToast object
-     */
-    private DisplayToast displayToast;
-
-    /**
      * FileSystem object
      */
     private FileSystem fileSystem;
 
-    MovementController(FileSystem fileSystem, DisplayToast displayToast) {
+    MovementController(FileSystem fileSystem) {
         this.fileSystem = fileSystem;
-        this.displayToast = displayToast;
     }
 
     void setBoardManager(BoardManager boardManager) {

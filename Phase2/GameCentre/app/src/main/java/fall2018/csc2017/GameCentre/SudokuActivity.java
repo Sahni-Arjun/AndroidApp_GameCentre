@@ -37,11 +37,6 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
     private FileSystem fileSystem = new FileSystem();
 
     /**
-     * The toast view
-     */
-    private DisplayToast displayToast = new DisplayToast();
-
-    /**
      * The current context for file reading/writing.
      */
     private Context currentContext = this;

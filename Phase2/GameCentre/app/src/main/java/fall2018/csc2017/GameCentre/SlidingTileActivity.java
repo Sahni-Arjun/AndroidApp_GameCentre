@@ -153,5 +153,4 @@ public class SlidingTileActivity extends AppCompatActivity implements Observer {
             startActivity(tmp);
         }
     }
-
 }

@@ -62,6 +62,6 @@ public class SudokuBoard extends Board{
      * Get the tile in row and col
      */
     public Tile getTile(int row, int col) {
-        return this.tiles[row][col];  // TODO: better way to return SudokuTile
+        return this.tiles[row][col];
     }
 }

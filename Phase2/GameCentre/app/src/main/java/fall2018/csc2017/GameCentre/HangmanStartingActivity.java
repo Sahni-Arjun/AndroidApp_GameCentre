@@ -33,7 +33,7 @@ public class HangmanStartingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         FileSystem fileSystem = new FileSystem();
         DisplayToast displayToast = new DisplayToast();
-        hangmanStartingActivityController = new HangmanStartingActivityController(fileSystem, displayToast);
+        hangmanStartingActivityController = new HangmanStartingActivityController(fileSystem);
         setContentView(R.layout.activity_hangman_starting);
 
         addHangmanSave1ButtonListener();

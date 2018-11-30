@@ -20,11 +20,6 @@ class HangmanStartingActivityController {
     private FileSystem fileSystem;
 
     /**
-     * DisplayToast object for displaying toast
-     */
-    private DisplayToast displayToast;
-
-    /**
      * AccountManager object
      */
     private AccountManager accountManager;
@@ -33,11 +28,9 @@ class HangmanStartingActivityController {
      * Constructor
      *
      * @param fileSystem   the filesystem for this controller.
-     * @param displayToast the toast display
      */
-    HangmanStartingActivityController(FileSystem fileSystem, DisplayToast displayToast) {
+    HangmanStartingActivityController(FileSystem fileSystem) {
         this.fileSystem = fileSystem;
-        this.displayToast = displayToast;
     }
 
     /**

@@ -210,7 +210,7 @@ class SaveManager implements Serializable {
 
                     HangmanState newState = new HangmanState((WordManager) gameManager, 0,
                             HangmanComplexityActivity.complexity, 10,
-                            0, true); // todo update
+                            0, true);
                     this.addState(newState);
                 }
                 HangmanState lastAutoState = (HangmanState) this.getLastState(SaveManager.auto);

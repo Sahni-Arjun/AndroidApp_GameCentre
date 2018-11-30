@@ -302,10 +302,6 @@ public class HangmanActivity extends AppCompatActivity implements Observer, KeyE
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
 
-        // The switch statement can be replaced by:
-        //wordManager.keyBoard(keyCode + 36);
-        //return true;
-
         switch (keyCode) {
             case KeyEvent.KEYCODE_A:
                 wordManager.keyBoard(65);

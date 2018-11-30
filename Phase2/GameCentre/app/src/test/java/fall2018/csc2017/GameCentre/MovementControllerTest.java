@@ -192,10 +192,7 @@ public class MovementControllerTest {
                         accountManager.addUser(user2);
                         return accountManager;
                     }
-        }, new DisplayToast(){
-        public void displayToast(Context Context, String message){
-            System.out.println(message);
-        }});
+        });
     }
 
     /**

@@ -47,18 +47,6 @@ public class Word extends Board{
     }
 
     /**
-     * A new word made of letters in order.
-     * Precondition: len(letters) == numCols
-     *
-     * @param letters the letters for the word
-     */
-    void setLetters(List<Letter> letters) {
-        for (int i = 0; i < letters.size(); i++) {
-            this.letters[0][i] = letters.get(i);
-        }
-    }
-
-    /**
      * Creating an empty new word made for mocking tests.
      *
      *

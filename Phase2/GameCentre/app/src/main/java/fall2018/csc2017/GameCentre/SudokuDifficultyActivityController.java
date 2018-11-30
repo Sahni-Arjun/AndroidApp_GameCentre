@@ -7,15 +7,6 @@ package fall2018.csc2017.GameCentre;
  * The controller for the activity.
  */
 class SudokuDifficultyActivityController {
-    /**
-     * The account manager.
-     */
-    private AccountManager accountManager;
-
-    /**
-     * the boardmanager
-     */
-    private SudokuBoardManager boardManager;
 
     /**
      * The filesystem.
@@ -37,11 +28,11 @@ class SudokuDifficultyActivityController {
      */
     void startGame(SudokuDifficultyActivity context, int difficulty) {
 
-        accountManager = fileSystem.loadAccount(context);
+        AccountManager accountManager = fileSystem.loadAccount(context);
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(SaveManager.sudokuName);
         currSavManager.wipeSave(SaveManager.auto);
-        boardManager = new SudokuBoardManager();
+        SudokuBoardManager boardManager = new SudokuBoardManager();
         //Start new game with chosen number of undos
         SudokuState newState = new
                 SudokuState(boardManager, 0);
