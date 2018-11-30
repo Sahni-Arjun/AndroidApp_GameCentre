@@ -1,3 +1,6 @@
+/*
+Model class
+ */
 package fall2018.csc2017.GameCentre;
 
 import java.io.Serializable;
@@ -31,7 +34,7 @@ class Account implements Serializable {
 
     private int currentGame;
 
-    public void setLastPlayedGame(String lastPlayedGame) {
+    void setLastPlayedGame(String lastPlayedGame) {
         this.lastPlayedGame = lastPlayedGame;
     }
 
@@ -120,7 +123,7 @@ class Account implements Serializable {
         this.password = password;
     }
 
-    public String getLastPlayedGame() {
+    String getLastPlayedGame() {
         return lastPlayedGame;
     }
 }

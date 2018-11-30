@@ -1,3 +1,6 @@
+/*
+View
+ */
 package fall2018.csc2017.GameCentre;
 
 import android.content.Intent;
@@ -11,7 +14,6 @@ import android.widget.Button;
  */
 public class HangmanComplexityActivity extends AppCompatActivity {
 
-    // todo maybe this variable goes into model?
     /**
      * The complexity of the game.
      */
@@ -39,7 +41,6 @@ public class HangmanComplexityActivity extends AppCompatActivity {
         startActivity(chooseGameActivity);
     }
 
-
     /**
      * Switch to Hangman Starting Activity.
      */
@@ -47,7 +48,6 @@ public class HangmanComplexityActivity extends AppCompatActivity {
         Intent hangmanStartingActivity = new Intent(this, HangmanStartingActivity.class);
         startActivity(hangmanStartingActivity);
     }
-
 
     /**
      * Activate button to set complexity to 3 (easy).
@@ -74,7 +74,6 @@ public class HangmanComplexityActivity extends AppCompatActivity {
         });
     }
 
-
     /**
      * Activate button to set complexity to 5 (hard).
      */
@@ -86,7 +85,4 @@ public class HangmanComplexityActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
 }

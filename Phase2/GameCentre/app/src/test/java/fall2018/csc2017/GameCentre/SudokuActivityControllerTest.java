@@ -149,7 +149,7 @@ public class SudokuActivityControllerTest {
         setUpBoardManager();
         // Set up the account
         user = new Account("Hello", "World");
-        // Set current game as Sudoku
+        // Set current game as third sudoku game
         user.setCurrentGame(3);
         // Get the Sudoku saveManager under the account
         SaveManager saveManager = user.getCurrentSaveManager(Account.sudokuName);
@@ -163,7 +163,7 @@ public class SudokuActivityControllerTest {
         //Set the initial state of sudoku game
         SudokuState sudokuState1 = new SudokuState(manager, 0, 3, 3, 0, true, 0);
         //Add the initial state to the saveManager
-        saveManager.addState(sudokuState1, SaveManager.sudokuName);
+        saveManager.addState(sudokuState1);
 
         //Make the first move
         boardManager.getBoard().setTile(1, 2, new Tile(3));
@@ -265,7 +265,7 @@ public class SudokuActivityControllerTest {
         controller.onPauseListener(context);
 
         SaveManager currSaveManager = user.getCurrentSaveManager(SaveManager.sudokuName);
-        SudokuState currLastState = (SudokuState) currSaveManager.getLastState(SaveManager.auto, SaveManager.sudokuName);
+        SudokuState currLastState = (SudokuState) currSaveManager.getLastState(SaveManager.auto);
 //        long time = currLastState.getTime();
         assert(currLastState.getTime() != 0);
     }
@@ -280,7 +280,7 @@ public class SudokuActivityControllerTest {
         controller.onPauseListener(context);
 
         SaveManager currSaveManager = user.getCurrentSaveManager(SaveManager.sudokuName);
-        SudokuState currLastState = (SudokuState) currSaveManager.getLastState(SaveManager.auto, SaveManager.sudokuName);
+        SudokuState currLastState = (SudokuState) currSaveManager.getLastState(SaveManager.auto);
         long startTime = currLastState.getTime();
         for (long stop=System.nanoTime()+TimeUnit.SECONDS.toNanos(1);stop>System.nanoTime(););
         controller.onResumeListener();
@@ -332,8 +332,8 @@ public class SudokuActivityControllerTest {
 
         SaveManager currSaveManager = user.getCurrentSaveManager(SaveManager.sudokuName);
 
-        currSaveManager.undo(SaveManager.sudokuName);
-        currSaveManager.undo(SaveManager.sudokuName);
+        currSaveManager.undo();
+        currSaveManager.undo();
 
         assertFalse(controller.undoListener(context, manager));
     }
@@ -347,9 +347,9 @@ public class SudokuActivityControllerTest {
         controller.onCreateListener(context);
 
         SaveManager currSavManager = user.getCurrentSaveManager(SaveManager.sudokuName);
-        assertEquals(0, currSavManager.getLength("perma", SaveManager.sudokuName));
+        assertEquals(0, currSavManager.getLength(SaveManager.perma));
         controller.saveListener(context);
-        assertEquals(3, currSavManager.getLength("perma", SaveManager.sudokuName));
+        assertEquals(3, currSavManager.getLength(SaveManager.perma));
     }
 
 }

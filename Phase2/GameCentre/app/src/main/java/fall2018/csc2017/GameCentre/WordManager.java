@@ -1,3 +1,6 @@
+/*
+Controller
+ */
 package fall2018.csc2017.GameCentre;
 
 
@@ -54,7 +57,6 @@ class WordManager extends GameManager implements Serializable {
         for (char splitChar : splittedWord) {
             int letterNum = Character.toUpperCase(splitChar);
             letters.add(new Letter(letterNum));
-
         }
         this.word = new Word(letters);
     }
