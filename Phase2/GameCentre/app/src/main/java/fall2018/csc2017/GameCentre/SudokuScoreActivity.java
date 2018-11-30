@@ -18,7 +18,7 @@ public class SudokuScoreActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sliding_tile_score);
-        SudokuScoreActivityController controller = new SudokuScoreActivityController();
+        SudokuScoreActivityController controller = new SudokuScoreActivityController(fileSystem);
         StringBuilder sudokuScoreboard = controller.onCreateListener(this);
         TextView slidingTileScores = findViewById(R.id.sldingTilesScores);
         slidingTileScores.setText(sudokuScoreboard);
