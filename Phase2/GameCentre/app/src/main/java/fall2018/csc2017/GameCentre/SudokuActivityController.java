@@ -1,3 +1,6 @@
+/*
+Controller
+ */
 package fall2018.csc2017.GameCentre;
 
 import android.content.Context;
@@ -31,7 +34,7 @@ class SudokuActivityController {
 
     /**
      * Get the last auto save state
-     * @param context
+     * @param context Context
      * @return SudokuBoardManager
      */
     SudokuBoardManager onCreateListener(Context context){
