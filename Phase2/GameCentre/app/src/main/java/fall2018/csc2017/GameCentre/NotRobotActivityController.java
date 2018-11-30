@@ -12,7 +12,7 @@ class NotRobotActivityController {
      *
      * @param context the context
      */
-    void createTileButtons(Context context, BoardManager manager, ArrayList<Button> buttons) {
+    void createTileButtons(Context context, SlidingTilesBoardManager manager, ArrayList<Button> buttons) {
         Board board = manager.getBoard();
         for (int row = 0; row != Board.numRows; row++) {
             for (int col = 0; col != Board.numCols; col++) {
@@ -25,7 +25,7 @@ class NotRobotActivityController {
     /**
      * Update the backgrounds on the buttons to match the tiles.
      */
-    void updateTileButtons(BoardManager manager, ArrayList<Button> buttons) {
+    void updateTileButtons(SlidingTilesBoardManager manager, ArrayList<Button> buttons) {
         Board board = manager.getBoard();
         int nextPos = 0;
 

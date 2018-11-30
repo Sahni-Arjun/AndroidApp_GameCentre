@@ -8,7 +8,7 @@ import android.content.Context;
 /**
  * The controller for the Sudoku game.
  */
-class SudokuActivityController extends NotRobotActivityController {
+class SudokuActivityController {
     /**
      * The filesystem.
      */
