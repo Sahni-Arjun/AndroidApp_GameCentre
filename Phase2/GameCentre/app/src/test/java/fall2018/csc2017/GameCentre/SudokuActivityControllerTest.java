@@ -234,4 +234,41 @@ public class SudokuActivityControllerTest {
         );
     }
 
+    /**
+     * Test if onCreateListener() method contains a correct field
+     */
+    @Test
+    public void onCreateListenerTest() {
+        Context context = new AppCompatActivity();
+
+        SudokuBoardManager testBoardManager = controller.onCreateListener(context);
+        Tile[][] testTile = testBoardManager.getBoard().getTiles();
+        Tile[][] presetTile = boardManager.getBoard().getTiles();
+
+        for (int row = 0; row < 9; row++) {
+            for (int col = 0; col < 9; col++) {
+                int testTileId = testTile[row][col].getBackground();
+                int testPresetId = presetTile[row][col].getBackground();
+                assertEquals(String.format("Expected the tile in row %d col %d to have id %d but had %d", row, col, testPresetId, testTileId), testPresetId, testTileId);
+            }
+        }
+    }
+
+    /**
+     * Test if onPauseListener method updates the last state from autosave
+     */
+    @Test
+    public void onPauseListenerTest() {
+        Context context = new AppCompatActivity();
+        controller.onCreateListener(context);
+        for (long stop=System.nanoTime()+TimeUnit.SECONDS.toNanos(1);stop>System.nanoTime(););
+        controller.onPauseListener(context);
+
+        SaveManager currSaveManager = user.getCurrentSaveManager(SaveManager.sudokuName);
+        SudokuState currLastState = (SudokuState) currSaveManager.getLastState(SaveManager.auto, SaveManager.sudokuName);
+//        long time = currLastState.getTime();
+        assert(currLastState.getTime() != 0);
+    }
+
+
 }
