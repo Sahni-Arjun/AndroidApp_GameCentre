@@ -43,7 +43,7 @@ public class HangmanActivityController {
         }
     }
 
-    String updateGameListener(Context context){
+    void updateGameListener(Context context){
         accountManager = fileSystem.loadAccount(context);
 
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
@@ -96,9 +96,10 @@ public class HangmanActivityController {
             WordManager.tries = 0;
             fileSystem.saveAccount(context, accountManager);
             LoosingActivity.lost();
-            return("loose");
+            Intent loose = new Intent(context, LoosingActivity.class);
+            context.startActivity(loose);
         }
-        return("win");
+
     }
 
     void saveListener(Context context){

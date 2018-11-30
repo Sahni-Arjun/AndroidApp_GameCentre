@@ -73,7 +73,7 @@ class AccountManager implements Serializable {
      * @param otherUser the existing user
      * @return true or false
      */
-    boolean isSamePassword(Account user, Account otherUser) {
+    private boolean isSamePassword(Account user, Account otherUser) {
         return user.getPassword().equals(otherUser.getPassword()) &&
                 user.getUsername().equals(otherUser.getUsername());
     }
