@@ -82,4 +82,12 @@ public class AccountManagerTest {
     public void findUserTest(){
         assertTrue(String.format("Expected %b but got %b", true, false), accountManager.findUser("user1") == this.users.get(0));
     }
+
+    /**
+     * Test if findUser returns null on a non-existing account
+     */
+    @Test
+    public void findUserNullTest() {
+        assertTrue(String.format("Expected %b but got %b", null, false), accountManager.findUser("user6") == null);
+    }
 }
