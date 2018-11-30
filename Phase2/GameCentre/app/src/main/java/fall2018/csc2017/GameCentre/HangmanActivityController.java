@@ -85,8 +85,7 @@ public class HangmanActivityController {
         if (WordManager.tries > 5){
             Scoreboard scoreboard = fileSystem.loadScoreboard(context, StartingLoginActivity.SAVE_HANGMAN_SCOREBOARD);
 
-            scoreboard.addToScoreBoard(scoreboard.createScore(StartingLoginActivity.currentUser,
-                    currSavManager.getFinalScore(SaveManager.hangmanName)));
+            scoreboard.addToScoreBoard(scoreboard.createScore(StartingLoginActivity.currentUser, 0));
 
             fileSystem.saveScoreBoard(context, StartingLoginActivity.SAVE_HANGMAN_SCOREBOARD, scoreboard);
             accountManager.findUser(StartingLoginActivity.currentUser).setLastPlayedGame(Account.hangmanName);
