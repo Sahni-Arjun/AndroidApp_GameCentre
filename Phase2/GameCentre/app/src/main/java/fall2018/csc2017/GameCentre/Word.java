@@ -10,7 +10,7 @@ public class Word extends Board{
     /**
      * Number of rows
      */
-    public final static int numRows = 1;
+    public static int numRows = 1;
 
     /**
      * Number of cols

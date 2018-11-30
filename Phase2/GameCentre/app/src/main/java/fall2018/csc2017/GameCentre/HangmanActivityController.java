@@ -98,7 +98,7 @@ public class HangmanActivityController {
             user.setLastPlayedGame(Account.hangmanName);
             WordManager.tries = 0;
             fileSystem.saveAccount(context, accountManager);
-            LoosingActivity.lost();
+
             Intent loose = new Intent(context, LoosingActivity.class);
             context.startActivity(loose);
         }
