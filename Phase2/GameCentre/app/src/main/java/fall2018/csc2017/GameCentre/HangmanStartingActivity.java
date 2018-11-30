@@ -81,7 +81,8 @@ public class HangmanStartingActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(hangmanStartingActivityController.loadSave(1, currentContext)){
+                if (hangmanStartingActivityController.loadSave(1, currentContext)) {
+                    Toast.makeText(currentContext, "Loaded Game", Toast.LENGTH_SHORT).show();
                     switchToHangman();
                 } else {
                     Toast.makeText(currentContext, "You can't continue a game that hasn't started", Toast.LENGTH_SHORT).show();
@@ -98,7 +99,8 @@ public class HangmanStartingActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(hangmanStartingActivityController.loadSave(2, currentContext)){
+                if (hangmanStartingActivityController.loadSave(2, currentContext)) {
+                    Toast.makeText(currentContext, "Loaded Game", Toast.LENGTH_SHORT).show();
                     switchToHangman();
                 } else {
                     Toast.makeText(currentContext, "You can't continue a game that hasn't started", Toast.LENGTH_SHORT).show();
@@ -115,7 +117,8 @@ public class HangmanStartingActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(hangmanStartingActivityController.loadSave(3, currentContext)){
+                if (hangmanStartingActivityController.loadSave(3, currentContext)) {
+                    Toast.makeText(currentContext, "Loaded Game", Toast.LENGTH_SHORT).show();
                     switchToHangman();
                 } else {
                     Toast.makeText(currentContext, "You can't continue a game that hasn't started", Toast.LENGTH_SHORT).show();
@@ -132,7 +135,8 @@ public class HangmanStartingActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(hangmanStartingActivityController.continueSave(1, currentContext)) {
+                if (hangmanStartingActivityController.continueSave(1, currentContext)) {
+                    Toast.makeText(currentContext, "Loaded Game", Toast.LENGTH_SHORT).show();
                     switchToHangman();
                 } else {
                     Toast.makeText(currentContext, "You can't continue a game that hasn't started", Toast.LENGTH_SHORT).show();
@@ -149,7 +153,8 @@ public class HangmanStartingActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(hangmanStartingActivityController.continueSave(2, currentContext)) {
+                if (hangmanStartingActivityController.continueSave(2, currentContext)) {
+                    Toast.makeText(currentContext, "Loaded Game", Toast.LENGTH_SHORT).show();
                     switchToHangman();
                 } else {
                     Toast.makeText(currentContext, "You can't continue a game that hasn't started", Toast.LENGTH_SHORT).show();
@@ -166,7 +171,8 @@ public class HangmanStartingActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(hangmanStartingActivityController.continueSave(3, currentContext)) {
+                if (hangmanStartingActivityController.continueSave(3, currentContext)) {
+                    Toast.makeText(currentContext, "Loaded Game", Toast.LENGTH_SHORT).show();
                     switchToHangman();
                 } else {
                     Toast.makeText(currentContext, "You can't continue a game that hasn't started", Toast.LENGTH_SHORT).show();

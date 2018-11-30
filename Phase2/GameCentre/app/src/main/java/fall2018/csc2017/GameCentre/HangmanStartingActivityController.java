@@ -127,7 +127,6 @@ class HangmanStartingActivityController {
             currSavManager.updateSave("auto");
             HangmanState prePermaState = (HangmanState) currSavManager.getLastState("perma");
             HangmanComplexityActivity.complexity = prePermaState.getComplexity();
-            displayToast.displayToast(context, "Loaded Game");
             fileSystem.saveAccount(context, accountManager);
         }
         return currSavManager.getLength("perma") != 0;
@@ -151,7 +150,6 @@ class HangmanStartingActivityController {
             HangmanComplexityActivity.complexity = lastAutoState.getComplexity();
             Board.numRows = HangmanComplexityActivity.complexity;
             Board.numCols = HangmanComplexityActivity.complexity;
-            displayToast.displayToast(currentContext, "Loaded Game " + gameFile);
         }
         return  currSavManager.getLength(SaveManager.auto) != 0;
     }
