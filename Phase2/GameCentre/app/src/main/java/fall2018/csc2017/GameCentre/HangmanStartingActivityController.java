@@ -80,6 +80,8 @@ class HangmanStartingActivityController {
 
         currentAccount.setCurrentGame(gameFile);
 
+        currentAccount.setLastPlayedGame(Account.hangmanName);
+
 
         SaveManager currSavManager = currentAccount.getCurrentSaveManager(Account.hangmanName);
         currSavManager.wipeSave(SaveManager.auto);
@@ -92,6 +94,9 @@ class HangmanStartingActivityController {
         currSavManager.addState(newState);
 
         fileSystem.saveAccount(context, accountManager);
+
+
+
 
         ((HangmanStartingActivity) context).switchToHangman();
 
