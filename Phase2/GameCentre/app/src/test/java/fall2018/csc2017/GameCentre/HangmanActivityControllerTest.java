@@ -169,8 +169,7 @@ public class HangmanActivityControllerTest {
         saveManager = user.getCurrentSaveManager(Account.hangmanName);
         Context thisContext = new AppCompatActivity();
         hangmanActivityController.updateGameListener(thisContext);
-        assertTrue(true);
-        //assertEquals("Your score is 0 !", LoosingActivity.getScoreMessage());
+        assertEquals("Your score is 0 !", LoosingActivity.getScoreMessage());
 
     }
 
