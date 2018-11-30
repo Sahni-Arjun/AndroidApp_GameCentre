@@ -217,7 +217,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onResume() {
         super.onResume();
-        controller.onResumeListener();
+        controller.onResumeListener(this);
     }
 
     @Override
@@ -229,7 +229,7 @@ public class SudokuActivity extends AppCompatActivity implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         display();
-        Boolean gameOver = controller.updateListener((SudokuActivity) currentContext, boardManager);
+        Boolean gameOver = controller.updateListener(currentContext, boardManager);
         if (gameOver){
             switchToWinning();
         }
