@@ -56,4 +56,30 @@ public class AccountManagerTest {
         assertTrue(String.format("Expected %b but got %b", true, false), accountManager.isExistingUser("user6"));
     }
 
+    /**
+     * Test if login was successful
+     */
+    @Test
+    public void logInSuccessfulTrueTest() {
+        assertTrue(String.format("Expected %b but got %b", true, false), accountManager.logInSuccessful(this.users.get(0)));
+    }
+
+    /**
+     * Test if logInSuccessful correctly returns False
+     */
+    @Test
+    public void logInSuccessfulFalseTest() {
+        Account user6 = new Account("user6", "pwd6");
+        assertFalse(String.format("Expected %b but got %b", true, false), accountManager.logInSuccessful(user6));
+    }
+
+    // No test for isSamePassword which is a private method in AccountManager class
+
+    /**
+     * Test if findUser returns the correct account
+     */
+    @Test
+    public void findUserTest(){
+        assertTrue(String.format("Expected %b but got %b", true, false), accountManager.findUser("user1") == this.users.get(0));
+    }
 }
