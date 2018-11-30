@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 /**
  * Activity for the sign in procedure for the app.
@@ -29,7 +30,7 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-        controller = new SignInActivityController(fileSystem, displayToast);
+        controller = new SignInActivityController(fileSystem);
         addEnterButtonListener();
     }
 
@@ -47,7 +48,10 @@ public class SignInActivity extends AppCompatActivity {
 
                 Boolean signInSuccess = controller.enterButtonListener(currentContext, temp_user.getText().toString(), temp_password.getText().toString());
                 if (signInSuccess){
+                    Toast.makeText(currentContext, "Loading...", Toast.LENGTH_SHORT).show();
                     switchToGameMenu();
+                }else{
+                    Toast.makeText(currentContext, "Wrong username or password", Toast.LENGTH_SHORT).show();
                 }
             }
         });
