@@ -86,6 +86,7 @@ class HangmanStartingActivityController {
 
         Word.numCols = HangmanComplexityActivity.complexity + 1;
         Word.numRows = 1;
+        WordManager.tries = 0;
 
         HangmanStartingActivity.wordManager = new WordManager(this.selectWordFromFile(context));
 
@@ -107,7 +108,6 @@ class HangmanStartingActivityController {
         currSavManager.addState(newState);
 
         fileSystem.saveAccount(context, accountManager);
-        ((HangmanStartingActivity) context).switchToHangman();
     }
 
     /**
@@ -116,7 +116,7 @@ class HangmanStartingActivityController {
      * @param gameFile the number of the game file the user would like to open
      * @param context  the current HangmanStartingActivity
      */
-    void loadSave(int gameFile, Context context) { // adapt
+    boolean loadSave(int gameFile, Context context) { // adapt
         accountManager = fileSystem.loadAccount(context);
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         currentAccount.setCurrentGame(gameFile);
@@ -129,11 +129,8 @@ class HangmanStartingActivityController {
             HangmanComplexityActivity.complexity = prePermaState.getComplexity();
             displayToast.displayToast(context, "Loaded Game");
             fileSystem.saveAccount(context, accountManager);
-            ((HangmanStartingActivity) context).switchToHangman();
-        } else {
-            displayToast.displayToast(context.getApplicationContext(), "you can't continue a game " +
-                    "that hasn't started!");
         }
+        return currSavManager.getLength("perma") != 0;
     }
 
     /**
@@ -142,7 +139,7 @@ class HangmanStartingActivityController {
      * @param gameFile       the number of the game file the user would like to open
      * @param currentContext the current HangmanStartingActivity
      */
-    void continueSave(int gameFile, Context currentContext) {
+    boolean continueSave(int gameFile, Context currentContext) {
         accountManager = fileSystem.loadAccount(currentContext);
         Account currentAccount = accountManager.findUser(StartingLoginActivity.currentUser);
         currentAccount.setCurrentGame(gameFile);
@@ -155,10 +152,7 @@ class HangmanStartingActivityController {
             Board.numRows = HangmanComplexityActivity.complexity;
             Board.numCols = HangmanComplexityActivity.complexity;
             displayToast.displayToast(currentContext, "Loaded Game " + gameFile);
-            ((HangmanStartingActivity) currentContext).switchToHangman();
-        } else {
-            displayToast.displayToast(currentContext, "you can't continue a game " +
-                    "that hasn't started!");
         }
+        return  currSavManager.getLength(SaveManager.auto) != 0;
     }
 }
