@@ -17,7 +17,7 @@ class SlidingTilesBoardManager extends BoardManager implements Serializable {
     /**
      * The board being managed.
      */
-    private Board board;z
+    private Board board;
 
     /**
      * Manage a board that has been pre-populated.
