@@ -1,9 +1,13 @@
 package fall2018.csc2017.GameCentre;
 
 import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.TestCase.assertTrue;
 
 public class AccountManagerTest {
     private AccountManager accountManager;
@@ -23,5 +27,21 @@ public class AccountManagerTest {
         users.add(user4);
         users.add(user5);
         accountManager = new AccountManager(users);
+    }
+
+    /**
+     * Test if isExistingUser returns true if the user exists
+     */
+    @Test
+    public void isExistingUserTrueTest() {
+        assertTrue(String.format("Expected %b but got %b", true, false), accountManager.isExistingUser("user1"));
+    }
+
+    /**
+     * Test if isExistingUser returns False if the user exists
+     */
+    @Test
+    public void isExistingUserFalseTest() {
+        assertFalse(String.format("Expected %b but got %b", true, false), accountManager.isExistingUser("user6"));
     }
 }
