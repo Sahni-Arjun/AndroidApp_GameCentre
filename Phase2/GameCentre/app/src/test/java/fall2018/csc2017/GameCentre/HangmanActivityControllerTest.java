@@ -173,7 +173,6 @@ public class HangmanActivityControllerTest {
 
     }
 
-
     @Test
     public void testSaveListener(){
 
@@ -195,41 +194,6 @@ public class HangmanActivityControllerTest {
         accountManager = hangmanActivityController.fileSystem.loadAccount(hangmanActivity);
 
         assertEquals(hangmanActivityController.accountManager, accountManager);
-
-
-//        setUp();
-//        sixGuesses();
-//        saveManager = user.getCurrentSaveManager(Account.hangmanName);
-//        Context thisContext = new AppCompatActivity();
-//        hangmanActivityController.saveListener(hangmanActivity);
-//        FileSystem fileSystem = new FileSystem();
-//        fileSystem.saveAccount(thisContext, accountManager);
-//        accountManager = fileSystem.loadAccount(hangmanActivity);
-        //assertEquals(saveManager, accountManager);
-
-    }
-
-
-
-    /**
-     * Test whether pressing undo will revert back to the previous Hangman State
-     */
-    @Test
-    public void testUndoListener(){  // TODO ERASE IF SUDOKU HAS UNDO
-
-          assertTrue(true);
-//        Context context = new AppCompatActivity();
-//        setUpAccountWithGame();
-//        SaveManager saveManager = user.getCurrentSaveManager(Account.hangmanName);
-//        hangmanActivityController.undoListener(context);
-//        hangmanActivityController.undoListener(context);
-//        HangmanState state = (HangmanState) saveManager.getLastState(SaveManager.hangmanName);
-//        Letter[][] newLetters = state.getWordManager().getWord().getLetters();
-//        for (int i = 0; i < 5; i++){
-//
-//            assertEquals(newLetters[0][i].hidden, false);
-//        }
-
-
     }
 }
+

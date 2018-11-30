@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class HangmanStartingActivity extends AppCompatActivity {
 
@@ -80,7 +81,11 @@ public class HangmanStartingActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hangmanStartingActivityController.loadSave(1, currentContext);
+                if(hangmanStartingActivityController.loadSave(1, currentContext)){
+                    switchToHangman();
+                } else {
+                    Toast.makeText(currentContext, "You can't continue a game that hasn't started", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -93,7 +98,11 @@ public class HangmanStartingActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hangmanStartingActivityController.loadSave(2, currentContext);
+                if(hangmanStartingActivityController.loadSave(2, currentContext)){
+                    switchToHangman();
+                } else {
+                    Toast.makeText(currentContext, "You can't continue a game that hasn't started", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -106,7 +115,11 @@ public class HangmanStartingActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hangmanStartingActivityController.loadSave(3, currentContext);
+                if(hangmanStartingActivityController.loadSave(3, currentContext)){
+                    switchToHangman();
+                } else {
+                    Toast.makeText(currentContext, "You can't continue a game that hasn't started", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -119,7 +132,11 @@ public class HangmanStartingActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hangmanStartingActivityController.continueSave(1, currentContext);
+                if(hangmanStartingActivityController.continueSave(1, currentContext)) {
+                    switchToHangman();
+                } else {
+                    Toast.makeText(currentContext, "You can't continue a game that hasn't started", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -132,7 +149,11 @@ public class HangmanStartingActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hangmanStartingActivityController.continueSave(2, currentContext);
+                if(hangmanStartingActivityController.continueSave(2, currentContext)) {
+                    switchToHangman();
+                } else {
+                    Toast.makeText(currentContext, "You can't continue a game that hasn't started", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -145,7 +166,11 @@ public class HangmanStartingActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hangmanStartingActivityController.continueSave(3, currentContext);
+                if(hangmanStartingActivityController.continueSave(3, currentContext)) {
+                    switchToHangman();
+                } else {
+                    Toast.makeText(currentContext, "You can't continue a game that hasn't started", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -159,6 +184,7 @@ public class HangmanStartingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 hangmanStartingActivityController.newGame(1, currentContext);
+                switchToHangman();
             }
         });
     }
@@ -172,6 +198,7 @@ public class HangmanStartingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 hangmanStartingActivityController.newGame(2, currentContext);
+                switchToHangman();
             }
         });
     }
@@ -185,6 +212,7 @@ public class HangmanStartingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 hangmanStartingActivityController.newGame(3, currentContext);
+                switchToHangman();
             }
         });
     }
