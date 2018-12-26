@@ -26,9 +26,9 @@ In the next screen the user has the option to choose a game to play, check the s
 Note to log out the user must press the back key 'built into the phone' until they reach this activity, or simply close the app.
 There are three games to choose from
 
-*SlidingTiles
-*Hangman
-*Sudoku
+ * SlidingTiles
+ * Hangman
+ * Sudoku
 
 Upon selecting the game to play the user now chooses which game state to play. There are three game states to choose from, if the user has no game states saved, load continue and load save buttons will not move to the next screen.
 
