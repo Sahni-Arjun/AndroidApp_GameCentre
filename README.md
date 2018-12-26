@@ -3,13 +3,13 @@
 ## How to use
 The app runs on a phone with Android 8.1.
 
-The first GameCentre file can be opened on AndroidStudio the path is shown below:
+The first GameCentre file can be opened on AndroidStudio the path is:    Phase2/GameCentre
 
-Phase2/GameCentre
 
-To run the code on a phone/emulator the app file has to run, the correct file is shown below:
 
-Phase2/GameCentre/app
+To run the code on a phone/emulator the app file has to run, the correct file is:   Phase2/GameCentre/app
+
+
 
 To got to the code for the functionality of the app, the path is shown below: 
 Phase2/GameCentre/app/src/main/java/fall2018/csc2017/GameCentre
